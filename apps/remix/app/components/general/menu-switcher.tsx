@@ -232,15 +232,7 @@ export const MenuSwitcher = ({ user, teams: initialTeamsData }: MenuSwitcherProp
             </div>
           </>
         ) : (
-          <DropdownMenuItem className="text-muted-foreground px-4 py-2" asChild>
-            <Link
-              to="/settings/teams?action=add-team"
-              className="flex items-center justify-between"
-            >
-              <Trans>Create team</Trans>
-              <Plus className="ml-2 h-4 w-4" />
-            </Link>
-          </DropdownMenuItem>
+          null
         )}
 
         <DropdownMenuSeparator />
