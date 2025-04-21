@@ -19,6 +19,8 @@ export const sendConfirmationEmail = async ({ userId }: SendConfirmationEmailPro
   const NEXT_PRIVATE_SMTP_FROM_NAME = env('NEXT_PRIVATE_SMTP_FROM_NAME');
   const NEXT_PRIVATE_SMTP_FROM_ADDRESS = env('NEXT_PRIVATE_SMTP_FROM_ADDRESS');
 
+  console.log("VALUES", NEXT_PRIVATE_SMTP_FROM_ADDRESS, NEXT_PRIVATE_SMTP_FROM_NAME)
+
   const user = await prisma.user.findFirstOrThrow({
     where: {
       id: userId,
@@ -53,6 +55,11 @@ export const sendConfirmationEmail = async ({ userId }: SendConfirmationEmailPro
     renderEmailWithI18N(confirmationTemplate),
     renderEmailWithI18N(confirmationTemplate, { plainText: true }),
   ]);
+
+  console.log("**************************HTML********************************")
+  console.log(html)
+  console.log("**************************TEXT********************************")
+  console.log(text)
 
   const i18n = await getI18nInstance();
 

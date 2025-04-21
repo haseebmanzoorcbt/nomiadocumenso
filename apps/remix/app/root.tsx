@@ -149,7 +149,6 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
           <TooltipProvider>
             <TrpcProvider>
               {children}
-
               <Toaster />
             </TrpcProvider>
           </TooltipProvider>

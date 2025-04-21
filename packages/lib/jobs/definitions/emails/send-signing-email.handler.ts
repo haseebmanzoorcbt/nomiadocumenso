@@ -162,6 +162,11 @@ export const run = async ({
       }),
     ]);
 
+    console.log("**************************HTML********************************")
+    console.log(html)
+    console.log("**************************TEXT********************************")
+    console.log(text)
+
     await mailer.sendMail({
       to: {
         name: recipient.name,

@@ -62,7 +62,9 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
           to={`${getRootHref(params, { returnEmptyRootString: true })}/documents`}
           className="focus-visible:ring-ring ring-offset-background hidden rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:inline"
         >
-          <BrandingLogo className="h-6 w-auto" />
+          <img
+          src="https://app.nomiadocs.com/static/media/nomia-logo2.4cb13eb13a54b98490e0.png"
+          className="h-10 w-auto" />
         </Link>
 
         <AppNavDesktop setIsCommandMenuOpen={setIsCommandMenuOpen} />

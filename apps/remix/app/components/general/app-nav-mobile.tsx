@@ -30,14 +30,14 @@ export const AppNavMobile = ({ isMenuOpen, onMenuOpenChange }: AppNavMobileProps
       href: `${rootHref}/documents`,
       text: msg`Documents`,
     },
-    {
-      href: `${rootHref}/templates`,
-      text: msg`Templates`,
-    },
-    {
-      href: '/settings/teams',
-      text: msg`Teams`,
-    },
+    // {
+    //   href: `${rootHref}/templates`,
+    //   text: msg`Templates`,
+    // },
+    // {
+    //   href: '/settings/teams',
+    //   text: msg`Teams`,
+    // },
     {
       href: '/settings/profile',
       text: msg`Settings`,
