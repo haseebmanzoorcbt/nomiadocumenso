@@ -26,6 +26,13 @@ export async function loader({ request }: Route.LoaderArgs) {
   const isOIDCSSOEnabled = IS_OIDC_SSO_ENABLED;
   const oidcProviderLabel = OIDC_PROVIDER_LABEL;
 
+  const url = new URL(request.url);
+  const email = url.searchParams.get('email');
+  
+  if (email) {
+    console.log('Email from query param:', email);
+  }
+
   if (isAuthenticated) {
     throw redirect('/documents');
   }
@@ -34,25 +41,26 @@ export async function loader({ request }: Route.LoaderArgs) {
     isGoogleSSOEnabled,
     isOIDCSSOEnabled,
     oidcProviderLabel,
+    email
   };
 }
 
 export default function SignIn({ loaderData }: Route.ComponentProps) {
-  const { isGoogleSSOEnabled, isOIDCSSOEnabled, oidcProviderLabel } = loaderData;
+  const { isGoogleSSOEnabled, isOIDCSSOEnabled, oidcProviderLabel, email } = loaderData;
 
   return (
     <div className="w-screen max-w-lg px-4">
-      <div className="border-border dark:bg-background z-10 rounded-xl border bg-neutral-100 p-6">
-        <h1 className="text-2xl font-semibold">
-          <Trans>Sign in to your account</Trans>
-        </h1>
-
-        <p className="text-muted-foreground mt-2 text-sm">
-          <Trans>Welcome back, we are lucky to have you.</Trans>
-        </p>
+      <div className="border-border dark:bg-background z-10 rounded-xl border p-6">
+        <div className='flex w-full items-center justify-center p-2'>
+            <img 
+            src='https://app.nomiadocs.com/static/media/nomia-logo2.4cb13eb13a54b98490e0.png'
+            className='h-10'
+            />
+          </div>
         <hr className="-mx-6 my-4" />
 
         <SignInForm
+          initialEmail={email}
           isGoogleSSOEnabled={isGoogleSSOEnabled}
           isOIDCSSOEnabled={isOIDCSSOEnabled}
           oidcProviderLabel={oidcProviderLabel}

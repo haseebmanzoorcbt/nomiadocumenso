@@ -68,7 +68,7 @@ export type TSignInFormSchema = z.infer<typeof ZSignInFormSchema>;
 
 export type SignInFormProps = {
   className?: string;
-  initialEmail?: string;
+  initialEmail?:  any;
   isGoogleSSOEnabled?: boolean;
   isOIDCSSOEnabled?: boolean;
   oidcProviderLabel?: string;
@@ -347,7 +347,7 @@ export const SignInForm = ({
                     to="/forgot-password"
                     className="text-muted-foreground text-sm duration-200 hover:opacity-70"
                   >
-                    <Trans>Forgot your password?</Trans>
+                    {/* <Trans>Forgot your password?</Trans> */}
                   </Link>
                 </p>
               </FormItem>
@@ -358,7 +358,7 @@ export const SignInForm = ({
             type="submit"
             size="lg"
             loading={isSubmitting}
-            className="dark:bg-documenso dark:hover:opacity-90"
+            className="dark:bg-documenso dark:hover:opacity-90 mt-3"
           >
             {isSubmitting ? <Trans>Signing in...</Trans> : <Trans>Sign In</Trans>}
           </Button>
@@ -373,7 +373,7 @@ export const SignInForm = ({
             </div>
           )}
 
-          {isGoogleSSOEnabled && (
+          {/* {isGoogleSSOEnabled && (
             <Button
               type="button"
               size="lg"
@@ -385,9 +385,9 @@ export const SignInForm = ({
               <FcGoogle className="mr-2 h-5 w-5" />
               Google
             </Button>
-          )}
+          )} */}
 
-          {isOIDCSSOEnabled && (
+          {/* {isOIDCSSOEnabled && (
             <Button
               type="button"
               size="lg"
@@ -399,9 +399,9 @@ export const SignInForm = ({
               <FaIdCardClip className="mr-2 h-5 w-5" />
               {oidcProviderLabel || 'OIDC'}
             </Button>
-          )}
+          )} */}
 
-          <Button
+          {/* <Button
             type="button"
             size="lg"
             variant="outline"
@@ -412,7 +412,7 @@ export const SignInForm = ({
           >
             {!isPasskeyLoading && <KeyRoundIcon className="-ml-1 mr-1 h-5 w-5" />}
             <Trans>Passkey</Trans>
-          </Button>
+          </Button> */}
         </fieldset>
       </form>
 
