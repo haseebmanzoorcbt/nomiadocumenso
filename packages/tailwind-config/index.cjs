@@ -152,7 +152,7 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
     addVariablesForColors,
-    function ({ addBase }) {
+    function({ addBase }) {
       addBase({
         ':root': {
           '--background': '0 0% 100%',
@@ -226,4 +226,3 @@ function addVariablesForColors({ addBase, theme }) {
     ':root': newVars,
   });
 }
-Z;
