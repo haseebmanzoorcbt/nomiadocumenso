@@ -9,7 +9,7 @@ export type TemplateFooterProps = {
 
 export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
   const branding = useBranding();
-
+  branding.brandingHidePoweredBy = true;
   return (
     <Section>
       {isDocument && !branding.brandingHidePoweredBy && (
@@ -36,7 +36,7 @@ export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
         </Text>
       ) : (
         <Text className="my-8 text-sm text-slate-400">
-          Documenso, Inc.
+          Nomia, Inc.
           <br />
           2261 Market Street, #5211, San Francisco, CA 94114, USA
         </Text>

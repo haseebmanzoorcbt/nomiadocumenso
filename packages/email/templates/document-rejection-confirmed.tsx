@@ -23,7 +23,10 @@ export function DocumentRejectionConfirmedEmail({
 }: DocumentRejectionConfirmedEmailProps) {
   const { _ } = useLingui();
   const branding = useBranding();
-
+  branding.brandingEnabled = true;
+  branding.brandingLogo =
+    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH';
+  branding.brandingAltText = 'Nomia Logo';
   const previewText = _(msg`You have rejected the document '${documentName}'`);
 
   const getAssetUrl = (path: string) => {
@@ -40,7 +43,11 @@ export function DocumentRejectionConfirmedEmail({
           <Container className="mx-auto mb-2 mt-8 max-w-xl rounded-lg border border-solid border-slate-200 p-4 backdrop-blur-sm">
             <Section>
               {branding.brandingEnabled && branding.brandingLogo ? (
-                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
+                <Img
+                  src={branding.brandingLogo}
+                  alt={branding.brandingAltText}
+                  className="mb-4 h-6"
+                />
               ) : (
                 <Img
                   src={getAssetUrl('/static/logo.png')}
