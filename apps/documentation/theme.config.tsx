@@ -6,8 +6,8 @@ const themeConfig: DocsThemeConfig = {
   head: function useHead() {
     const config = useConfig<{ title?: string; description?: string }>();
 
-    const title = `${config.frontMatter.title} | Documenso Docs` || 'Documenso Docs';
-    const description = config.frontMatter.description || 'The official Documenso documentation';
+    const title = "Nomia - Esign"
+    const description = "Nomia E-sign documents"
 
     return (
       <>
@@ -44,7 +44,7 @@ const themeConfig: DocsThemeConfig = {
   primarySaturation: 48.47,
   useNextSeoProps() {
     return {
-      titleTemplate: '%s | Documenso Docs',
+      titleTemplate: '%s | Nomia E-sign Docs',
     };
   },
 };
