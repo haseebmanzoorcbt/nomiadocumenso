@@ -17,12 +17,8 @@ export const handleRequestRedirect = (redirectUrl?: string) => {
   }
 };
 
-export const handleSignInRedirect = (redirectUrl: string = '/documents') => {
+export const handleSignInRedirect = (redirectUrl:any) => {
+  console.log("NEW DATA", redirectUrl)
   const url = new URL(redirectUrl, NEXT_PUBLIC_WEBAPP_URL());
-
-  if (url.origin !== NEXT_PUBLIC_WEBAPP_URL()) {
-    window.location.href = '/documents';
-  } else {
     window.location.href = redirectUrl;
-  }
 };

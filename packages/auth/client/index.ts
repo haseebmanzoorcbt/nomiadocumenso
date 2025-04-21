@@ -66,9 +66,9 @@ export class AuthClient {
   }
 
   public emailPassword = {
-    signIn: async (data: Omit<TEmailPasswordSignin, 'csrfToken'> & { csrfToken?: string }) => {
+    signIn: async (data: Omit<TEmailPasswordSignin, 'csrfToken'> & { csrfToken?: string } & {docId?:any}) => {
       let csrfToken = data.csrfToken;
-
+      let docId=data.docId
       if (!csrfToken) {
         csrfToken = (await this.client.csrf.$get().then(async (res) => res.json())).csrfToken;
       }
@@ -81,8 +81,7 @@ export class AuthClient {
       });
 
       await this.handleError(response);
-
-      handleSignInRedirect(data.redirectPath);
+      handleSignInRedirect(`/documents/${docId}/edit`);
     },
 
     updatePassword: async (data: TUpdatePasswordSchema) => {

@@ -29,19 +29,21 @@ export async function loader({ request }: Route.LoaderArgs) {
       teamUrlCookie && ZTeamUrlSchema.safeParse(teamUrlCookie).success ? teamUrlCookie : undefined;
 
     // Early return for no preferred team.
-    if (!preferredTeamUrl || isReferrerFromTeamUrl) {
-      throw redirect('/documents');
-    }
+    // if (!preferredTeamUrl || isReferrerFromTeamUrl) {
+    //   console.log("AAA")
+    //   throw redirect('/documents');
+    // }
 
     const teams = await getTeams({ userId: session.user.id });
 
     const currentTeam = teams.find((team) => team.url === preferredTeamUrl);
 
-    if (!currentTeam) {
-      throw redirect('/documents');
-    }
+    // if (!currentTeam) {
+    //   console.log("BBB")
+    //   throw redirect('/documents');
+    // }
 
-    throw redirect(formatDocumentsPath(currentTeam.url));
+    // throw redirect(formatDocumentsPath(currentTeam.url));
   }
 
   throw redirect('/signin');
