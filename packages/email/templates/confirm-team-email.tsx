@@ -38,6 +38,10 @@ export const ConfirmTeamEmailTemplate = ({
 }: ConfirmTeamEmailProps) => {
   const { _ } = useLingui();
   const branding = useBranding();
+  branding.brandingEnabled = true;
+  branding.brandingLogo =
+    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH';
+  branding.brandingAltText = 'Nomia Logo';
 
   const previewText = msg`Accept team email request for ${teamName} on Documenso`;
 
@@ -50,7 +54,11 @@ export const ConfirmTeamEmailTemplate = ({
         <Section className="bg-white">
           <Container className="mx-auto mb-2 mt-8 max-w-xl rounded-lg border border-solid border-slate-200 px-2 pt-2 backdrop-blur-sm">
             {branding.brandingEnabled && branding.brandingLogo ? (
-              <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6 p-2" />
+              <Img
+                src={branding.brandingLogo}
+                alt={branding.brandingAltText}
+                className="mb-4 h-6 p-2"
+              />
             ) : (
               <TemplateImage
                 assetBaseUrl={assetBaseUrl}

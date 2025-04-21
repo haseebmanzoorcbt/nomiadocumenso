@@ -226,4 +226,3 @@ function addVariablesForColors({ addBase, theme }) {
     ':root': newVars,
   });
 }
-Z;

@@ -6,6 +6,7 @@ type BrandingContextValue = {
   brandingLogo: string;
   brandingCompanyDetails: string;
   brandingHidePoweredBy: boolean;
+  brandingAltText: string;
 };
 
 const BrandingContext = createContext<BrandingContextValue | undefined>(undefined);
@@ -16,6 +17,7 @@ const defaultBrandingContextValue: BrandingContextValue = {
   brandingLogo: '',
   brandingCompanyDetails: '',
   brandingHidePoweredBy: false,
+  brandingAltText: '',
 };
 
 export const BrandingProvider = (props: {
