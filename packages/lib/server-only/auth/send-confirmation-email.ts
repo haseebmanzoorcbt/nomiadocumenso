@@ -56,10 +56,6 @@ export const sendConfirmationEmail = async ({ userId }: SendConfirmationEmailPro
     renderEmailWithI18N(confirmationTemplate, { plainText: true }),
   ]);
 
-  console.log("**************************HTML********************************")
-  console.log(html)
-  console.log("**************************TEXT********************************")
-  console.log(text)
 
   const i18n = await getI18nInstance();
 

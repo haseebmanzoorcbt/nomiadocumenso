@@ -46,6 +46,8 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
   .post('/authorize', sValidator('json', ZSignInSchema), async (c) => {
     const requestMetadata = c.get('requestMetadata');
 
+    console.log('requestMetadata', requestMetadata);
+    console.log('context', c);
     const { email, password, totpCode, backupCode, csrfToken } = c.req.valid('json');
 
     const csrfCookieToken = await getCsrfCookie(c);
@@ -157,13 +159,13 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
    * Signup endpoint.
    */
   .post('/signup', sValidator('json', ZSignUpSchema), async (c) => {
-    if (env('NEXT_PUBLIC_DISABLE_SIGNUP') === 'true') {
+    if (env('NEXT_PUBLIC_DISABLE_SIGNUP') === 'false') {
       throw new AppError('SIGNUP_DISABLED', {
         message: 'Signups are disabled.',
       });
     }
 
-    const { name, email, password, signature, url } = c.req.valid('json');
+    const { name, email, password, signature, url , fromNomia } = c.req.valid('json');
 
     if (IS_BILLING_ENABLED() && url && url.length < 6) {
       throw new AppError('PREMIUM_PROFILE_URL', {
@@ -171,14 +173,28 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       });
     }
 
-    const user = await createUser({ name, email, password, signature, url });
 
-    await jobsClient.triggerJob({
-      name: 'send.signup.confirmation.email',
-      payload: {
-        email: user.email,
-      },
-    });
+    if (fromNomia) {
+
+      console.log("user Signup from Nomia");
+      //simply create verifies user there
+      const user = await createUser({ name, email, password, signature, url ,fromNomia });
+    }
+    else
+    {
+      console.log("user Signup from Outside");
+      const user = await createUser({ name, email, password, signature, url ,fromNomia });
+
+      await jobsClient.triggerJob({
+        name: 'send.signup.confirmation.email',
+        payload: {
+          email: user.email,
+        },
+      });
+    }
+
+
+
 
     return c.text('OK', 201);
   })

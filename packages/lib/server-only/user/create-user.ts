@@ -10,6 +10,7 @@ import { IS_BILLING_ENABLED } from '../../constants/app';
 import { SALT_ROUNDS } from '../../constants/auth';
 import { AppError, AppErrorCode } from '../../errors/app-error';
 import { buildLogger } from '../../utils/logger';
+import { DateTime } from 'luxon';
 
 export interface CreateUserOptions {
   name: string;
@@ -17,9 +18,10 @@ export interface CreateUserOptions {
   password: string;
   signature?: string | null;
   url?: string;
+  fromNomia?: boolean|false;
 }
 
-export const createUser = async ({ name, email, password, signature, url }: CreateUserOptions) => {
+export const createUser = async ({ name, email, password, signature, url , fromNomia }: CreateUserOptions) => {
   const hashedPassword = await hash(password, SALT_ROUNDS);
 
   const userExists = await prisma.user.findFirst({
@@ -55,6 +57,7 @@ export const createUser = async ({ name, email, password, signature, url }: Crea
         password: hashedPassword, // Todo: (RR7) Drop password.
         signature,
         url,
+        emailVerified : DateTime.now().toJSDate(), // Todo: (RR7) Remove this after RR7.
       },
     });
 

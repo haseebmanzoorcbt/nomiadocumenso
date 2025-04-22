@@ -149,7 +149,7 @@ export const run = async ({
   });
 
   await io.runTask('send-signing-email', async () => {
-    const branding = document.team?.teamGlobalSettings
+    const branding:any = document.team?.teamGlobalSettings
       ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
       : undefined;
 
@@ -162,10 +162,7 @@ export const run = async ({
       }),
     ]);
 
-    console.log("**************************HTML********************************")
-    console.log(html)
-    console.log("**************************TEXT********************************")
-    console.log(text)
+  
 
     await mailer.sendMail({
       to: {

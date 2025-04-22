@@ -46,6 +46,7 @@ export const ZSignUpSchema = z.object({
       message: 'Username can only container alphanumeric characters and dashes.',
     })
     .optional(),
+  fromNomia:z.boolean().default(false).optional(),
 });
 
 export type TSignUpSchema = z.infer<typeof ZSignUpSchema>;

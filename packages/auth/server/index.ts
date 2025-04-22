@@ -24,15 +24,15 @@ export const auth = new Hono<HonoAuthContext>()
     const validOrigin = new URL(NEXT_PUBLIC_WEBAPP_URL()).origin;
     const headerOrigin = c.req.header('Origin');
 
-    if (headerOrigin && headerOrigin !== validOrigin) {
-      return c.json(
-        {
-          message: 'Forbidden',
-          statusCode: 403,
-        },
-        403,
-      );
-    }
+    // if (headerOrigin && headerOrigin !== validOrigin) {
+    //   return c.json(
+    //     {
+    //       message: 'Forbidden',
+    //       statusCode: 403,
+    //     },
+    //     403,
+    //   );
+    // }
 
     await next();
   })
