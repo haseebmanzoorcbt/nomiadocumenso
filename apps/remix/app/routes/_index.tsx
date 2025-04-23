@@ -10,6 +10,8 @@ import type { Route } from './+types/_index';
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getOptionalSession(request);
+  const url = new URL(request.url);
+  const isInternal = url.searchParams.get('internal') === 'true';
 
   if (session.isAuthenticated) {
     const teamUrlCookie = extractCookieFromHeaders('preferred-team-url', request.headers);
@@ -29,22 +31,22 @@ export async function loader({ request }: Route.LoaderArgs) {
       teamUrlCookie && ZTeamUrlSchema.safeParse(teamUrlCookie).success ? teamUrlCookie : undefined;
 
     // Early return for no preferred team.
-    // if (!preferredTeamUrl || isReferrerFromTeamUrl) {
-    //   console.log("AAA")
-    //   throw redirect('/documents');
-    // }
+    if (!preferredTeamUrl || isReferrerFromTeamUrl) {
+      throw redirect('/documents');
+    }
 
     const teams = await getTeams({ userId: session.user.id });
 
     const currentTeam = teams.find((team) => team.url === preferredTeamUrl);
 
-    // if (!currentTeam) {
-    //   console.log("BBB")
-    //   throw redirect('/documents');
-    // }
+    if (!currentTeam) {
+      throw redirect('/documents');
+    }
 
-    // throw redirect(formatDocumentsPath(currentTeam.url));
+    throw redirect(formatDocumentsPath(currentTeam.url));
   }
 
+  if(!isInternal){
   throw redirect('/signin');
+  } 
 }

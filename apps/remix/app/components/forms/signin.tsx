@@ -6,7 +6,7 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser';
-import { KeyRoundIcon } from 'lucide-react';
+import { KeyRoundIcon, Loader } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FaIdCardClip } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
@@ -314,6 +314,7 @@ export const SignInForm = ({
     }
   }, [form]);
 
+   
   return (
     <Form {...form}>
       <form

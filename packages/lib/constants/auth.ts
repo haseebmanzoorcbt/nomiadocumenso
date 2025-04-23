@@ -57,6 +57,5 @@ export const formatSecureCookieName = (name: string) => `${secureCookiePrefix}${
 
 export const getCookieDomain = () => {
   const url = new URL(NEXT_PUBLIC_WEBAPP_URL());
-
   return url.hostname;
 };

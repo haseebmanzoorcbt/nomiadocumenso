@@ -61,6 +61,7 @@ export const getSessionCookie = async (c: Context): Promise<string | null> => {
  * @param sessionToken - The session token to set.
  */
 export const setSessionCookie = async (c: Context, sessionToken: string) => {
+  console.log("SESSION TOKEN", sessionToken, c , sessionCookieName,)
   await setSignedCookie(
     c,
     sessionCookieName,
@@ -101,5 +102,6 @@ export const setCsrfCookie = async (c: Context) => {
     maxAge: undefined,
   });
 
+  console.log("SETTING SIGNED CSRF", csrfToken)
   return csrfToken;
 };

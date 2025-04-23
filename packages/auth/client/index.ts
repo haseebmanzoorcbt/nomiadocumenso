@@ -72,7 +72,6 @@ export class AuthClient {
       if (!csrfToken) {
         csrfToken = (await this.client.csrf.$get().then(async (res) => res.json())).csrfToken;
       }
-
       const response = await this.client['email-password'].authorize.$post({
         json: {
           ...data,
@@ -81,7 +80,7 @@ export class AuthClient {
       });
 
       await this.handleError(response);
-      handleSignInRedirect(`/documents/${docId}/edit`);
+      handleSignInRedirect(`/documents`);
     },
 
     updatePassword: async (data: TUpdatePasswordSchema) => {
