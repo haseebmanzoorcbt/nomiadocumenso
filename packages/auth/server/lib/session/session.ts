@@ -49,7 +49,12 @@ export const createSession = async (
   userId: number,
   metadata: RequestMetadata,
 ): Promise<Session> => {
+  
+  
+  
   const hashedSessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+
+  console.log("Session ID", hashedSessionId);
 
   const session: Session = {
     id: hashedSessionId,
@@ -66,6 +71,8 @@ export const createSession = async (
     data: session,
   });
 
+
+
   await prisma.userSecurityAuditLog.create({
     data: {
       userId,
@@ -74,6 +81,8 @@ export const createSession = async (
       type: UserSecurityAuditLogType.SIGN_IN,
     },
   });
+
+
 
   return session;
 };

@@ -173,12 +173,16 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       });
     }
 
+    let  userId = 0;
+
 
     if (fromNomia) {
 
       console.log("user Signup from Nomia");
       //simply create verifies user there
-      const user = await createUser({ name, email, password, signature, url ,fromNomia });
+      const user = await createUser({ name, email, password, signature, url, fromNomia });
+      userId = user.id;
+
     }
     else
     {
@@ -196,7 +200,14 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
 
 
 
-    return c.text('OK', 201);
+    //return id of user and 201 response
+    return c.json(
+      {
+        id: userId,
+      },
+      201,
+    );
+    
   })
   /**
    * Update password endpoint.

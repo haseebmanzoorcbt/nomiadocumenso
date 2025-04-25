@@ -133,7 +133,7 @@ export const sendTeamEmailVerificationEmail = async (
     token,
   });
 
-  const branding = team.teamGlobalSettings
+  const branding:any = team.teamGlobalSettings
     ? teamGlobalSettingsToBranding(team.teamGlobalSettings)
     : undefined;
 
