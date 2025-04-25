@@ -30,12 +30,6 @@ export const signWithLocalCert = async ({ pdf }: SignWithLocalCertOptions) => {
     cert = Buffer.from(localFileContents, 'base64');
   }
 
-
-  console.log('Signing Passphrase:', env('NEXT_PRIVATE_SIGNING_PASSPHRASE') || 'Not set');
-  console.log("Local Signing File Path:", env('NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH') || 'Not set');
-
-  console.log("Node Environment:", env('NODE_ENV') || 'Not set');
-
   if (!cert) {
     let certPath = env('NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH') || '/opt/documenso/cert.p12';
 
@@ -59,7 +53,10 @@ export const signWithLocalCert = async ({ pdf }: SignWithLocalCertOptions) => {
     password: env('NEXT_PRIVATE_SIGNING_PASSPHRASE') || undefined,
   });
 
+  console.log('Signing Passphrase:', env('NEXT_PRIVATE_SIGNING_PASSPHRASE') || 'Not set');
+  console.log("Local Signing File Path:", env('NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH') || 'Not set');
 
+  console.log("Node Environment:", env('NODE_ENV') || 'Not set');
 
   const signatureAsHex = signature.toString('hex');
 
