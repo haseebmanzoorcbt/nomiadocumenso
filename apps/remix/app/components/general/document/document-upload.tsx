@@ -46,6 +46,7 @@ export const DocumentUploadDropzone = ({ className }: DocumentUploadDropzoneProp
 
   const { mutateAsync: createDocument } = trpc.document.createDocument.useMutation();
 
+ 
   const disabledMessage = useMemo(() => {
     if (remaining.documents === 0) {
       return team
@@ -118,6 +119,7 @@ export const DocumentUploadDropzone = ({ className }: DocumentUploadDropzoneProp
       variant: 'destructive',
     });
   };
+  
 
   return (
     <div className={cn('relative', className)}>

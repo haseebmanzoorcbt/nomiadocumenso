@@ -10,6 +10,8 @@ import type { Route } from './+types/_index';
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getOptionalSession(request);
+  const url = new URL(request.url);
+  const isInternal = url.searchParams.get('internal') === 'true';
 
   if (session.isAuthenticated) {
     const teamUrlCookie = extractCookieFromHeaders('preferred-team-url', request.headers);
@@ -44,5 +46,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw redirect(formatDocumentsPath(currentTeam.url));
   }
 
+  if(!isInternal){
   throw redirect('/signin');
+  } 
 }

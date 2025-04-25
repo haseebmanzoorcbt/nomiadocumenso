@@ -1,6 +1,6 @@
 import { type HTMLAttributes, useEffect, useState } from 'react';
 
-import { MenuIcon, SearchIcon } from 'lucide-react';
+import { Loader, MenuIcon, SearchIcon } from 'lucide-react';
 import { Link, useLocation, useParams } from 'react-router';
 
 import type { SessionUser } from '@documenso/auth/server/lib/session/session';
@@ -14,6 +14,7 @@ import { AppCommandMenu } from './app-command-menu';
 import { AppNavDesktop } from './app-nav-desktop';
 import { AppNavMobile } from './app-nav-mobile';
 import { MenuSwitcher } from './menu-switcher';
+import { Trans } from '@lingui/react/macro';
 
 export type HeaderProps = HTMLAttributes<HTMLDivElement> & {
   user: SessionUser;
@@ -22,8 +23,7 @@ export type HeaderProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
   const params = useParams();
-  const { pathname } = useLocation();
-
+  const { pathname,search } = useLocation();
   const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -32,9 +32,7 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
     const onScroll = () => {
       setScrollY(window.scrollY);
     };
-
     window.addEventListener('scroll', onScroll);
-
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -42,10 +40,9 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
     if (!pathname || !pathname.startsWith(`/t/`)) {
       return false;
     }
-
     return pathname.split('/')[2] === teamUrl;
   };
-
+ 
   const selectedTeam = teams?.find((team) => isPathTeamUrl(team.url));
 
   return (

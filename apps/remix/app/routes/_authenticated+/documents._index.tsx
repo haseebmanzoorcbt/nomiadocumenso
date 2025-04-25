@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { useSearchParams } from 'react-router';
+import { Loader } from 'lucide-react';
+import { useLoaderData, useLocation, useSearchParams } from 'react-router';
 import { Link } from 'react-router';
 import { z } from 'zod';
 
@@ -43,6 +44,8 @@ const ZSearchParamsSchema = ZFindDocumentsInternalRequestSchema.pick({
 
 export default function DocumentsPage() {
   const [searchParams] = useSearchParams();
+  const { theme, session } = useLoaderData<any>() || {};
+  const location = useLocation();
 
   const team = useOptionalCurrentTeam();
 
@@ -54,6 +57,8 @@ export default function DocumentsPage() {
     [ExtendedDocumentStatus.INBOX]: 0,
     [ExtendedDocumentStatus.ALL]: 0,
   });
+
+  const isInternal = new URLSearchParams(location.search).get('internal') === 'true';
 
   const findDocumentSearchParams = useMemo(
     () => ZSearchParamsSchema.safeParse(Object.fromEntries(searchParams.entries())).data || {},
@@ -93,10 +98,34 @@ export default function DocumentsPage() {
     }
   }, [data?.stats]);
 
+  const [hasRedirected, setHasRedirected] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname.includes('edit')) {
+      console.log('do nothing');
+    } else {
+      const sessionId = document.cookie.split('; ').find((row) => row.startsWith('sessionId='));
+      if (sessionId && !hasRedirected && isInternal) {
+        setHasRedirected(true);
+        window.location.href = '/documents/25/edit';
+      }
+    }
+  }, [session, hasRedirected, location.pathname, location.search]);
+
+  if (isInternal) {
+    return (
+      <div className="flex h-[80vh] w-full flex-col items-center justify-center">
+        <Loader className="text-documenso h-12 w-12 animate-spin" />
+        <p className="text-muted-foreground mt-4">
+          <Trans>Loading document...</Trans>
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <DocumentUploadDropzone />
-
       <div className="mt-12 flex flex-wrap items-center justify-between gap-x-4 gap-y-8">
         <div className="flex flex-row items-center">
           {team && (

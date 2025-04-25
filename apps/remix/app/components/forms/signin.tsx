@@ -6,7 +6,7 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser';
-import { KeyRoundIcon } from 'lucide-react';
+import { KeyRoundIcon, Loader } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FaIdCardClip } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
@@ -55,7 +55,7 @@ const handleFallbackErrorMessages = (code: string) => {
   return message;
 };
 
-const LOGIN_REDIRECT_PATH = '/documents';
+const LOGIN_REDIRECT_PATH = '/dasdwda';
 
 export const ZSignInFormSchema = z.object({
   email: z.string().email().min(1),
@@ -87,6 +87,20 @@ export const SignInForm = ({
   const { toast } = useToast();
 
   const navigate = useNavigate();
+
+  const [docId, setDocId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const docIdFromParams = urlParams.get('docId');
+      if (docIdFromParams) {
+        setDocId(docIdFromParams);
+      }
+    }
+  }, []);
+
+  console.log('Current docId state outside useEffect:', docId);
 
   const [isTwoFactorAuthenticationDialogOpen, setIsTwoFactorAuthenticationDialogOpen] =
     useState(false);
@@ -204,6 +218,7 @@ export const SignInForm = ({
     }
   };
 
+
   const onFormSubmit = async ({ email, password, totpCode, backupCode }: TSignInFormSchema) => {
     try {
       await authClient.emailPassword.signIn({
@@ -211,7 +226,7 @@ export const SignInForm = ({
         password,
         totpCode,
         backupCode,
-        redirectPath,
+        docId
       });
     } catch (err) {
       console.log(err);
@@ -299,6 +314,7 @@ export const SignInForm = ({
     }
   }, [form]);
 
+   
   return (
     <Form {...form}>
       <form

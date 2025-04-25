@@ -16,10 +16,10 @@ const navigationLinks = [
     href: '/documents',
     label: msg`Documents`,
   },
-  // {
-  //   href: '/templates',
-  //   label: msg`Templates`,
-  // },
+  {
+    href: '/templates',
+    label: msg`Templates`,
+  },
 ];
 
 export type AppNavDesktopProps = HTMLAttributes<HTMLDivElement> & {
