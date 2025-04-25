@@ -45,11 +45,18 @@ export const signWithLocalCert = async ({ pdf }: SignWithLocalCertOptions) => {
     cert = Buffer.from(fs.readFileSync(certPath));
   }
 
+
+
   const signature = signWithP12({
     cert,
     content: pdfWithoutSignature,
     password: env('NEXT_PRIVATE_SIGNING_PASSPHRASE') || undefined,
   });
+
+  console.log('Signing Passphrase:', env('NEXT_PRIVATE_SIGNING_PASSPHRASE') || 'Not set');
+  console.log("Local Signing File Path:", env('NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH') || 'Not set');
+
+  console.log("Node Environment:", env('NODE_ENV') || 'Not set');
 
   const signatureAsHex = signature.toString('hex');
 
