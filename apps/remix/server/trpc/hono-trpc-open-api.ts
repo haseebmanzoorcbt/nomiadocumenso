@@ -18,14 +18,12 @@ export const openApiTrpcServerHandler = async (c: Context) => {
     responseMeta: (opts) => {
       if (opts.errors[0]?.cause instanceof AppError) {
         const appError = AppError.parseError(opts.errors[0].cause);
-
         const httpStatus = genericErrorCodeToTrpcErrorCodeMap[appError.code]?.status ?? 400;
 
         return {
           status: httpStatus,
         };
       }
-
       return {};
     },
   });
