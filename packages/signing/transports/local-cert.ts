@@ -39,7 +39,7 @@ export const signWithLocalCert = async ({ pdf }: SignWithLocalCertOptions) => {
     //
     // Our docker image automatically sets this so it shouldn't be an issue for self-hosters.
     // if (env('NODE_ENV') !== 'production') {
-     let  certPath = env('NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH') || './example/cert.p12';
+     let  certPath = './example/cert.p12';
     // }
 
     cert = Buffer.from(fs.readFileSync(certPath));
