@@ -75,7 +75,7 @@ export const run = async ({
       assetBaseUrl: NEXT_PUBLIC_WEBAPP_URL(),
     });
 
-    const branding = document.team?.teamGlobalSettings
+    const branding:any= document.team?.teamGlobalSettings
       ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
       : undefined;
 
@@ -115,7 +115,7 @@ export const run = async ({
       assetBaseUrl: NEXT_PUBLIC_WEBAPP_URL(),
     });
 
-    const branding = document.team?.teamGlobalSettings
+    const branding:any= document.team?.teamGlobalSettings
       ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
       : undefined;
 

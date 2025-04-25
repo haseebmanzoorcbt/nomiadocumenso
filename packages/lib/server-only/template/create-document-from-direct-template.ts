@@ -585,7 +585,7 @@ export const createDocumentFromDirectTemplate = async ({
       assetBaseUrl: NEXT_PUBLIC_WEBAPP_URL() || 'http://localhost:3000',
     });
 
-    const branding = template.team?.teamGlobalSettings
+    const branding:any= template.team?.teamGlobalSettings
       ? teamGlobalSettingsToBranding(template.team.teamGlobalSettings)
       : undefined;
 

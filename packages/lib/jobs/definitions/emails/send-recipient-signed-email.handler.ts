@@ -87,7 +87,7 @@ export const run = async ({
   });
 
   await io.runTask('send-recipient-signed-email', async () => {
-    const branding = document.team?.teamGlobalSettings
+    const branding:any= document.team?.teamGlobalSettings
       ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
       : undefined;
 

@@ -59,7 +59,7 @@ export const sendDeleteEmail = async ({ documentId, reason }: SendDeleteEmailOpt
     assetBaseUrl,
   });
 
-  const branding = document.team?.teamGlobalSettings
+  const branding:any= document.team?.teamGlobalSettings
     ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
     : undefined;
 

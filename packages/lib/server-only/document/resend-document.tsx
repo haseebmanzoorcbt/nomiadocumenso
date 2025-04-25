@@ -161,7 +161,7 @@ export const resendDocument = async ({
         teamName: document.team?.name,
       });
 
-      const branding = document.team?.teamGlobalSettings
+      const branding:any= document.team?.teamGlobalSettings
         ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
         : undefined;
 

@@ -102,7 +102,7 @@ export const sendTeamDeleteEmail = async ({ email, isOwner, team }: SendTeamDele
     isOwner,
   });
 
-  const branding = team.teamGlobalSettings
+  const branding:any= team.teamGlobalSettings
     ? teamGlobalSettingsToBranding(team.teamGlobalSettings)
     : undefined;
 

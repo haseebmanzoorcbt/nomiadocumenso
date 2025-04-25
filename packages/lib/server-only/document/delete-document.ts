@@ -235,7 +235,7 @@ const handleDocumentOwnerDelete = async ({
         assetBaseUrl,
       });
 
-      const branding = team?.teamGlobalSettings
+      const branding:any= team?.teamGlobalSettings
         ? teamGlobalSettingsToBranding(team.teamGlobalSettings)
         : undefined;
 

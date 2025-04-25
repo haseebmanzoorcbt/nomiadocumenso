@@ -8,7 +8,7 @@ export type TemplateFooterProps = {
 };
 
 export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
-  const branding = useBranding();
+  const branding:any= useBranding();
   branding.brandingHidePoweredBy = true;
   return (
     <Section>

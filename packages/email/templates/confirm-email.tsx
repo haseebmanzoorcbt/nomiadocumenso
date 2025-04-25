@@ -12,7 +12,7 @@ export const ConfirmEmailTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
 }: TemplateConfirmationEmailProps) => {
   const { _ } = useLingui();
-  const branding = useBranding();
+  const branding:any= useBranding();
 
   branding.brandingEnabled = true;
   branding.brandingLogo =

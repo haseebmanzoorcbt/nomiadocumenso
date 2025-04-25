@@ -27,7 +27,7 @@ export const TeamJoinEmailTemplate = ({
   teamUrl = 'demo',
 }: TeamJoinEmailProps) => {
   const { _ } = useLingui();
-  const branding = useBranding();
+  const branding:any= useBranding();
   branding.brandingEnabled = true;
   branding.brandingLogo =
     'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH';

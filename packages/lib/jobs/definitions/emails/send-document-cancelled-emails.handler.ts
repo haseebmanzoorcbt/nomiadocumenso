@@ -73,7 +73,7 @@ export const run = async ({
           cancellationReason: cancellationReason || 'The document has been cancelled.',
         });
 
-        const branding = document.team?.teamGlobalSettings
+        const branding:any = document.team?.teamGlobalSettings
           ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
           : undefined;
 

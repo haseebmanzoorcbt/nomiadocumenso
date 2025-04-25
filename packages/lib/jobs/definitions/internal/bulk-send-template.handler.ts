@@ -173,7 +173,7 @@ export const run = async ({
       });
     }
 
-    const branding = teamGlobalSettings
+    const branding:any= teamGlobalSettings
       ? teamGlobalSettingsToBranding(teamGlobalSettings)
       : undefined;
 

@@ -93,7 +93,7 @@ export const sendCompletedEmail = async ({ documentId, requestMetadata }: SendDo
       downloadLink: documentOwnerDownloadLink,
     });
 
-    const branding = document.team?.teamGlobalSettings
+    const branding:any= document.team?.teamGlobalSettings
       ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
       : undefined;
 
@@ -170,7 +170,7 @@ export const sendCompletedEmail = async ({ documentId, requestMetadata }: SendDo
             : undefined,
       });
 
-      const branding = document.team?.teamGlobalSettings
+      const branding:any= document.team?.teamGlobalSettings
         ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
         : undefined;
 

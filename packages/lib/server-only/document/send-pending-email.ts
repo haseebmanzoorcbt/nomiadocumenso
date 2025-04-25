@@ -70,7 +70,7 @@ export const sendPendingEmail = async ({ documentId, recipientId }: SendPendingE
     assetBaseUrl,
   });
 
-  const branding = document.team?.teamGlobalSettings
+  const branding:any= document.team?.teamGlobalSettings
     ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
     : undefined;
 

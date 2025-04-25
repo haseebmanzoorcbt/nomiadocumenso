@@ -72,7 +72,7 @@ export const superDeleteDocument = async ({ id, requestMetadata }: SuperDeleteDo
           assetBaseUrl,
         });
 
-        const branding = document.team?.teamGlobalSettings
+        const branding:any= document.team?.teamGlobalSettings
           ? teamGlobalSettingsToBranding(document.team.teamGlobalSettings)
           : undefined;
 

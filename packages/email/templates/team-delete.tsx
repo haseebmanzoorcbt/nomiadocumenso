@@ -22,7 +22,7 @@ export const TeamDeleteEmailTemplate = ({
   isOwner = false,
 }: TeamDeleteEmailProps) => {
   const { _ } = useLingui();
-  const branding = useBranding();
+  const branding:any= useBranding();
 
   branding.brandingEnabled = true;
   branding.brandingLogo =
