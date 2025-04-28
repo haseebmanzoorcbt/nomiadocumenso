@@ -53,11 +53,11 @@ export default function PublicProfileLayout() {
               to="/"
               className="focus-visible:ring-ring ring-offset-background rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:inline"
             >
-              <BrandingLogo className="hidden h-6 w-auto sm:block" />
+              <img  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH" className="hidden h-15 w-auto sm:block" />
 
               <img
-                src={LogoIcon}
-                alt="Documenso Logo"
+                src="https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH"
+                alt="Nomia Logo"
                 width={48}
                 height={48}
                 className="h-10 w-auto sm:hidden dark:invert"

@@ -22,9 +22,9 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
 
   let browser: Browser;
 
-  const browserlessUrl = env('NEXT_PRIVATE_BROWSERLESS_URL');
+  // const browserlessUrl = env('NEXT_PRIVATE_BROWSERLESS_URL');
 
-  console.log("Browserless URL:", browserlessUrl);
+  // console.log("Browserless URL:", browserlessUrl);
 
   // if (browserlessUrl) {
   //   // !: Use CDP rather than the default `connect` method to avoid coupling to the playwright version.

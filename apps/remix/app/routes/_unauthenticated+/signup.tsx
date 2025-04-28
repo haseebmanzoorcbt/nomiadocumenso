@@ -19,7 +19,7 @@ export function loader() {
   const isGoogleSSOEnabled = IS_GOOGLE_SSO_ENABLED;
   const isOIDCSSOEnabled = IS_OIDC_SSO_ENABLED;
 
-  if (NEXT_PUBLIC_DISABLE_SIGNUP === 'false') {
+  if (NEXT_PUBLIC_DISABLE_SIGNUP === 'true') {
     throw redirect('/signin');
   }
 
