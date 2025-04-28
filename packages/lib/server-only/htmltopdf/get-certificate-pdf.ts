@@ -24,6 +24,8 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
 
   const browserlessUrl = env('NEXT_PRIVATE_BROWSERLESS_URL');
 
+  console.log("Browserless URL:", browserlessUrl);
+
   if (browserlessUrl) {
     // !: Use CDP rather than the default `connect` method to avoid coupling to the playwright version.
     // !: Previously we would have to keep the playwright version in sync with the browserless version to avoid errors.
@@ -39,10 +41,12 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
   }
 
   const browserContext = await browser.newContext();
+  console.log('Browser context created successfully');
 
   const page = await browserContext.newPage();
 
   const lang = isValidLanguageCode(language) ? language : 'en';
+  console.log('Language set to:', lang);
 
   await page.context().addCookies([
     {
@@ -57,6 +61,8 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
     timeout: 10_000,
   });
 
+  console.log('Page loaded successfully');
+
   const result = await page.pdf({
     format: 'A4',
   });
@@ -69,4 +75,6 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
   void browser.close();
 
   return result;
+
+
 };

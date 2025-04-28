@@ -62,6 +62,8 @@ export const run = async ({
   const isComplete =
     document.recipients.some((recipient) => recipient.signingStatus === SigningStatus.REJECTED) ||
     document.recipients.every((recipient) => recipient.signingStatus === SigningStatus.SIGNED);
+  
+  console.log("Document Completed ", isComplete);
 
   if (!isComplete) {
     throw new AppError(AppErrorCode.UNKNOWN_ERROR, {
@@ -133,14 +135,21 @@ export const run = async ({
 
   const pdfData = await getFileServerSide(documentData);
 
-  const certificateData =
-    (document.team?.teamGlobalSettings?.includeSigningCertificate ?? true)
-      ? await getCertificatePdf({
-          documentId,
-          language: document.documentMeta?.language,
-        }).catch(() => null)
-      : null;
+  // const certificateData =
+  //   (document.team?.teamGlobalSettings?.includeSigningCertificate ?? true)
+  //     ? await getCertificatePdf({
+  //         documentId,
+  //         language: document.documentMeta?.language,
+  //       }).catch(() => null)
+  //     : null;
+
+
   
+  const certificateData = await getCertificatePdf({
+    documentId,
+    language: document.documentMeta?.language,
+  })
+  console.log("language :", document.documentMeta?.language);
   console.log('Certificate data job:', certificateData);
 
   const newDataId = await io.runTask('decorate-and-sign-pdf', async () => {
