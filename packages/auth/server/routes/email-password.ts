@@ -51,22 +51,6 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
     const { email, password, totpCode, backupCode, csrfToken } = c.req.valid('json');
 
     const csrfCookieToken = await getCsrfCookie(c);
-
-    if (
-      process.env.NODE_ENV === 'development' &&
-      email === 'grthaseeb.ahmed412@gmail.com' &&
-      password === 'Hellopop@4122'
-    ) {
-      const devUser = await prisma.user.findFirst({
-        where: { email: 'grthaseeb.ahmed412@gmail.com' },
-      });
-
-      if (devUser) {
-        await onAuthorize({ userId: devUser.id }, c);
-        return c.text('', 201);
-      }
-    }
-
     // Todo: (RR7) Add logging here.
     if (csrfToken !== csrfCookieToken || !csrfCookieToken) {
       throw new AppError(AuthenticationErrorCode.InvalidRequest, {
