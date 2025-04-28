@@ -61,6 +61,9 @@ export const sealDocument = async ({
 
   const { documentData } = document;
 
+
+  console.log('Document data:', documentData);
+
   if (!documentData) {
     throw new Error(`Document ${document.id} has no document data`);
   }

@@ -61,6 +61,9 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
     format: 'A4',
   });
 
+
+  console.log('PDF generated successfully');
+
   await browserContext.close();
 
   void browser.close();
