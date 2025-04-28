@@ -158,12 +158,12 @@ export const DocumentsTableActionDropdown = ({ row }: DocumentsTableActionDropdo
         </DropdownMenuItem>
 
         {/* We don't want to allow teams moving documents across at the moment. */}
-        {!team && !row.teamId && (
+        {/* {!team && !row.teamId && (
           <DropdownMenuItem onClick={() => setMoveDialogOpen(true)}>
             <MoveRight className="mr-2 h-4 w-4" />
             <Trans>Move to Team</Trans>
           </DropdownMenuItem>
-        )}
+        )} */}
 
         {/* No point displaying this if there's no functionality. */}
         {/* <DropdownMenuItem disabled>
@@ -196,7 +196,7 @@ export const DocumentsTableActionDropdown = ({ row }: DocumentsTableActionDropdo
 
         <DocumentResendDialog document={row} recipients={nonSignedRecipients} />
 
-        <DocumentShareButton
+        {/* <DocumentShareButton
           documentId={row.id}
           token={isOwner ? undefined : recipient?.token}
           trigger={({ loading, disabled }) => (
@@ -207,7 +207,7 @@ export const DocumentsTableActionDropdown = ({ row }: DocumentsTableActionDropdo
               </div>
             </DropdownMenuItem>
           )}
-        />
+        /> */}
       </DropdownMenuContent>
 
       <DocumentDeleteDialog
