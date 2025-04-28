@@ -141,7 +141,7 @@ export const run = async ({
         }).catch(() => null)
       : null;
   
-  console.log('Certificate data:', certificateData);
+  console.log('Certificate data job:', certificateData);
 
   const newDataId = await io.runTask('decorate-and-sign-pdf', async () => {
     const pdfDoc = await PDFDocument.load(pdfData);
@@ -232,7 +232,7 @@ export const run = async ({
       });
 
       // Update the document data with the new data
-      console.log('Updating document data:', newData.data);
+      console.log('Updating document data:');
 
       await tx.documentData.update({
         where: {
@@ -254,8 +254,13 @@ export const run = async ({
             ...(isRejected ? { isRejected: true, rejectionReason: rejectionReason } : {}),
           },
         }),
+
+       
       });
+ 
+      
     });
+    console.log('Creating document audit log');
   });
 
   await io.runTask('send-completed-email', async () => {
@@ -268,6 +273,8 @@ export const run = async ({
     if (shouldSendCompletedEmail) {
       await sendCompletedEmail({ documentId, requestMetadata });
     }
+
+    console.log('Sending completed email');
   });
 
   const updatedDocument = await prisma.document.findFirstOrThrow({

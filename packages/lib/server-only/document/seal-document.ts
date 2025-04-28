@@ -130,7 +130,7 @@ export const sealDocument = async ({
         }).catch(() => null)
       : null;
   
-  console.log('Certificate data:', certificateData);
+  console.log('Certificate data seal document:', certificateData);
 
   const doc = await PDFDocument.load(pdfData);
 
