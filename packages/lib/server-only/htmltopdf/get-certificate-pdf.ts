@@ -26,13 +26,13 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
 
   console.log("Browserless URL:", browserlessUrl);
 
-  if (browserlessUrl) {
-    // !: Use CDP rather than the default `connect` method to avoid coupling to the playwright version.
-    // !: Previously we would have to keep the playwright version in sync with the browserless version to avoid errors.
-    browser = await chromium.connectOverCDP(browserlessUrl);
-  } else {
-    browser = await chromium.launch();
-  }
+  // if (browserlessUrl) {
+  //   // !: Use CDP rather than the default `connect` method to avoid coupling to the playwright version.
+  //   // !: Previously we would have to keep the playwright version in sync with the browserless version to avoid errors.
+  //   browser = await chromium.connectOverCDP(browserlessUrl);
+  // } else {
+  browser = await chromium.launch();
+  // }
 
   if (!browser) {
     throw new Error(
