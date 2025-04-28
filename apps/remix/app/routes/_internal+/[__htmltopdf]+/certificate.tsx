@@ -93,6 +93,8 @@ export default function SigningCertificate({ loaderData }: Route.ComponentProps)
 
   const { i18n, _ } = useLingui();
 
+  // console.log('SigningCertificate', { document, documentLanguage, isPlatformDocument, auditLogs });
+
   i18n.loadAndActivate({ locale: documentLanguage, messages });
 
   const isOwner = (email: string) => {
@@ -345,7 +347,7 @@ export default function SigningCertificate({ loaderData }: Route.ComponentProps)
         <div className="my-8 flex-row-reverse">
           <div className="flex items-end justify-end gap-x-4">
             <p className="flex-shrink-0 text-sm font-medium print:text-xs">
-              {_(msg`Signing certificate Nomia`)}:
+              {_(msg`Signing certificate provided by`)}:
             </p>
 
             <BrandingLogo className="max-h-6 print:max-h-4" />

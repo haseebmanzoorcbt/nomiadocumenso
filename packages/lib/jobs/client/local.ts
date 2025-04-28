@@ -59,6 +59,8 @@ export class LocalJobProvider extends BaseJobProvider {
           },
         });
 
+        console.log("JOB CREATED", pendingJob.id, job.id, options.payload);
+
         await this.submitJobToEndpoint({
           jobId: pendingJob.id,
           jobDefinitionId: pendingJob.jobId,
@@ -72,9 +74,14 @@ export class LocalJobProvider extends BaseJobProvider {
     return async (c: HonoContext) => {
       const req = c.req;
 
+
+
       if (req.method !== 'POST') {
         return c.text('Method not allowed', 405);
       }
+
+      console.log(`[JOBS]: Received request to trigger job ${req.path}`);
+      console.log("Method", req.method);
 
       const jobId = req.header('x-job-id');
       const signature = req.header('x-job-signature');

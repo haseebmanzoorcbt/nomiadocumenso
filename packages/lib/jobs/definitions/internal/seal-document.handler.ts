@@ -38,6 +38,8 @@ export const run = async ({
 }) => {
   const { documentId, sendEmail = true, isResealing = false, requestMetadata } = payload;
 
+  console.log('Sealing document:', documentId);
+
   const document = await prisma.document.findFirstOrThrow({
     where: {
       id: documentId,
@@ -138,6 +140,8 @@ export const run = async ({
           language: document.documentMeta?.language,
         }).catch(() => null)
       : null;
+  
+  console.log('Certificate data:', certificateData);
 
   const newDataId = await io.runTask('decorate-and-sign-pdf', async () => {
     const pdfDoc = await PDFDocument.load(pdfData);
@@ -153,6 +157,9 @@ export const run = async ({
     }
 
     if (certificateData) {
+
+   
+
       const certificateDoc = await PDFDocument.load(certificateData);
 
       const certificatePages = await pdfDoc.copyPages(
@@ -213,6 +220,7 @@ export const run = async ({
         },
       });
 
+
       await tx.document.update({
         where: {
           id: document.id,
@@ -222,6 +230,9 @@ export const run = async ({
           completedAt: new Date(),
         },
       });
+
+      // Update the document data with the new data
+      console.log('Updating document data:', newData.data);
 
       await tx.documentData.update({
         where: {

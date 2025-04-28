@@ -39,6 +39,10 @@ export const sealDocument = async ({
   isResealing = false,
   requestMetadata,
 }: SealDocumentOptions) => {
+
+  console.log('Sealing document:', documentId);
+
+
   const document = await prisma.document.findFirstOrThrow({
     where: {
       id: documentId,
@@ -62,7 +66,7 @@ export const sealDocument = async ({
   const { documentData } = document;
 
 
-  console.log('Document data:', documentData);
+  // console.log('Document data:', documentData);
 
   if (!documentData) {
     throw new Error(`Document ${document.id} has no document data`);
