@@ -81,8 +81,8 @@ export class LocalJobProvider extends BaseJobProvider {
         return c.text('Method not allowed', 405);
       }
 
-      console.log(`[JOBS]: Received request to trigger job ${req.path}`);
-      console.log("Method", req.method);
+      // console.log(`[JOBS]: Received request to trigger job ${req.path}`);
+      // console.log("Method", req.method);
 
       const jobId = req.header('x-job-id');
       const signature = req.header('x-job-signature');
@@ -98,6 +98,7 @@ export class LocalJobProvider extends BaseJobProvider {
       console.log("Options", options);  
 
       if (!options) {
+        console.log('Failed to parse request body');
         return c.text('Bad request', 400);
       }
 
@@ -108,6 +109,8 @@ export class LocalJobProvider extends BaseJobProvider {
         typeof signature !== 'string' ||
         typeof options !== 'object'
       ) {
+
+        console.log('Failed to parse request body 222');
         return c.text('Bad request', 400);
       }
 
@@ -127,7 +130,7 @@ export class LocalJobProvider extends BaseJobProvider {
 
       if (definition.trigger.schema) {
         const result = definition.trigger.schema.safeParse(options.payload);
-
+        console.log("Result", result);
         if (!result.success) {
           return c.text('Bad request', 400);
         }
@@ -176,7 +179,7 @@ export class LocalJobProvider extends BaseJobProvider {
 
         const taskHasExceededRetries = error instanceof BackgroundTaskExceededRetriesError;
         const jobHasExceededRetries =
-          backgroundJob.retried >= 10 &&
+          backgroundJob.retried >= backgroundJob.maxRetries &&
           !(error instanceof BackgroundTaskFailedError);
 
         if (taskHasExceededRetries || jobHasExceededRetries) {

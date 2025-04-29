@@ -32,6 +32,8 @@ export const run = async ({
 }) => {
   const { userId, documentId, recipientId, requestMetadata } = payload;
 
+  console.log("Sending signing email")
+
   const [user, document, recipient] = await Promise.all([
     prisma.user.findFirstOrThrow({
       where: {

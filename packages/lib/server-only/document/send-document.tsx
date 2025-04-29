@@ -39,6 +39,10 @@ export const sendDocument = async ({
   sendEmail,
   requestMetadata,
 }: SendDocumentOptions) => {
+
+
+  console.log('Sending document:', documentId);
+
   const document = await prisma.document.findUnique({
     where: {
       id: documentId,
@@ -67,7 +71,9 @@ export const sendDocument = async ({
     },
   });
 
+
   if (!document) {
+    
     throw new Error('Document not found');
   }
 
