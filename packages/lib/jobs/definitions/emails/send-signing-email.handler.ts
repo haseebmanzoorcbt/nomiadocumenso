@@ -43,7 +43,7 @@ export const run = async ({
     prisma.document.findFirstOrThrow({
       where: {
         id: documentId,
-        status: DocumentStatus.PENDING,
+        // status: DocumentStatus.PENDING,
       },
       include: {
         documentMeta: true,
@@ -62,6 +62,10 @@ export const run = async ({
       },
     }),
   ]);
+
+  console.log("User", user.name);
+  console.log("Recipient", recipient.name);
+  console.log("Document", document.title);
 
   const { documentMeta, team } = document;
 

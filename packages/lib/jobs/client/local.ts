@@ -230,7 +230,7 @@ export class LocalJobProvider extends BaseJobProvider {
     const endpoint = `${NEXT_PRIVATE_INTERNAL_WEBAPP_URL}/api/jobs/${jobDefinitionId}/${jobId}`;
     const signature = sign(data);
 
-    console.log("Payload", data);
+    // console.log("Payload", data);
   
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ export class LocalJobProvider extends BaseJobProvider {
     console.log(`[JOB:${jobId}] Submitting to endpoint: ${endpoint}`);
   
     const controller = new AbortController();
-    const timeout = 5000;
+    const timeout = 1000;
     const timeoutId = setTimeout(() => {
       controller.abort();
       console.warn(`[JOB:${jobId}] Fetch aborted after ${timeout}ms`);
@@ -268,7 +268,7 @@ export class LocalJobProvider extends BaseJobProvider {
       }
     } catch (err: any) {
       clearTimeout(timeoutId);
-      console.log(err);
+      // console.log(err);
       if (err.name === 'AbortError') {
       
         console.warn(`[JOB:${jobId}] Fetch timed out after ${timeout}ms`);
@@ -307,7 +307,7 @@ export class LocalJobProvider extends BaseJobProvider {
           return task.result as T;
         }
 
-        if (task.retried >= 3) {
+        if (task.retried >= 5) {
           throw new BackgroundTaskExceededRetriesError('Task exceeded retries');
         }
 

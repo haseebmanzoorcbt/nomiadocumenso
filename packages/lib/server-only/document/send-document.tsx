@@ -73,6 +73,7 @@ export const sendDocument = async ({
 
 
   if (!document) {
+    console.log('Document not found', documentId);
     
     throw new Error('Document not found');
   }
@@ -103,6 +104,7 @@ export const sendDocument = async ({
   const { documentData } = document;
 
   if (!documentData.data) {
+    console.log('Document data not found File send-document', documentData.id);
     throw new Error('Document data not found');
   }
 
