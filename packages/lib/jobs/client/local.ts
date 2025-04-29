@@ -59,12 +59,13 @@ export class LocalJobProvider extends BaseJobProvider {
           },
         });
 
-        console.log("JOB CREATED", pendingJob.id, job.id, options.payload);
+        console.log("JOB CREATED", pendingJob.id, job.id);
 
         await this.submitJobToEndpoint({
           jobId: pendingJob.id,
           jobDefinitionId: pendingJob.jobId,
           data: options,
+          isRetry :true
         });
       }),
     );
@@ -205,6 +206,7 @@ export class LocalJobProvider extends BaseJobProvider {
           jobId,
           jobDefinitionId: backgroundJob.jobId,
           data: options,
+          isRetry: true,
         });
       }
 
@@ -219,32 +221,58 @@ export class LocalJobProvider extends BaseJobProvider {
     isRetry?: boolean;
   }) {
     const { jobId, jobDefinitionId, data, isRetry } = options;
-
+  
     const endpoint = `${NEXT_PRIVATE_INTERNAL_WEBAPP_URL}/api/jobs/${jobDefinitionId}/${jobId}`;
     const signature = sign(data);
 
+    console.log("Payload", data);
+  
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-Job-Id': jobId,
       'X-Job-Signature': signature,
     };
-
+  
     if (isRetry) {
       headers['X-Job-Retry'] = '1';
     }
-
-    console.log('Submitting job to endpoint:', endpoint);
-    await Promise.race([
-      fetch(endpoint, {
+  
+    console.log(`[JOB:${jobId}] Submitting to endpoint: ${endpoint}`);
+  
+    const controller = new AbortController();
+    const timeout = 5000;
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+      console.warn(`[JOB:${jobId}] Fetch aborted after ${timeout}ms`);
+    }, timeout);
+  
+    try {
+      const res = await fetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify(data),
         headers,
-      }).catch(() => null),
-      new Promise((resolve) => {
-        setTimeout(resolve, 150);
-      }),
-    ]);
+        body: JSON.stringify(data),
+        signal: controller.signal,
+      });
+  
+      clearTimeout(timeoutId);
+  
+      if (!res.ok) {
+        console.error(`[JOB:${jobId}] Server responded with status ${res.status}`);
+      } else {
+        console.log(`[JOB:${jobId}] Job delivered successfully`);
+      }
+    } catch (err: any) {
+      clearTimeout(timeoutId);
+      console.log(err);
+      if (err.name === 'AbortError') {
+      
+        console.warn(`[JOB:${jobId}] Fetch timed out after ${timeout}ms`);
+      } else {
+        console.error(`[JOB:${jobId}] Fetch failed:`, err);
+      }
+    }
   }
+  
 
   private createJobRunIO(jobId: string): JobRunIO {
     return {
