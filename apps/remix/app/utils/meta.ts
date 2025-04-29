@@ -27,16 +27,16 @@ export const appMetaTags = (title?: string) => {
     },
     {
       property: 'og:title',
-      content: 'Nomia Signatures - The Open Source DocuSign Alternative',
+      content: 'Nomia Signatures - The  DocuSign Alternative',
     },
     {
       property: 'og:description',
       content: description,
     },
-    {
-      property: 'og:image',
-      content: `${NEXT_PUBLIC_WEBAPP_URL()}/opengraph-image.jpg`,
-    },
+    // {
+    //   property: 'og:image',
+    //   content: `${NEXT_PUBLIC_WEBAPP_URL()}/opengraph-image.jpg`,
+    // },
     {
       property: 'og:type',
       content: 'website',
