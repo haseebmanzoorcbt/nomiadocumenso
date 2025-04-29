@@ -94,6 +94,8 @@ export class LocalJobProvider extends BaseJobProvider {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         .then((data) => data as SimpleTriggerJobOptions)
         .catch(() => null);
+      
+      console.log("Options", options);  
 
       if (!options) {
         return c.text('Bad request', 400);
@@ -188,7 +190,7 @@ export class LocalJobProvider extends BaseJobProvider {
               completedAt: new Date(),
             },
           });
-
+          console.log("Max retries exceeded", backgroundJob.id);
           return c.text('Task exceeded retries', 500);
         }
 
