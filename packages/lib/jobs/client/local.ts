@@ -174,7 +174,7 @@ export class LocalJobProvider extends BaseJobProvider {
 
         const taskHasExceededRetries = error instanceof BackgroundTaskExceededRetriesError;
         const jobHasExceededRetries =
-          backgroundJob.retried >= backgroundJob.maxRetries &&
+          backgroundJob.retried >= 10 &&
           !(error instanceof BackgroundTaskFailedError);
 
         if (taskHasExceededRetries || jobHasExceededRetries) {
