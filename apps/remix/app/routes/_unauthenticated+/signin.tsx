@@ -28,7 +28,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const url = new URL(request.url);
   const email = url.searchParams.get('email');
-  
+
   if (email) {
     console.log('Email from query param:', email);
   }
@@ -41,7 +41,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     isGoogleSSOEnabled,
     isOIDCSSOEnabled,
     oidcProviderLabel,
-    email
+    email,
   };
 }
 
@@ -50,13 +50,10 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="w-screen max-w-lg px-4">
-      <div className="border-border dark:bg-background z-10 rounded-xl border p-6">
-        <div className='flex w-full items-center justify-center p-2'>
-            <img 
-            src='https://app.nomiadocs.com/static/media/nomia-logo2.4cb13eb13a54b98490e0.png'
-            className='h-10'
-            />
-          </div>
+      <div className="border-border bg-background z-10 rounded-xl border p-6">
+        <div className="flex w-full items-center justify-center p-2">
+          <img src="/images/nomiasignatures.png" className="h-20" />
+        </div>
         <hr className="-mx-6 my-4" />
 
         <SignInForm
