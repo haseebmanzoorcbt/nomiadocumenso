@@ -604,8 +604,8 @@ export const createDocumentFromDirectTemplate = async ({
         },
       ],
       from: {
-        name: env('NEXT_PRIVATE_SMTP_FROM_NAME') || 'Documenso',
-        address: env('NEXT_PRIVATE_SMTP_FROM_ADDRESS') || 'noreply@documenso.com',
+        name: env('NEXT_PRIVATE_SMTP_FROM_NAME') || 'Nomia Signatures',
+        address: env('NEXT_PRIVATE_SMTP_FROM_ADDRESS') || 'esign@nomiadocs.com',
       },
       subject: i18n._(msg`Document created from direct template`),
       html,

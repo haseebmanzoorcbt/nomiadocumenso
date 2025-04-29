@@ -1,9 +1,9 @@
 import { env } from '../utils/env';
 
-export const FROM_ADDRESS = env('NEXT_PRIVATE_SMTP_FROM_ADDRESS') || 'noreply@documenso.com';
-export const FROM_NAME = env('NEXT_PRIVATE_SMTP_FROM_NAME') || 'Documenso';
+export const FROM_ADDRESS = env('NEXT_PRIVATE_SMTP_FROM_ADDRESS') || 'esign@nomiadocs.com';
+export const FROM_NAME = env('NEXT_PRIVATE_SMTP_FROM_NAME') || 'Nomia Signatures';
 
-export const SERVICE_USER_EMAIL = 'serviceaccount@documenso.com';
+export const SERVICE_USER_EMAIL = 'info@nomiadocs.com';
 
 export const EMAIL_VERIFICATION_STATE = {
   NOT_FOUND: 'NOT_FOUND',

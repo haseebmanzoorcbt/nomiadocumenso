@@ -54,6 +54,8 @@ export const createDocument = async ({
     },
   });
 
+  console.log('User:', user);
+
   if (
     teamId !== undefined &&
     !user.teamMembers.some((teamMember) => teamMember.teamId === teamId)
@@ -94,6 +96,8 @@ export const createDocument = async ({
         id: documentDataId,
       },
     });
+
+    // console.log('Document Data:', documentData);
 
     if (documentData) {
       const buffer = await getFileServerSide(documentData);

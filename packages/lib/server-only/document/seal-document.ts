@@ -40,7 +40,7 @@ export const sealDocument = async ({
   requestMetadata,
 }: SealDocumentOptions) => {
 
-  console.log('Sealing document:', documentId);
+  // console.log('Sealing document:', documentId);
 
 
   const document = await prisma.document.findFirstOrThrow({

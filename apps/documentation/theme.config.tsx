@@ -2,7 +2,7 @@ import type { DocsThemeConfig } from 'nextra-theme-docs';
 import { useConfig } from 'nextra-theme-docs';
 
 const themeConfig: DocsThemeConfig = {
-  logo: <span>Documenso</span>,
+  logo: <span>Nomia</span>,
   head: function useHead() {
     const config = useConfig<{ title?: string; description?: string }>();
 
@@ -33,8 +33,8 @@ const themeConfig: DocsThemeConfig = {
     text: (
       <span>
         {new Date().getFullYear()} ©{' '}
-        <a href="https://documen.so" target="_blank">
-          Documenso
+        <a href="https://sign.nomiadocs.com" target="_blank">
+          Nomia
         </a>
         .
       </span>

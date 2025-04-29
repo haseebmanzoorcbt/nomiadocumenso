@@ -25,7 +25,11 @@ export const SEAL_DOCUMENT_JOB_DEFINITION = {
   handler: async ({ payload, io }) => {
     const handler = await import('./seal-document.handler');
 
+    console.log('Sealing document:', payload.documentId);
+
     await handler.run({ payload, io });
+
+    console.log('Sealed document:', payload.documentId);
   },
 } as const satisfies JobDefinition<
   typeof SEAL_DOCUMENT_JOB_DEFINITION_ID,
