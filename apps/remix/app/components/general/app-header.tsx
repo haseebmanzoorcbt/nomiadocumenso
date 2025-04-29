@@ -1,5 +1,6 @@
 import { type HTMLAttributes, useEffect, useState } from 'react';
 
+import { Trans } from '@lingui/react/macro';
 import { Loader, MenuIcon, SearchIcon } from 'lucide-react';
 import { Link, useLocation, useParams } from 'react-router';
 
@@ -14,7 +15,6 @@ import { AppCommandMenu } from './app-command-menu';
 import { AppNavDesktop } from './app-nav-desktop';
 import { AppNavMobile } from './app-nav-mobile';
 import { MenuSwitcher } from './menu-switcher';
-import { Trans } from '@lingui/react/macro';
 
 export type HeaderProps = HTMLAttributes<HTMLDivElement> & {
   user: SessionUser;
@@ -23,7 +23,7 @@ export type HeaderProps = HTMLAttributes<HTMLDivElement> & {
 
 export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
   const params = useParams();
-  const { pathname,search } = useLocation();
+  const { pathname, search } = useLocation();
   const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -42,7 +42,7 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
     }
     return pathname.split('/')[2] === teamUrl;
   };
- 
+
   const selectedTeam = teams?.find((team) => isPathTeamUrl(team.url));
 
   return (
@@ -59,9 +59,7 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
           to={`${getRootHref(params, { returnEmptyRootString: true })}/documents`}
           className="focus-visible:ring-ring ring-offset-background hidden rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:inline"
         >
-          <img
-          src="https://app.nomiadocs.com/static/media/nomia-logo2.4cb13eb13a54b98490e0.png"
-          className="h-10 w-auto" />
+          <img src="/images/nomiasignatures.png" className="h-10 w-auto" />
         </Link>
 
         <AppNavDesktop setIsCommandMenuOpen={setIsCommandMenuOpen} />
