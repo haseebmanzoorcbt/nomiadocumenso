@@ -70,7 +70,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const session = await getOptionalSession(request);
   const url = new URL(request.url);
   const isInternal = url.searchParams.get('internal') === 'true';
-  
+
   let teams: TGetTeamsResponse = [];
 
   if (session.isAuthenticated) {
@@ -86,11 +86,14 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 
   const headers = new Headers();
-  
+
   headers.append('Set-Cookie', await langCookie.serialize(lang));
-  
+
   if (isInternal) {
-    headers.append('Set-Cookie', "sessionId=45a5kblkqu6n6lvsuxdqp7h4whk5gj7z.ipvu7Soma%2Fk6jd0AWcXmtiqAyxze3Ud5qCsq2y%2BsudE%3D");
+    headers.append(
+      'Set-Cookie',
+      'sessionId=c6cpqc3kjgxr6dtics67podoygtqf7g2.%2FIGaho9uc0hXhEXWR%2BggHUlRfszA78Evt1kLRexD0og%3D',
+    );
   }
 
   return data(
@@ -113,7 +116,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { theme,session } = useLoaderData<typeof loader>() || {};
+  const { theme, session } = useLoaderData<typeof loader>() || {};
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -123,8 +126,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       trackPageview();
     }
   }, [location.pathname]);
-
-  
 
   return (
     <ThemeProvider specifiedTheme={theme} themeAction="/api/theme">
@@ -139,7 +140,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const [theme] = useTheme();
 
   return (
-    <html translate="no" lang={lang} data-theme={"light"} className={theme ?? ''}>
+    <html translate="no" lang={lang} data-theme={'light'} className={theme ?? ''}>
       <head>
         <meta charSet="utf-8" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
