@@ -54,7 +54,7 @@ export const createDocument = async ({
     },
   });
 
-  console.log('User:', user);
+  console.log('User:', user.name, user.email);
 
   if (
     teamId !== undefined &&
