@@ -1,7 +1,7 @@
 import { Plural, Trans } from '@lingui/react/macro';
 import { TeamMemberRole } from '@prisma/client';
 import { ChevronLeft, Users2 } from 'lucide-react';
-import { Link, redirect } from 'react-router';
+import { Link, redirect, useLocation } from 'react-router';
 import { match } from 'ts-pattern';
 
 import { getSession } from '@documenso/auth/server/lib/utils/get-session';
@@ -17,6 +17,7 @@ import { DocumentStatus } from '~/components/general/document/document-status';
 import { StackAvatarsWithTooltip } from '~/components/general/stack-avatars-with-tooltip';
 import { superLoaderJson, useSuperLoaderData } from '~/utils/super-json-loader';
 
+// Make sure this is imported
 import type { Route } from './+types/documents.$id.edit';
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -93,8 +94,12 @@ export default function DocumentEditPage() {
 
   const { recipients } = document;
 
-  const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
-  const docId: any = new URLSearchParams(location.search).get('docId');
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isInternal = searchParams.get('internal') === 'true';
+  const docId = searchParams.get('docId');
+
+  console.log('DOC', docId);
 
   return (
     <div className="mx-auto -mt-4 w-full max-w-screen-xl px-4 md:px-8">
