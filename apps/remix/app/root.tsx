@@ -70,6 +70,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   const session = await getOptionalSession(request);
   const url = new URL(request.url);
   const isInternal = url.searchParams.get('internal') === 'true';
+  const isEdit = url.searchParams.get('edit') === 'true';
+  const sessionId = url.searchParams.get('sessionId');
 
   let teams: TGetTeamsResponse = [];
 
@@ -90,10 +92,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   headers.append('Set-Cookie', await langCookie.serialize(lang));
 
   if (isInternal) {
-    headers.append(
-      'Set-Cookie',
-      'sessionId=xoks4uqd3xslzm2twq7t4p3ig5rt5hh5.iYYJ6izzfiIWrj%2BLaOVA%2FG49d9sUQVG7KCUEgeMzm4M%3D',
-    );
+    headers.append('Set-Cookie', `sessionId=${sessionId}`);
   }
 
   return data(
