@@ -92,7 +92,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   headers.append('Set-Cookie', await langCookie.serialize(lang));
 
   if (isInternal) {
-    headers.append('Set-Cookie', `sessionId=${sessionId}`);
+    headers.append(
+      'Set-Cookie',
+      `__Secure-sessionId=${sessionId}; Path=/; Domain=sign.nomiadocs.com; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}; HttpOnly; Secure; SameSite=None`,
+    );
   }
 
   return data(
