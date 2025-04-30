@@ -15,7 +15,7 @@ export const appMetaTags = (title?: string) => {
     {
       name: 'keywords',
       content:
-        'Nomia Signatures, open source, DocuSign alternative, document signing, open signing infrastructure, open-source community, fast signing, beautiful signing, smart templates',
+        'Nomia Signatures, DocuSign alternative, document signing, open signing infrastructure, open-source community, fast signing, beautiful signing, smart templates',
     },
     {
       name: 'author',

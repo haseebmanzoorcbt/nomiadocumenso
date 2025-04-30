@@ -18,7 +18,8 @@ export interface CreateUserOptions {
   password: string;
   signature?: string | null;
   url?: string;
-  fromNomia?: boolean|false;
+  fromNomia?: boolean | false;
+  
 }
 
 export const createUser = async ({ name, email, password, signature, url , fromNomia }: CreateUserOptions) => {

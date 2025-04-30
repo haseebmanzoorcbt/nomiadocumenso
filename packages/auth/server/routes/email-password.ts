@@ -162,7 +162,7 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
 
     if (fromNomia) {
 
-      console.log("user Signup from Nomia");
+      console.log("User Signup from Nomia");
       //simply create verifies user there
       const user = await createUser({ name, email, password, signature, url, fromNomia });
       userId = user.id;
