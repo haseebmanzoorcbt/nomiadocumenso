@@ -2,7 +2,7 @@ import { type HTMLAttributes, useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Loader, MenuIcon, SearchIcon } from 'lucide-react';
-import { Link, useLocation, useParams } from 'react-router';
+import { Link, useLocation, useParams, useSearchParams } from 'react-router';
 
 import type { SessionUser } from '@documenso/auth/server/lib/session/session';
 import type { TGetTeamsResponse } from '@documenso/lib/server-only/team/get-teams';
@@ -45,6 +45,10 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
 
   const selectedTeam = teams?.find((team) => isPathTeamUrl(team.url));
 
+  const [searchParams] = useSearchParams();
+  const internal =
+    searchParams.get('internalUser') === 'true' || searchParams.get('internal') === 'true';
+
   return (
     <header
       className={cn(
@@ -62,31 +66,35 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
           <img src="/images/nomiasignatures.png" className="h-10 w-auto" />
         </Link>
 
-        <AppNavDesktop setIsCommandMenuOpen={setIsCommandMenuOpen} />
+        {!internal && <AppNavDesktop setIsCommandMenuOpen={setIsCommandMenuOpen} />}
 
-        <div
-          className="flex gap-x-4 md:ml-8"
-          title={selectedTeam ? selectedTeam.name : (user.name ?? '')}
-        >
-          <MenuSwitcher user={user} teams={teams} />
-        </div>
+        {!internal && (
+          <div
+            className="flex gap-x-4 md:ml-8"
+            title={selectedTeam ? selectedTeam.name : (user.name ?? '')}
+          >
+            <MenuSwitcher user={user} teams={teams} />
+          </div>
+        )}
 
-        <div className="flex flex-row items-center space-x-4 md:hidden">
-          <button onClick={() => setIsCommandMenuOpen(true)}>
-            <SearchIcon className="text-muted-foreground h-6 w-6" />
-          </button>
+        {!internal && (
+          <div className="flex flex-row items-center space-x-4 md:hidden">
+            <button onClick={() => setIsCommandMenuOpen(true)}>
+              <SearchIcon className="text-muted-foreground h-6 w-6" />
+            </button>
 
-          <button onClick={() => setIsHamburgerMenuOpen(true)}>
-            <MenuIcon className="text-muted-foreground h-6 w-6" />
-          </button>
+            <button onClick={() => setIsHamburgerMenuOpen(true)}>
+              <MenuIcon className="text-muted-foreground h-6 w-6" />
+            </button>
 
-          <AppCommandMenu open={isCommandMenuOpen} onOpenChange={setIsCommandMenuOpen} />
+            <AppCommandMenu open={isCommandMenuOpen} onOpenChange={setIsCommandMenuOpen} />
 
-          <AppNavMobile
-            isMenuOpen={isHamburgerMenuOpen}
-            onMenuOpenChange={setIsHamburgerMenuOpen}
-          />
-        </div>
+            <AppNavMobile
+              isMenuOpen={isHamburgerMenuOpen}
+              onMenuOpenChange={setIsHamburgerMenuOpen}
+            />
+          </div>
+        )}
       </div>
     </header>
   );

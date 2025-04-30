@@ -107,7 +107,7 @@ export default function DocumentsPage() {
       const sessionId = document.cookie.split('; ').find((row) => row.startsWith('sessionId='));
       if (sessionId && !hasRedirected && isInternal) {
         setHasRedirected(true);
-        window.location.href = '/documents/27/edit';
+        window.location.href = '/documents/27/edit?internalUser=true';
       }
     }
   }, [session, hasRedirected, location.pathname, location.search]);

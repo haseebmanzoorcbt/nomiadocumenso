@@ -210,9 +210,9 @@ export function AppCommandMenu({ open, onOpenChange }: AppCommandMenuProps) {
               <CommandItem className="-mx-2 -my-1 rounded-lg" onSelect={() => addPage('language')}>
                 Change language
               </CommandItem>
-              <CommandItem className="-mx-2 -my-1 rounded-lg" onSelect={() => addPage('theme')}>
+              {/* <CommandItem className="-mx-2 -my-1 rounded-lg" onSelect={() => addPage('theme')}>
                 Change theme
-              </CommandItem>
+              </CommandItem> */}
             </CommandGroup>
             {searchResults.length > 0 && (
               <CommandGroup className="mx-2 p-0 pb-2" heading={_(msg`Your documents`)}>
