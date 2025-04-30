@@ -93,12 +93,17 @@ export default function DocumentEditPage() {
 
   const { recipients } = document;
 
+  const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
+  const docId: any = new URLSearchParams(location.search).get('docId');
+
   return (
     <div className="mx-auto -mt-4 w-full max-w-screen-xl px-4 md:px-8">
-      <Link to={documentRootPath} className="flex items-center text-[#4C33FF] hover:opacity-80">
-        <ChevronLeft className="mr-2 inline-block h-5 w-5" />
-        <Trans>Documents</Trans>
-      </Link>
+      {!docId && (
+        <Link to={documentRootPath} className="flex items-center text-[#4C33FF] hover:opacity-80">
+          <ChevronLeft className="mr-2 inline-block h-5 w-5" />
+          <Trans>Documents</Trans>
+        </Link>
+      )}
 
       <h1
         className="mt-4 block max-w-[20rem] truncate text-2xl font-semibold md:max-w-[30rem] md:text-3xl"
