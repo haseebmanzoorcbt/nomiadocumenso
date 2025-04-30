@@ -67,35 +67,62 @@ export function meta() {
 export const shouldRevalidate = () => false;
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await getOptionalSession(request);
   const url = new URL(request.url);
   const isInternal = url.searchParams.get('internal') === 'true';
   const isEdit = url.searchParams.get('edit') === 'true';
   const sessionId = url.searchParams.get('sessionId');
 
+  const headers = new Headers();
+  let lang: SupportedLanguageCodes = await langCookie.parse(request.headers.get('cookie') ?? '');
+  headers.append('Set-Cookie', await langCookie.serialize(lang));
+
+  // Create a modified request with the sessionId as a cookie if it exists in query params
+  let modifiedRequest = request;
+
+  if (isInternal && sessionId) {
+    console.log('Setting sessionId cookie from query param:', sessionId);
+
+    // Create a new cookie header with the sessionId
+    const cookieHeader = request.headers.get('cookie') || '';
+    const updatedCookieHeader = `${cookieHeader}; sessionId=${sessionId}`;
+
+    // Create a new request with the updated cookie header
+    const newHeaders = new Headers(request.headers);
+    newHeaders.set('cookie', updatedCookieHeader);
+
+    modifiedRequest = new Request(request.url, {
+      headers: newHeaders,
+      method: request.method,
+      body: request.body,
+      signal: request.signal,
+      cache: request.cache,
+      credentials: request.credentials,
+      integrity: request.integrity,
+      keepalive: request.keepalive,
+      mode: request.mode,
+      redirect: request.redirect,
+      referrer: request.referrer,
+      referrerPolicy: request.referrerPolicy,
+    });
+
+    // Also set the cookie for future requests
+    headers.append('Set-Cookie', `sessionId=${sessionId}`);
+  }
+
+  // Use the modified request that includes the sessionId cookie
+  const session = await getOptionalSession(modifiedRequest);
   let teams: TGetTeamsResponse = [];
 
   if (session.isAuthenticated) {
     teams = await getTeams({ userId: session.user.id });
+  } else if (isInternal && sessionId) {
+    console.warn('Failed to authenticate with sessionId:', sessionId);
   }
 
   const { getTheme } = await themeSessionResolver(request);
 
-  let lang: SupportedLanguageCodes = await langCookie.parse(request.headers.get('cookie') ?? '');
-
   if (!APP_I18N_OPTIONS.supportedLangs.includes(lang)) {
     lang = extractLocaleData({ headers: request.headers }).lang;
-  }
-
-  const headers = new Headers();
-
-  headers.append('Set-Cookie', await langCookie.serialize(lang));
-
-  if (isInternal) {
-    headers.append(
-      'Set-Cookie',
-      `__Secure-sessionId=${sessionId}; Path=/; Domain=sign.nomiadocs.com; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}; HttpOnly; Secure; SameSite=None`,
-    );
   }
 
   return data(

@@ -37,6 +37,8 @@ export interface DataTableProps<TData, TValue> {
     enable: boolean;
     component?: React.ReactNode;
   };
+  // ✅ Add this new prop
+  rowClassName?: (row: TData) => string;
 }
 
 export function DataTable<TData, TValue>({
@@ -52,6 +54,7 @@ export function DataTable<TData, TValue>({
   onClearFilters,
   onPaginationChange,
   children,
+  rowClassName, // ✅ destructure it here
 }: DataTableProps<TData, TValue>) {
   const pagination = useMemo<PaginationState>(() => {
     if (currentPage !== undefined && perPage !== undefined) {
@@ -72,7 +75,6 @@ export function DataTable<TData, TValue>({
   const onTablePaginationChange = (updater: Updater<PaginationState>) => {
     if (typeof updater === 'function') {
       const newState = updater(pagination);
-
       onPaginationChange?.(newState.pageIndex + 1, newState.pageSize);
     } else {
       onPaginationChange?.(updater.pageIndex + 1, updater.pageSize);
@@ -99,22 +101,24 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className={rowClassName?.(row.original)} // ✅ Apply class here
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
@@ -145,7 +149,6 @@ export function DataTable<TData, TValue>({
                   <p>
                     <Trans>No results found</Trans>
                   </p>
-
                   {hasFilters && onClearFilters !== undefined && (
                     <button
                       onClick={() => onClearFilters()}

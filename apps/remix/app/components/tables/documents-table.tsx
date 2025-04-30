@@ -29,11 +29,12 @@ export type DocumentsTableProps = {
   data?: TFindDocumentsResponse;
   isLoading?: boolean;
   isLoadingError?: boolean;
+  docId?: any;
 };
 
 type DocumentsTableRow = TFindDocumentsResponse['data'][number];
 
-export const DocumentsTable = ({ data, isLoading, isLoadingError }: DocumentsTableProps) => {
+export const DocumentsTable = ({ data, isLoading, isLoadingError, docId }: DocumentsTableProps) => {
   const { _, i18n } = useLingui();
 
   const team = useOptionalCurrentTeam();
@@ -107,7 +108,9 @@ export const DocumentsTable = ({ data, isLoading, isLoadingError }: DocumentsTab
     <div className="relative">
       <DataTable
         columns={columns}
-        data={results.data}
+        data={
+          docId != null ? results.data.filter((row) => row.id === parseInt(docId)) : results.data
+        }
         perPage={results.perPage}
         currentPage={results.currentPage}
         totalPages={results.totalPages}
@@ -143,6 +146,9 @@ export const DocumentsTable = ({ data, isLoading, isLoadingError }: DocumentsTab
             </>
           ),
         }}
+        rowClassName={(row: DocumentsTableRow) =>
+          row.id === parseInt(docId) ? 'bg-gradient-to-r from-purple-100 to-blue-200' : ''
+        }
       >
         {(table) => <DataTablePagination additionalInformation="VisibleCount" table={table} />}
       </DataTable>
