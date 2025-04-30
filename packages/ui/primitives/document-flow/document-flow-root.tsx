@@ -150,7 +150,7 @@ export const DocumentFlowFormContainerActions = ({
     <div className="mt-4 flex gap-x-4">
       <Button
         type="button"
-        className="dark:bg-muted dark:hover:bg-muted/80 flex-1 bg-black/5 hover:bg-black/10"
+        className="flex-1"
         size="lg"
         variant="secondary"
         disabled={disabled || loading || !canGoBack || !onGoBackClick}

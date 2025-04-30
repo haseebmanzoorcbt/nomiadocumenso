@@ -92,7 +92,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (isInternal) {
     headers.append(
       'Set-Cookie',
-      'sessionId=c6cpqc3kjgxr6dtics67podoygtqf7g2.%2FIGaho9uc0hXhEXWR%2BggHUlRfszA78Evt1kLRexD0og%3D',
+      'sessionId=xoks4uqd3xslzm2twq7t4p3ig5rt5hh5.iYYJ6izzfiIWrj%2BLaOVA%2FG49d9sUQVG7KCUEgeMzm4M%3D',
     );
   }
 

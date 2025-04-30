@@ -30,7 +30,7 @@ module.exports = {
           foreground: '#FFFFFF',
         },
         secondary: {
-          DEFAULT: '#D6D6D6',
+          DEFAULT: '#7D7C7C',
           foreground: '#FFFFFF',
         },
         warning: {
@@ -152,7 +152,7 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
     addVariablesForColors,
-    function({ addBase }) {
+    function ({ addBase }) {
       addBase({
         ':root': {
           '--background': '0 0% 100%',
