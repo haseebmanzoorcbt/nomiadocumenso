@@ -58,7 +58,8 @@ export default function DocumentsPage() {
     [ExtendedDocumentStatus.ALL]: 0,
   });
 
-  const isInternal = new URLSearchParams(location.search).get('internal') === 'true';
+  const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
+  const docId: any = new URLSearchParams(location.search).get('docId');
 
   const findDocumentSearchParams = useMemo(
     () => ZSearchParamsSchema.safeParse(Object.fromEntries(searchParams.entries())).data || {},
@@ -104,10 +105,12 @@ export default function DocumentsPage() {
     if (location.pathname.includes('edit')) {
       console.log('do nothing');
     } else {
-      const sessionId = document.cookie.split('; ').find((row) => row.startsWith('sessionId='));
+      const sessionId = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('__Secure-sessionId='));
       if (sessionId && !hasRedirected && isInternal) {
         setHasRedirected(true);
-        window.location.href = '/documents/27/edit?internalUser=true';
+        window.location.href = `/documents/${parseInt(docId)}/edit?internalUser=true`;
       }
     }
   }, [session, hasRedirected, location.pathname, location.search]);
