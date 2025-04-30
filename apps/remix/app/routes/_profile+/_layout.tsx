@@ -53,10 +53,10 @@ export default function PublicProfileLayout() {
               to="/"
               className="focus-visible:ring-ring ring-offset-background rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:inline"
             >
-              <img  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH" className="hidden h-15 w-auto sm:block" />
+              <img  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py" className="hidden h-15 w-auto sm:block" />
 
               <img
-                src="https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/QmdZK8272AGmUKxHbnhHq8TDofJRCmqox2BKeWAgY8BKMH"
+                src="https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"
                 alt="Nomia Logo"
                 width={48}
                 height={48}
