@@ -60,6 +60,7 @@ export default function DocumentsPage() {
 
   const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
   const docId: any = new URLSearchParams(location.search).get('docId');
+  const isEdit: any = new URLSearchParams(location.search).get('edit') === 'true';
 
   const findDocumentSearchParams = useMemo(
     () => ZSearchParamsSchema.safeParse(Object.fromEntries(searchParams.entries())).data || {},
@@ -101,34 +102,32 @@ export default function DocumentsPage() {
 
   const [hasRedirected, setHasRedirected] = useState(false);
 
-  // useEffect(() => {
-  //   if (location.pathname.includes('edit')) {
-  //     console.log('do nothing');
-  //   } else {
-  //     const sessionId = document.cookie
-  //       .split('; ')
-  //       .find((row) => row.startsWith('__Secure-sessionId='));
-  //     if (sessionId && !hasRedirected && isInternal) {
-  //       setHasRedirected(true);
-  //       window.location.href = `/documents/${parseInt(docId)}/edit?internalUser=true`;
-  //     }
-  //   }
-  // }, [session, hasRedirected, location.pathname, location.search]);
+  useEffect(() => {
+    if (location.pathname.includes('edit')) {
+      console.log('do nothing');
+    } else {
+      const sessionId = document.cookie.split('; ').find((row) => row.startsWith('sessionId='));
+      if (sessionId && !hasRedirected && isEdit) {
+        setHasRedirected(true);
+        window.location.href = `/documents/${parseInt(docId)}/edit?internalUser=true`;
+      }
+    }
+  }, [session, hasRedirected, location.pathname, location.search]);
 
-  // if (isInternal) {
-  //   return (
-  //     <div className="flex h-[80vh] w-full flex-col items-center justify-center">
-  //       <Loader className="text-documenso h-12 w-12 animate-spin" />
-  //       <p className="text-muted-foreground mt-4">
-  //         <Trans>Loading document...</Trans>
-  //       </p>
-  //     </div>
-  //   );
-  // }
+  if (isEdit) {
+    return (
+      <div className="flex h-[80vh] w-full flex-col items-center justify-center">
+        <Loader className="text-documenso h-12 w-12 animate-spin" />
+        <p className="text-muted-foreground mt-4">
+          <Trans>Loading document...</Trans>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
-      <DocumentUploadDropzone />
+      {!isInternal && <DocumentUploadDropzone />}
       <div className="mt-12 flex flex-wrap items-center justify-between gap-x-4 gap-y-8">
         <div className="flex flex-row items-center">
           {team && (
@@ -191,7 +190,12 @@ export default function DocumentsPage() {
               status={findDocumentSearchParams.status || ExtendedDocumentStatus.ALL}
             />
           ) : (
-            <DocumentsTable data={data} isLoading={isLoading} isLoadingError={isLoadingError} />
+            <DocumentsTable
+              data={data}
+              docId={docId}
+              isLoading={isLoading}
+              isLoadingError={isLoadingError}
+            />
           )}
         </div>
       </div>
