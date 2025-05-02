@@ -106,7 +106,9 @@ export default function DocumentsPage() {
     if (location.pathname.includes('edit')) {
       console.log('do nothing');
     } else {
-      const sessionId = document.cookie.split('; ').find((row) => row.startsWith('sessionId='));
+      const sessionId = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('__Secure-sessionId='));
       if (sessionId && !hasRedirected && isEdit) {
         setHasRedirected(true);
         window.location.href = `/documents/${parseInt(docId)}/edit?internalUser=true`;
