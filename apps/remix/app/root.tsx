@@ -84,7 +84,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
     // Create a new cookie header with the sessionId
     const cookieHeader = request.headers.get('cookie') || '';
-    const updatedCookieHeader = `${cookieHeader}; sessionId=${sessionId}`;
+    const updatedCookieHeader = `${cookieHeader}; __Secure-sessionId=${sessionId}`;
 
     // Create a new request with the updated cookie header
     const newHeaders = new Headers(request.headers);
