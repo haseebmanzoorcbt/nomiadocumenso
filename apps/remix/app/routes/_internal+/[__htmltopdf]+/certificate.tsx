@@ -227,7 +227,7 @@ export default function SigningCertificate({ loaderData }: Route.ComponentProps)
                           <div
                             className="inline-block rounded-lg p-1"
                             style={{
-                              boxShadow: `0px 0px 0px 4.88px rgba(122, 196, 85, 0.1), 0px 0px 0px 1.22px rgba(122, 196, 85, 0.6), 0px 0px 0px 0.61px rgba(122, 196, 85, 1)`,
+                              boxShadow: `   0 0 0 4.88px rgba(76, 51, 255, 0.1), 0 0 0 1.22px rgba(76, 51, 255, 0.6), 0 0 0 0.61px rgba(76, 51, 255, 1)`,
                             }}
                           >
                             {signature.signature?.signatureImageAsBase64 && (
@@ -350,7 +350,7 @@ export default function SigningCertificate({ loaderData }: Route.ComponentProps)
               {_(msg`Signing certificate provided by`)}:
             </p>
 
-            <img className="max-h-6 print:max-h-4"  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"/>
+            <img className="max-h-8 print:max-h-10"  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"/>
           </div>
         </div>
       )}
