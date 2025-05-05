@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { Button } from '@documenso/ui/primitives/button';
 
-const SUPPORT_EMAIL = 'support@documenso.com';
+const SUPPORT_EMAIL = 'help@nomiadocs.com';
 
 export default function SignatureDisclosure() {
   return (
@@ -18,10 +18,11 @@ export default function SignatureDisclosure() {
         </h2>
         <p>
           <Trans>
-            Thank you for using Documenso to perform your electronic document signing. The purpose
-            of this disclosure is to inform you about the process, legality, and your rights
-            regarding the use of electronic signatures on our platform. By opting to use an
-            electronic signature, you are agreeing to the terms and conditions outlined below.
+          Thank you for using Nomia to perform your electronic document signing. 
+          The purpose of this disclosure is to inform you about the process, legality,
+          and your rights regarding the use of electronic signatures on our 
+          platform. By opting to use an electronic signature, you are agreeing to 
+          the terms and conditions outlined below.
           </Trans>
         </p>
 
@@ -30,10 +31,11 @@ export default function SignatureDisclosure() {
         </h2>
         <p>
           <Trans>
-            When you use our platform to affix your electronic signature to documents, you are
-            consenting to do so under the Electronic Signatures in Global and National Commerce Act
-            (E-Sign Act) and other applicable laws. This action indicates your agreement to use
-            electronic means to sign documents and receive notifications.
+          When you use our platform to affix your electronic signature to 
+          documents, you are consenting to do so under the Electronic 
+          Communications and Transactions Act and other applicable laws. This 
+          action indicates your agreement to use electronic means to sign 
+          documents and receive notifications.
           </Trans>
         </p>
 
@@ -42,10 +44,11 @@ export default function SignatureDisclosure() {
         </h2>
         <p>
           <Trans>
-            An electronic signature provided by you on our platform, achieved through clicking
-            through to a document and entering your name, or any other electronic signing method we
-            provide, is legally binding. It carries the same weight and enforceability as a manual
-            signature written with ink on paper.
+          An electronic signature provided by you on our platform, achieved 
+          through clicking through to a document and entering your name, or any 
+          other electronic signing method we provide, is legally binding. It carries 
+          the same weight and enforceability as a manual signature written with 
+          ink on paper.
           </Trans>
         </p>
 
@@ -136,7 +139,7 @@ export default function SignatureDisclosure() {
         </h2>
         <p>
           <Trans>
-            By proceeding to use the electronic signature service provided by Documenso, you affirm
+            By proceeding to use the electronic signature service provided by Nomia, you affirm
             that you have read and understood this disclosure. You agree to all terms and conditions
             related to the use of electronic signatures and electronic transactions as outlined
             herein.
