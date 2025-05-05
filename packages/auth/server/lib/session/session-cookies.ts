@@ -61,7 +61,7 @@ export const getSessionCookie = async (c: Context): Promise<string | null> => {
  * @param sessionToken - The session token to set.
  */
 export const setSessionCookie = async (c: Context, sessionToken: string) => {
-  console.log("SESSION TOKEN", sessionToken, c , sessionCookieName,)
+  // console.log("SESSION TOKEN", sessionToken, c , sessionCookieName,)
   await setSignedCookie(
     c,
     sessionCookieName,

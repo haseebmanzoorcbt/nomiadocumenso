@@ -16,7 +16,7 @@ export const onAuthorize = async (user: AuthorizeUser, c: Context<HonoAuthContex
 
   const sessionToken = generateSessionToken();
 
-  console.log("Session token", sessionToken);
+  // console.log("Session token", sessionToken);
 
   await createSession(sessionToken, user.userId, metadata);
 

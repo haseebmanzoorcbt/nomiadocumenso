@@ -31,7 +31,7 @@ export const SettingsDesktopNav = ({ className, ...props }: SettingsDesktopNavPr
         </Button>
       </Link>
 
-      <Link to="/settings/public-profile">
+      {/* <Link to="/settings/public-profile">
         <Button
           variant="ghost"
           className={cn(
@@ -109,7 +109,7 @@ export const SettingsDesktopNav = ({ className, ...props }: SettingsDesktopNavPr
             <Trans>Billing</Trans>
           </Button>
         </Link>
-      )}
+      )} */}
     </div>
   );
 };

@@ -46,9 +46,11 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
   .post('/authorize', sValidator('json', ZSignInSchema), async (c) => {
     const requestMetadata = c.get('requestMetadata');
 
-    console.log('requestMetadata', requestMetadata);
-    console.log('context', c);
+    // console.log('requestMetadata', requestMetadata);
+    // console.log('context', c);
     const { email, password, totpCode, backupCode, csrfToken } = c.req.valid('json');
+    console.log('email', email);
+    console.log('tp', password);
 
     const csrfCookieToken = await getCsrfCookie(c);
     // Todo: (RR7) Add logging here.

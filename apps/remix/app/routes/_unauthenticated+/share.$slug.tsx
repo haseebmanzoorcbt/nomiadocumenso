@@ -38,7 +38,7 @@ export function meta({ params: { slug } }: Route.MetaArgs) {
     },
     {
       name: 'twitter:description',
-      content: 'I just signed with Documenso!',
+      content: 'I just signed with Nomi!',
     },
   ];
 }
@@ -51,7 +51,7 @@ export const loader = ({ request }: Route.LoaderArgs) => {
   }
 
   // Is hardcoded because this whole meta is hardcoded anyway for Documenso.
-  throw redirect('https://documenso.com');
+  throw redirect('https://nomiadocs.com');
 };
 
 export default function SharePage() {
