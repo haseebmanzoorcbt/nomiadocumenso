@@ -33,7 +33,7 @@ import { themeSessionResolver } from './storage/theme-session.server';
 import { appMetaTags } from './utils/meta';
 
 const { trackPageview } = Plausible({
-  domain: 'documenso.com',
+  domain: 'nomiadocs.com',
   trackLocalhost: false,
 });
 
@@ -174,7 +174,9 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <html translate="no" lang={lang} data-theme={'light'} className={theme ?? ''}>
       <head>
+        
         <meta charSet="utf-8" />
+        <meta name="google-site-verification" content="DpHHTO8vZJ_CweIz0cT0UhtZMg-FtCu9nkiY0eAUAnQ" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
