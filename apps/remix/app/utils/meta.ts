@@ -2,7 +2,7 @@ import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 
 export const appMetaTags = (title?: string) => {
   const description =
-    'Join Nomia Signatures, the open signing infrastructure, and get a 10x better signing experience. Sign in now and enjoy a faster, smarter, and more beautiful document signing process.';
+    'Streamline your document signing with Nomia’s intuitive e-signature platform. Quick, easy, and secure, our solution makes e-signing effortless and affordable. Create reusable templates, manage individual or bulk signings, track document status, and send reminders—all within a seamless, integrated workflow.';
 
   return [
     {
@@ -15,7 +15,7 @@ export const appMetaTags = (title?: string) => {
     {
       name: 'keywords',
       content:
-        'Nomia Signatures, DocuSign alternative, document signing, open signing infrastructure, open-source community, fast signing, beautiful signing, smart templates',
+        'Nomia Signatures, DocuSign alternative, document signing, open signing infrastructure, open-source community, fast signing, beautiful signing, smart templates  ,fast and secure signing platform , nomiadocs',
     },
     {
       name: 'author',
@@ -27,7 +27,7 @@ export const appMetaTags = (title?: string) => {
     },
     {
       property: 'og:title',
-      content: 'Nomia Signatures - The  DocuSign Alternative',
+      content: 'Nomia E-Signatures – Fast, Smart, and Secure',
     },
     {
       property: 'og:description',
