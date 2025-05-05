@@ -350,7 +350,7 @@ export default function SigningCertificate({ loaderData }: Route.ComponentProps)
               {_(msg`Signing certificate provided by`)}:
             </p>
 
-            <img className="max-h-8 print:max-h-10"  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"/>
+            <img className="max-h-8 print:max-h-6"  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"/>
           </div>
         </div>
       )}
