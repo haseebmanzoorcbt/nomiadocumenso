@@ -38,7 +38,6 @@ export const auth = new Hono<HonoAuthContext>()
   })
   .get('/csrf', async (c) => {
     const csrfToken = await setCsrfCookie(c);
-
     return c.json({ csrfToken });
   })
   .route('/', sessionRoute)

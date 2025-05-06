@@ -24,6 +24,7 @@ const defaultOptions: CorsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
+  credentials: false,
 };
 
 function isOriginAllowed(origin: string, allowed: StaticOrigin): boolean {

@@ -82,14 +82,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (isInternal && sessionId) {
     console.log('Setting sessionId cookie from query param:', sessionId);
 
-    const cookieExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
-
-    headers.set(
+    // First, clear any existing sessionId cookie
+    headers.append(
       'Set-Cookie',
-      [
-        `__Secure-sessionId=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None`,
-        `__Secure-sessionId=${sessionId}; Path=/; Expires=${cookieExpires}; HttpOnly; Secure; SameSite=None`,
-      ].join(', '),
+      `__Secure-sessionId=; Path=/; Domain=sign.nomiadocs.com; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None`,
+    );
+
+    // Then set the new sessionId cookie
+    headers.append(
+      'Set-Cookie',
+      `__Secure-sessionId=${sessionId}; Path=/; Domain=sign.nomiadocs.com; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}; HttpOnly; Secure; SameSite=None`,
     );
 
     // Create a new request with the updated cookie header for this request cycle
