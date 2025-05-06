@@ -15,8 +15,6 @@ import {
 } from 'react-router';
 import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes';
 
-import { authClient } from '@documenso/auth/client';
-import { auth } from '@documenso/auth/server';
 import { getOptionalSession } from '@documenso/auth/server/lib/utils/get-session';
 import { SessionProvider } from '@documenso/lib/client-only/providers/session';
 import { APP_I18N_OPTIONS, type SupportedLanguageCodes } from '@documenso/lib/constants/i18n';
@@ -78,7 +76,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   let lang: SupportedLanguageCodes = await langCookie.parse(request.headers.get('cookie') ?? '');
   headers.append('Set-Cookie', await langCookie.serialize(lang));
 
-  const manageCookies = () => {
+  // Create a modified request with the sessionId as a cookie if it exists in query params
+  let modifiedRequest = request;
+
+  if (isInternal && sessionId) {
     console.log('Setting sessionId cookie from query param:', sessionId);
 
     // First, clear any existing sessionId cookie
@@ -124,19 +125,6 @@ export async function loader({ request }: Route.LoaderArgs) {
       referrer: request.referrer,
       referrerPolicy: request.referrerPolicy,
     });
-  };
-
-  // Create a modified request with the sessionId as a cookie if it exists in query params
-  let modifiedRequest = request;
-
-  if (isInternal && sessionId) {
-    try {
-      authClient.signOut().then(() => {
-        manageCookies();
-      });
-    } catch (error) {
-      manageCookies();
-    }
   }
 
   // Use the modified request that includes the sessionId cookie
