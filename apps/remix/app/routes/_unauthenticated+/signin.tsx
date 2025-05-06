@@ -33,9 +33,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     console.log('Email from query param:', email);
   }
 
-  if (isAuthenticated) {
-    throw redirect('/documents');
-  }
+  // if (isAuthenticated) {
+  //   throw redirect('/documents');
+  // }
 
   return {
     isGoogleSSOEnabled,
