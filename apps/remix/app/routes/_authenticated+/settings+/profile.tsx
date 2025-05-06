@@ -25,8 +25,8 @@ export default function SettingsProfile() {
       <ProfileForm className="mb-8 max-w-xl" />
 
       <hr className="my-4 max-w-xl" />
-
-      <AccountDeleteDialog className="max-w-xl" />
+      
+      {/* <AccountDeleteDialog className="max-w-xl" /> */}
     </div>
   );
 }
