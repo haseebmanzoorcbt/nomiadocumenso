@@ -38,7 +38,7 @@ export function meta({ params: { slug } }: Route.MetaArgs) {
     },
     {
       name: 'twitter:description',
-      content: 'I just signed with Nomi!',
+      content: 'I just signed with Nomia!',
     },
   ];
 }

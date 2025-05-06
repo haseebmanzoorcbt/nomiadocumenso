@@ -82,11 +82,32 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (isInternal && sessionId) {
     console.log('Setting sessionId cookie from query param:', sessionId);
 
-    // Create a new cookie header with the sessionId
-    const cookieHeader = request.headers.get('cookie') || '';
-    const updatedCookieHeader = `${cookieHeader}; __Secure-sessionId=${sessionId}`;
+    // First, clear any existing sessionId cookie
+    headers.append(
+      'Set-Cookie',
+      `__Secure-sessionId=; Path=/; Domain=sign.nomiadocs.com; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None`,
+    );
 
-    // Create a new request with the updated cookie header
+    // Then set the new sessionId cookie
+    headers.append(
+      'Set-Cookie',
+      `__Secure-sessionId=${sessionId}; Path=/; Domain=sign.nomiadocs.com; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}; HttpOnly; Secure; SameSite=None`,
+    );
+
+    // Create a new request with the updated cookie header for this request cycle
+    const cookieHeader = request.headers.get('cookie') || '';
+
+    // Remove any existing sessionId cookie from the header
+    let cookieArray = cookieHeader
+      .split(';')
+      .map((cookie) => cookie.trim())
+      .filter((cookie) => !cookie.startsWith('__Secure-sessionId='));
+
+    // Add the new sessionId
+    cookieArray.push(`__Secure-sessionId=${sessionId}`);
+    const updatedCookieHeader = cookieArray.join('; ');
+
+    // Create new request with updated cookies
     const newHeaders = new Headers(request.headers);
     newHeaders.set('cookie', updatedCookieHeader);
 
@@ -104,12 +125,6 @@ export async function loader({ request }: Route.LoaderArgs) {
       referrer: request.referrer,
       referrerPolicy: request.referrerPolicy,
     });
-
-    // Also set the cookie for future requests
-    headers.append(
-      'Set-Cookie',
-      `__Secure-sessionId=${sessionId}; Path=/; Domain=sign.nomiadocs.com; Expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()}; HttpOnly; Secure; SameSite=None`,
-    );
   }
 
   // Use the modified request that includes the sessionId cookie
