@@ -26,7 +26,7 @@ export type DocumentsTableActionButtonProps = {
   internal?: any;
 };
 
-export const DocumentsTableActionButton = ({ row }: DocumentsTableActionButtonProps) => {
+export const DocumentsTableActionButton = ({ row, internal }: DocumentsTableActionButtonProps) => {
   const { user } = useSession();
   const { toast } = useToast();
   const { _ } = useLingui();
