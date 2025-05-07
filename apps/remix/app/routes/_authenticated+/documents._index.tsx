@@ -193,6 +193,7 @@ export default function DocumentsPage() {
             />
           ) : (
             <DocumentsTable
+              internal={isInternal}
               data={data}
               docId={docId}
               isLoading={isLoading}

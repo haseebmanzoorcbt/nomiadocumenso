@@ -30,11 +30,18 @@ export type DocumentsTableProps = {
   isLoading?: boolean;
   isLoadingError?: boolean;
   docId?: any;
+  internal?: any;
 };
 
 type DocumentsTableRow = TFindDocumentsResponse['data'][number];
 
-export const DocumentsTable = ({ data, isLoading, isLoadingError, docId }: DocumentsTableProps) => {
+export const DocumentsTable = ({
+  data,
+  isLoading,
+  isLoadingError,
+  docId,
+  internal,
+}: DocumentsTableProps) => {
   const { _, i18n } = useLingui();
 
   const team = useOptionalCurrentTeam();
@@ -80,7 +87,7 @@ export const DocumentsTable = ({ data, isLoading, isLoadingError, docId }: Docum
         cell: ({ row }) =>
           (!row.original.deletedAt || isDocumentCompleted(row.original.status)) && (
             <div className="flex items-center gap-x-4">
-              <DocumentsTableActionButton row={row.original} />
+              <DocumentsTableActionButton internal={internal} row={row.original} />
               <DocumentsTableActionDropdown row={row.original} />
             </div>
           ),

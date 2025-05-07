@@ -23,6 +23,7 @@ export type DocumentsTableActionButtonProps = {
     recipients: Recipient[];
     team: Pick<Team, 'id' | 'url'> | null;
   };
+  internal?: any;
 };
 
 export const DocumentsTableActionButton = ({ row }: DocumentsTableActionButtonProps) => {
@@ -96,7 +97,7 @@ export const DocumentsTableActionButton = ({ row }: DocumentsTableActionButtonPr
       isOwner ? { isDraft: true, isOwner: true } : { isDraft: true, isCurrentTeamDocument: true },
       () => (
         <Button className="w-32" asChild>
-          <Link to={`${documentsPath}/${row.id}/edit`}>
+          <Link to={`${documentsPath}/${row.id}/edit?internal=${internal}`}>
             <Edit className="-ml-1 mr-2 h-4 w-4" />
             <Trans>Edit</Trans>
           </Link>

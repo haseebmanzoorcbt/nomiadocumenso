@@ -71,6 +71,7 @@ export type AddSettingsFormProps = {
   document: TDocument;
   currentTeamMemberRole?: TeamMemberRole;
   onSubmit: (_data: TAddSettingsFormSchema) => void;
+  externalId: any;
 };
 
 export const AddSettingsFormPartial = ({
@@ -82,6 +83,7 @@ export const AddSettingsFormPartial = ({
   document,
   currentTeamMemberRole,
   onSubmit,
+  externalId,
 }: AddSettingsFormProps) => {
   const { t } = useLingui();
 
@@ -93,7 +95,7 @@ export const AddSettingsFormPartial = ({
     resolver: zodResolver(ZAddSettingsFormSchema),
     defaultValues: {
       title: document.title,
-      externalId: document.externalId || '',
+      externalId: externalId || document.externalId || '',
       visibility: document.visibility || '',
       globalAccessAuth: documentAuthOption?.globalAccessAuth || undefined,
       globalActionAuth: documentAuthOption?.globalActionAuth || undefined,

@@ -36,6 +36,7 @@ export type DocumentEditFormProps = {
   initialDocument: TDocument;
   documentRootPath: string;
   isDocumentEnterprise: boolean;
+  externalId?: any;
 };
 
 type EditDocumentStep = 'settings' | 'signers' | 'fields' | 'subject';
@@ -46,6 +47,7 @@ export const DocumentEditForm = ({
   initialDocument,
   documentRootPath,
   isDocumentEnterprise,
+  externalId,
 }: DocumentEditFormProps) => {
   const { toast } = useToast();
   const { _ } = useLingui();
@@ -352,6 +354,7 @@ export const DocumentEditForm = ({
             setCurrentStep={(step) => setStep(EditDocumentSteps[step - 1])}
           >
             <AddSettingsFormPartial
+              externalId={externalId}
               key={recipients.length}
               documentFlow={documentFlow.settings}
               document={document}

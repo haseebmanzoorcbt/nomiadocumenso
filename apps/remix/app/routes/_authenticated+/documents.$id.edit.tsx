@@ -29,10 +29,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     team = await getTeamByUrl({ userId: user.id, teamUrl: params.teamUrl });
   }
 
+  const url = new URL(request.url);
+  const isInternal = url.searchParams.get('internal') === 'true';
+  const queryDocId = url.searchParams.get('docId');
+
   const { id } = params;
-
   const documentId = Number(id);
-
   const documentRootPath = formatDocumentsPath(team?.url);
 
   if (!documentId || Number.isNaN(documentId)) {
@@ -66,15 +68,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   }
 
   if (!document) {
-    throw redirect(documentRootPath);
+    throw redirect(`${documentRootPath}?internal=${isInternal}&&docId=${documentId}`);
   }
 
   if (team && !canAccessDocument) {
-    throw redirect(documentRootPath);
+    throw redirect(`${documentRootPath}?internal=${isInternal}&&docId=${documentId}`);
   }
 
   if (isDocumentCompleted(document.status)) {
-    throw redirect(`${documentRootPath}/${documentId}`);
+    throw redirect(`${documentRootPath}?internal=${isInternal}&&docId=${documentId}`);
   }
 
   const isDocumentEnterprise = await isUserEnterprise({
@@ -96,12 +98,14 @@ export default function DocumentEditPage() {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const isInternal = searchParams.get('internalUser') === 'true';
+  const isInternal = searchParams.get('internal') === 'true';
+  const hideBackBtn = searchParams.get('hideBackBtn') === 'true';
+  const externalId = searchParams.get('externalId');
   const docId = searchParams.get('docId');
 
   return (
     <div className="mx-auto -mt-4 w-full max-w-screen-xl px-4 md:px-8">
-      {!isInternal && (
+      {!hideBackBtn && (
         <Link to={documentRootPath} className="flex items-center text-[#4C33FF] hover:opacity-80">
           <ChevronLeft className="mr-2 inline-block h-5 w-5" />
           <Trans>Documents</Trans>
@@ -136,6 +140,7 @@ export default function DocumentEditPage() {
       </div>
 
       <DocumentEditForm
+        externalId={externalId}
         className="mt-6"
         initialDocument={document}
         documentRootPath={documentRootPath}
