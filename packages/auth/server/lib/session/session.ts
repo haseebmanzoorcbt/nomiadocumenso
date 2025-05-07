@@ -148,6 +148,7 @@ export const invalidateSession = async (
   sessionId: string,
   metadata: RequestMetadata,
 ): Promise<void> => {
+  
   const session = await prisma.session.delete({ where: { id: sessionId } });
 
   await prisma.userSecurityAuditLog.create({
