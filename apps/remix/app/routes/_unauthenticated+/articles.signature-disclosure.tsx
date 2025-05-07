@@ -157,13 +157,13 @@ export default function SignatureDisclosure() {
         </p>
       </article>
 
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <Button asChild>
           <Link to="/documents">
             <Trans>Back to Documents</Trans>
           </Link>
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -119,7 +119,7 @@ export const DocumentShareButton = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger onClick={(e) => e.stopPropagation()} asChild>
+      {/* <DialogTrigger onClick={(e) => e.stopPropagation()} asChild>
         {trigger?.({
           disabled: !documentId,
           loading: isLoading,
@@ -130,11 +130,11 @@ export const DocumentShareButton = ({
             className={cn('flex-1 text-[11px]', className)}
             loading={isLoading}
           >
-            {/* {!isLoading && <Sparkles className="mr-2 h-5 w-5" />}
-            <Trans>Share Signature Card</Trans> */}
+            {!isLoading && <Sparkles className="mr-2 h-5 w-5" />}
+            <Trans>Share Signature Card</Trans>
           </Button>
         )}
-      </DialogTrigger>
+      </DialogTrigger> */}
 
       <DialogContent position="end">
         <DialogHeader>
