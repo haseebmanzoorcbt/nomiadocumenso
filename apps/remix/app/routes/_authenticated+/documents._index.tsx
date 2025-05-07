@@ -45,7 +45,6 @@ const ZSearchParamsSchema = ZFindDocumentsInternalRequestSchema.pick({
 export default function DocumentsPage() {
   const [searchParams] = useSearchParams();
   const { theme, session } = useLoaderData<any>() || {};
-  const location = useLocation();
 
   const team = useOptionalCurrentTeam();
 
@@ -58,6 +57,7 @@ export default function DocumentsPage() {
     [ExtendedDocumentStatus.ALL]: 0,
   });
 
+  const location = useLocation();
   const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
   const docId: any = new URLSearchParams(location.search).get('docId');
   const isEdit: any = new URLSearchParams(location.search).get('edit') === 'true';

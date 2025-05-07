@@ -106,7 +106,10 @@ export default function DocumentEditPage() {
   return (
     <div className="mx-auto -mt-4 w-full max-w-screen-xl px-4 md:px-8">
       {!hideBackBtn && (
-        <Link to={documentRootPath} className="flex items-center text-[#4C33FF] hover:opacity-80">
+        <Link
+          to={`${documentRootPath}?internal=${isInternal}&&docId=${docId}`}
+          className="flex items-center text-[#4C33FF] hover:opacity-80"
+        >
           <ChevronLeft className="mr-2 inline-block h-5 w-5" />
           <Trans>Documents</Trans>
         </Link>

@@ -116,7 +116,9 @@ export const DocumentsTable = ({
       <DataTable
         columns={columns}
         data={
-          docId != null ? results.data.filter((row) => row.id === parseInt(docId)) : results.data
+          docId === 'null' || docId === 'undefined' || !docId
+            ? results.data
+            : results.data.filter((row) => row.id === parseInt(docId))
         }
         perPage={results.perPage}
         currentPage={results.currentPage}

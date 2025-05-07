@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { type Document, DocumentStatus, FieldType, RecipientRole } from '@prisma/client';
 import { CheckCircle2, Clock8, FileSearch } from 'lucide-react';
-import { Link, useRevalidator } from 'react-router';
+import { Link, useLocation, useRevalidator } from 'react-router';
 import { match } from 'ts-pattern';
 
 import signingCelebration from '@documenso/assets/images/signing-celebration.png';
@@ -101,6 +101,10 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
 
   const { sessionData } = useOptionalSession();
   const user = sessionData?.user;
+
+  const location = useLocation();
+  const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
+  const docId: any = new URLSearchParams(location.search).get('docId');
 
   const {
     isDocumentAccessValid,
@@ -249,7 +253,10 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
           )}
 
           {user && (
-            <Link to="/documents" className="text-documenso-700 hover:text-documenso-600 mt-2">
+            <Link
+              to={`/documents?internal=${isInternal}&&docId=${docId}`}
+              className="text-documenso-700 hover:text-documenso-600 mt-2"
+            >
               <Trans>Go Back Home</Trans>
             </Link>
           )}

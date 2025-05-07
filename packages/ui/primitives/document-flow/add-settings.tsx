@@ -7,6 +7,7 @@ import { DocumentVisibility, TeamMemberRole } from '@prisma/client';
 import { DocumentStatus, type Field, type Recipient, SendStatus } from '@prisma/client';
 import { InfoIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { Link, redirect, useLocation } from 'react-router';
 import { match } from 'ts-pattern';
 
 import { DATE_FORMATS, DEFAULT_DOCUMENT_DATE_FORMAT } from '@documenso/lib/constants/date-formats';
@@ -147,6 +148,10 @@ export const AddSettingsFormPartial = ({
     form.formState.touchedFields.meta?.timezone,
     document.documentMeta?.timezone,
   ]);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isInternal = searchParams.get('internal') === 'true';
 
   return (
     <>
@@ -319,7 +324,7 @@ export const AddSettingsFormPartial = ({
                           </FormLabel>
 
                           <FormControl>
-                            <Input className="bg-background" {...field} />
+                            <Input disabled={isInternal} className="bg-background" {...field} />
                           </FormControl>
 
                           <FormMessage />

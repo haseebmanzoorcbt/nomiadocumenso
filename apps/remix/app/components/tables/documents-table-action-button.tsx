@@ -4,7 +4,7 @@ import { Trans } from '@lingui/react/macro';
 import type { Document, Recipient, Team, User } from '@prisma/client';
 import { DocumentStatus, RecipientRole, SigningStatus } from '@prisma/client';
 import { CheckCircle, Download, Edit, EyeIcon, Pencil } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { match } from 'ts-pattern';
 
 import { downloadPDF } from '@documenso/lib/client-only/download-pdf';
@@ -45,6 +45,9 @@ export const DocumentsTableActionButton = ({ row, internal }: DocumentsTableActi
   const isCurrentTeamDocument = team && row.team?.url === team.url;
 
   const documentsPath = formatDocumentsPath(team?.url);
+
+  const location = useLocation();
+  const docId: any = new URLSearchParams(location.search).get('docId');
 
   const onDownloadClick = async () => {
     try {
@@ -97,7 +100,7 @@ export const DocumentsTableActionButton = ({ row, internal }: DocumentsTableActi
       isOwner ? { isDraft: true, isOwner: true } : { isDraft: true, isCurrentTeamDocument: true },
       () => (
         <Button className="w-32" asChild>
-          <Link to={`${documentsPath}/${row.id}/edit?internal=${internal}`}>
+          <Link to={`${documentsPath}/${row.id}/edit?internal=${internal}&&docId=${docId}`}>
             <Edit className="-ml-1 mr-2 h-4 w-4" />
             <Trans>Edit</Trans>
           </Link>
@@ -106,7 +109,7 @@ export const DocumentsTableActionButton = ({ row, internal }: DocumentsTableActi
     )
     .with({ isRecipient: true, isPending: true, isSigned: false }, () => (
       <Button className="w-32" asChild>
-        <Link to={`/sign/${recipient?.token}`}>
+        <Link to={`/sign/${recipient?.token}?internal=${internal}&&docId=${docId}`}>
           {match(role)
             .with(RecipientRole.SIGNER, () => (
               <>

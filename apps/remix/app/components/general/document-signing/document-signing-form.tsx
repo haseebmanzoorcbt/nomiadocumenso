@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import { type Field, FieldType, type Recipient, RecipientRole } from '@prisma/client';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { useAnalytics } from '@documenso/lib/client-only/hooks/use-analytics';
 import { useOptionalSession } from '@documenso/lib/client-only/providers/session';
@@ -66,6 +66,10 @@ export const DocumentSigningForm = ({
   const [validateUninsertedFields, setValidateUninsertedFields] = useState(false);
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
   const [isAssistantSubmitting, setIsAssistantSubmitting] = useState(false);
+
+  const location = useLocation();
+  const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
+  const docId: any = new URLSearchParams(location.search).get('docId');
 
   const {
     mutateAsync: completeDocumentWithToken,
@@ -149,7 +153,7 @@ export const DocumentSigningForm = ({
     if (redirectUrl) {
       window.location.href = redirectUrl;
     } else {
-      await navigate(`/sign/${recipient.token}/complete`);
+      await navigate(`/sign/${recipient.token}/complete?internal=${isInternal}&&docId=${docId}`);
     }
   };
 
