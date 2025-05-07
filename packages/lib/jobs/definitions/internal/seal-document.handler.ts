@@ -163,6 +163,7 @@ export const run = async ({
     // Add rejection stamp if the document is rejected
     if (isRejected && rejectionReason) {
       await addRejectionStampToPdf(pdfDoc, rejectionReason);
+      console.log('Added rejection stamp to PDF');
     }
 
     if (certificateData) {
@@ -179,6 +180,8 @@ export const run = async ({
       certificatePages.forEach((page) => {
         pdfDoc.addPage(page);
       });
+
+      console.log('Added certificate to PDF');
     }
 
     for (const field of fields) {
@@ -204,6 +207,8 @@ export const run = async ({
       type: 'application/pdf',
       arrayBuffer: async () => Promise.resolve(pdfBuffer),
     });
+
+    console.log('Document data created');
 
     return documentData.id;
   });
