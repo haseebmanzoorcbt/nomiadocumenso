@@ -5,7 +5,7 @@ import { msg } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import type { Document } from '@prisma/client';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router';
 import { z } from 'zod';
 
@@ -53,6 +53,11 @@ export function DocumentSigningRejectDialog({
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const location = useLocation();
+  const searchParamss = new URLSearchParams(location.search);
+  const isInternal = searchParamss.get('internal') === 'true';
+  const docId = searchParamss.get('docId');
+
   const { mutateAsync: rejectDocumentWithToken } =
     trpc.recipient.rejectDocumentWithToken.useMutation();
 
@@ -82,7 +87,7 @@ export function DocumentSigningRejectDialog({
       if (onRejected) {
         await onRejected(reason);
       } else {
-        await navigate(`/sign/${token}/rejected`);
+        await navigate(`/sign/${token}/rejected?internal=${isInternal}&&docId=${docId}`);
       }
     } catch (err) {
       toast({

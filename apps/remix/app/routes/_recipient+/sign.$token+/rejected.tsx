@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro';
 import { FieldType } from '@prisma/client';
 import { XCircle } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 import { getOptionalSession } from '@documenso/auth/server/lib/utils/get-session';
 import { useOptionalSession } from '@documenso/lib/client-only/providers/session';
@@ -79,6 +79,11 @@ export default function RejectedSigningPage({ loaderData }: Route.ComponentProps
 
   const { isDocumentAccessValid, recipientReference, truncatedTitle } = loaderData;
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isInternal = searchParams.get('internal') === 'true';
+  const docId = searchParams.get('docId');
+
   if (!isDocumentAccessValid) {
     return <DocumentSigningAuthPageView email={recipientReference} />;
   }
@@ -115,7 +120,7 @@ export default function RejectedSigningPage({ loaderData }: Route.ComponentProps
 
         {user && (
           <Button className="mt-6" asChild>
-            <Link to={`/`}>Return Home</Link>
+            <Link to={`documents/?internal=${isInternal}&&docId=${docId}`}>Return Home</Link>
           </Button>
         )}
       </div>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { DocumentDistributionMethod, DocumentStatus } from '@prisma/client';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 
 import { DocumentSignatureType } from '@documenso/lib/constants/document';
 import { isValidLanguageCode } from '@documenso/lib/constants/i18n';
@@ -53,6 +53,11 @@ export const DocumentEditForm = ({
   const { _ } = useLingui();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const searchParamss = new URLSearchParams(location.search);
+  const isInternal = searchParamss.get('internal') === 'true';
+  const docId = searchParamss.get('docId');
 
   const [searchParams] = useSearchParams();
   const team = useOptionalCurrentTeam();
@@ -296,7 +301,7 @@ export const DocumentEditForm = ({
           duration: 5000,
         });
 
-        await navigate(documentRootPath);
+        await navigate(`${documentRootPath}?internal=${isInternal}&&docId=${docId}`);
       } else if (document.status === DocumentStatus.DRAFT) {
         toast({
           title: _(msg`Links Generated`),
@@ -304,7 +309,7 @@ export const DocumentEditForm = ({
           duration: 5000,
         });
       } else {
-        await navigate(`${documentRootPath}/${document.id}`);
+        await navigate(`${documentRootPath}/${document.id}?internal=${isInternal}&&docId=${docId}`);
       }
     } catch (err) {
       console.error(err);
