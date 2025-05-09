@@ -2,7 +2,7 @@ import { useLingui } from '@lingui/react';
 import { Plural, Trans } from '@lingui/react/macro';
 import { DocumentStatus, TeamMemberRole } from '@prisma/client';
 import { ChevronLeft, Clock9, Users2 } from 'lucide-react';
-import { Link, redirect } from 'react-router';
+import { Link, redirect, useLocation } from 'react-router';
 import { match } from 'ts-pattern';
 
 import { getSession } from '@documenso/auth/server/lib/utils/get-session';
@@ -127,16 +127,28 @@ export default function DocumentPage() {
   // This was a feature flag. Leave to false since it's not ready.
   const isDocumentHistoryEnabled = false;
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isInternal = searchParams.get('internal') === 'true';
+  const hideBackBtn = searchParams.get('hideBackBtn') === 'true';
+  const externalId = searchParams.get('externalId');
+  const docId = searchParams.get('docId');
+
   return (
     <div className="mx-auto -mt-4 w-full max-w-screen-xl px-4 md:px-8">
       {document.status === DocumentStatus.PENDING && (
         <DocumentRecipientLinkCopyDialog recipients={recipients} />
       )}
 
-      <Link to={documentRootPath} className="flex items-center text-[#4C33FF] hover:opacity-80">
-        <ChevronLeft className="mr-2 inline-block h-5 w-5" />
-        <Trans>Documents</Trans>
-      </Link>
+      {!hideBackBtn && (
+        <Link
+          to={`${documentRootPath}?internal=${isInternal}&&docId=${docId}`}
+          className="flex items-center text-[#4C33FF] hover:opacity-80"
+        >
+          <ChevronLeft className="mr-2 inline-block h-5 w-5" />
+          <Trans>Documents</Trans>
+        </Link>
+      )}
 
       <div className="flex flex-row justify-between truncate">
         <div>
