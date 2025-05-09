@@ -4,7 +4,7 @@ import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { Loader } from 'lucide-react';
 import { DateTime } from 'luxon';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { match } from 'ts-pattern';
 
 import { useUpdateSearchParams } from '@documenso/lib/client-only/hooks/use-update-search-params';
@@ -185,6 +185,10 @@ const DataTableTitle = ({ row, teamUrl }: DataTableTitleProps) => {
   const isRecipient = !!recipient;
   const isCurrentTeamDocument = teamUrl && row.team?.url === teamUrl;
 
+  const location = useLocation();
+  const docId: any = new URLSearchParams(location.search).get('docId');
+  const isInternal: any = new URLSearchParams(location.search).get('internal');
+
   const documentsPath = formatDocumentsPath(isCurrentTeamDocument ? teamUrl : undefined);
 
   return match({
@@ -194,7 +198,7 @@ const DataTableTitle = ({ row, teamUrl }: DataTableTitleProps) => {
   })
     .with({ isOwner: true }, { isCurrentTeamDocument: true }, () => (
       <Link
-        to={`${documentsPath}/${row.id}`}
+        to={`${documentsPath}/${row.id}?internal=${isInternal}&&docId=${docId}`}
         title={row.title}
         className="block max-w-[10rem] truncate font-medium hover:underline md:max-w-[20rem]"
       >
