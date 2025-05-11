@@ -119,9 +119,7 @@ export default function DocumentPage() {
 
   const { _ } = useLingui();
   const { user } = useSession();
-
   const { document, documentRootPath, fields } = loaderData;
-
   const { recipients, documentData, documentMeta } = document;
 
   // This was a feature flag. Leave to false since it's not ready.

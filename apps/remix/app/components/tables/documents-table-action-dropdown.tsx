@@ -48,9 +48,13 @@ export type DocumentsTableActionDropdownProps = {
     recipients: Recipient[];
     team: Pick<Team, 'id' | 'url'> | null;
   };
+  internal?: any;
 };
 
-export const DocumentsTableActionDropdown = ({ row }: DocumentsTableActionDropdownProps) => {
+export const DocumentsTableActionDropdown = ({
+  row,
+  internal,
+}: DocumentsTableActionDropdownProps) => {
   const { user } = useSession();
   const team = useOptionalCurrentTeam();
 
@@ -115,7 +119,7 @@ export const DocumentsTableActionDropdown = ({ row }: DocumentsTableActionDropdo
 
         {!isDraft && recipient && recipient?.role !== RecipientRole.CC && (
           <DropdownMenuItem disabled={!recipient || isComplete} asChild>
-            <Link to={`/sign/${recipient?.token}`}>
+            <Link to={`/sign/${recipient?.token}?internal=${internal}`}>
               {recipient?.role === RecipientRole.VIEWER && (
                 <>
                   <EyeIcon className="mr-2 h-4 w-4" />
@@ -141,7 +145,7 @@ export const DocumentsTableActionDropdown = ({ row }: DocumentsTableActionDropdo
         )}
 
         <DropdownMenuItem disabled={!canManageDocument || isComplete} asChild>
-          <Link to={`${documentsPath}/${row.id}/edit`}>
+          <Link to={`${documentsPath}/${row.id}/edit?internal=${internal}`}>
             <Edit className="mr-2 h-4 w-4" />
             <Trans>Edit</Trans>
           </Link>
