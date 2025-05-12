@@ -67,11 +67,16 @@ export default function DocumentsPage() {
   const isStandAlone = /^([^0-9]*1[^0-9]*)$/.test(s);
 
   useEffect(() => {
+    if (isInternal) {
+      localStorage.setItem('isInternal', externalId);
+    }
     if (externalId) {
       localStorage.setItem('externalId', externalId);
+      localStorage.removeItem('isInternal');
     }
     if (s && typeof isStandAlone === 'boolean') {
       localStorage.setItem('isStandAlone', JSON.stringify(isStandAlone));
+      localStorage.removeItem('isInternal');
     }
   }, [externalId, s, isStandAlone]);
 

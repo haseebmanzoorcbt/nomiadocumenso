@@ -29,6 +29,8 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
   const [scrollY, setScrollY] = useState(0);
 
   const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+  const isInternalLS = typeof window !== 'undefined' ? localStorage.getItem('isInternal') : null;
+
   const isStandAloneRaw =
     typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
   const isStandAloneLS = isStandAloneRaw === 'true';
@@ -56,6 +58,10 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
   const s: any = searchParams.get('s');
 
   if (s && !isStandAloneLS) {
+    return null;
+  }
+
+  if (isInternalLS) {
     return null;
   }
 
