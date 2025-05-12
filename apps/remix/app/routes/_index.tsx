@@ -41,6 +41,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
     if (!currentTeam) {
       throw redirect('/documents');
+      
     }
 
     throw redirect(formatDocumentsPath(currentTeam.url));
