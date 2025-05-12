@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { prisma } from '@documenso/prisma';
-import type { LoaderFunctionArgs } from 'react-router';
-
+import { prisma } from '@documenso/prisma'
+import type { LoaderFunctionArgs } from 'react-router'
+import { getFileFromS3 } from '@documenso/lib/universal/upload/get-file'
 
 const DocumentIdSchema = z.object({
-  documentId: z.string(),
-});
+  documentId: z.string()
+})
 
 export async function loader({ params }: LoaderFunctionArgs) {
   try {
@@ -54,6 +54,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
       });
     }
 
+
+    // const file = await getFileFromS3(documentData.data);
+
     return new Response(JSON.stringify(documentData), {
       status: 200,
       headers: {
@@ -78,3 +81,5 @@ export async function loader({ params }: LoaderFunctionArgs) {
     });
   }
 } 
+
+
