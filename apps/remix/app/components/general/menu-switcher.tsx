@@ -51,6 +51,11 @@ export const MenuSwitcher = ({ user, teams: initialTeamsData }: MenuSwitcherProp
 
   const teams = teamsQueryResult && teamsQueryResult.length > 0 ? teamsQueryResult : null;
 
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+  const isStandAloneRaw =
+    typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
+  const isStandAloneLS = isStandAloneRaw === 'true';
+
   const isPathTeamUrl = (teamUrl: string) => {
     if (!pathname || !pathname.startsWith(`/t/`)) {
       return false;
@@ -231,9 +236,7 @@ export const MenuSwitcher = ({ user, teams: initialTeamsData }: MenuSwitcherProp
               ))}
             </div>
           </>
-        ) : (
-          null
-        )}
+        ) : null}
 
         <DropdownMenuSeparator />
 
@@ -267,12 +270,14 @@ export const MenuSwitcher = ({ user, teams: initialTeamsData }: MenuSwitcherProp
           <Trans>Language</Trans>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
-          className="text-destructive/90 hover:!text-destructive px-4 py-2"
-          onSelect={async () => authClient.signOut()}
-        >
-          <Trans>Sign Out</Trans>
-        </DropdownMenuItem>
+        {!isStandAloneLS && (
+          <DropdownMenuItem
+            className="text-destructive/90 hover:!text-destructive px-4 py-2"
+            onSelect={async () => authClient.signOut()}
+          >
+            <Trans>Sign Out</Trans>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
 
       <LanguageSwitcherDialog open={languageSwitcherOpen} setOpen={setLanguageSwitcherOpen} />

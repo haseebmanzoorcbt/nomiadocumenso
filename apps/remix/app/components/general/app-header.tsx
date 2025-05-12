@@ -28,6 +28,11 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+  const isStandAloneRaw =
+    typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
+  const isStandAloneLS = isStandAloneRaw === 'true';
+
   useEffect(() => {
     const onScroll = () => {
       setScrollY(window.scrollY);
@@ -48,6 +53,11 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
   const [searchParams] = useSearchParams();
   const internal =
     searchParams.get('internalUser') === 'true' || searchParams.get('internal') === 'true';
+  const s: any = searchParams.get('s');
+
+  if (s && !isStandAloneLS) {
+    return null;
+  }
 
   return (
     <header

@@ -46,9 +46,6 @@ export const createSession = async (
   userId: number,
   metadata: RequestMetadata,
 ): Promise<Session> => {
-  
-  
-  
   const hashedSessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
   // console.log("Session ID", hashedSessionId);
@@ -68,8 +65,6 @@ export const createSession = async (
     data: session,
   });
 
-
-
   await prisma.userSecurityAuditLog.create({
     data: {
       userId,
@@ -79,16 +74,11 @@ export const createSession = async (
     },
   });
 
-
-
   return session;
 };
 
 export const validateSessionToken = async (token: string): Promise<SessionValidationResult> => {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-
-  // console.log('Token', token);
-  // console.log('SESSION ID', sessionId);
 
   const result = await prisma.session.findUnique({
     where: {
@@ -114,8 +104,6 @@ export const validateSessionToken = async (token: string): Promise<SessionValida
       },
     },
   });
-
-  // console.log('IS SESSION');
 
   if (!result?.user) {
     return { session: null, user: null, isAuthenticated: false };
@@ -148,7 +136,6 @@ export const invalidateSession = async (
   sessionId: string,
   metadata: RequestMetadata,
 ): Promise<void> => {
-  
   const session = await prisma.session.delete({ where: { id: sessionId } });
 
   await prisma.userSecurityAuditLog.create({

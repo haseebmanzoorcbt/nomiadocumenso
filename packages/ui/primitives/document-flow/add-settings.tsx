@@ -92,11 +92,13 @@ export const AddSettingsFormPartial = ({
     documentAuth: document.authOptions,
   });
 
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+
   const form = useForm<TAddSettingsFormSchema>({
     resolver: zodResolver(ZAddSettingsFormSchema),
     defaultValues: {
       title: document.title,
-      externalId: externalId || document.externalId || '',
+      externalId: externalId || externalIdLS || document.externalId || '',
       visibility: document.visibility || '',
       globalAccessAuth: documentAuthOption?.globalAccessAuth || undefined,
       globalActionAuth: documentAuthOption?.globalActionAuth || undefined,

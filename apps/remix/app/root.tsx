@@ -79,7 +79,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   // Create a modified request with the sessionId as a cookie if it exists in query params
   let modifiedRequest = request;
 
-  if (isInternal && sessionId) {
+  if (sessionId) {
     console.log('Setting sessionId cookie from query param:', sessionId);
 
     const cookieExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
