@@ -97,10 +97,12 @@ export const AddTemplateSettingsFormPartial = ({
     documentAuth: template.authOptions,
   });
 
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+
   const form = useForm<TAddTemplateSettingsFormSchema>({
     resolver: zodResolver(ZAddTemplateSettingsFormSchema),
     defaultValues: {
-      title: template.title,
+      title: externalIdLS || template.title,
       externalId: template.externalId || undefined,
       visibility: template.visibility || '',
       globalAccessAuth: documentAuthOption?.globalAccessAuth || undefined,

@@ -23,6 +23,11 @@ export const AppNavMobile = ({ isMenuOpen, onMenuOpenChange }: AppNavMobileProps
     onMenuOpenChange?.(false);
   };
 
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+  const isStandAloneRaw =
+    typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
+  const isStandAloneLS = isStandAloneRaw === 'true';
+
   const rootHref = getRootHref(params, { returnEmptyRootString: true });
 
   const menuNavigationLinks = [
@@ -72,6 +77,7 @@ export const AppNavMobile = ({ isMenuOpen, onMenuOpenChange }: AppNavMobileProps
           <button
             className="text-foreground hover:text-foreground/80 text-2xl font-semibold"
             onClick={async () => authClient.signOut()}
+            disabled={isStandAloneLS}
           >
             <Trans>Sign Out</Trans>
           </button>

@@ -61,6 +61,33 @@ export default function DocumentsPage() {
   const isInternal: any = new URLSearchParams(location.search).get('internal') === 'true';
   const docId: any = new URLSearchParams(location.search).get('docId');
   const isEdit: any = new URLSearchParams(location.search).get('edit') === 'true';
+  const externalId: any = new URLSearchParams(location.search).get('externalId');
+  const ss: any = new URLSearchParams(location.search).get('ss');
+  const s: any = new URLSearchParams(location.search).get('s');
+  const isStandAlone = /^([^0-9]*1[^0-9]*)$/.test(s);
+
+  useEffect(() => {
+    if (externalId) {
+      localStorage.setItem('externalId', externalId);
+    }
+    if (s && typeof isStandAlone === 'boolean') {
+      localStorage.setItem('isStandAlone', JSON.stringify(isStandAlone));
+    }
+  }, [externalId, s, isStandAlone]);
+
+  useEffect(() => {
+    if (ss) {
+      localStorage.removeItem('externalId');
+      localStorage.removeItem('isStandAlone');
+    }
+  }, [ss]);
+
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+
+  const isStandAloneRaw =
+    typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
+
+  const isStandAloneLS = isStandAloneRaw === 'true';
 
   const findDocumentSearchParams = useMemo(
     () => ZSearchParamsSchema.safeParse(Object.fromEntries(searchParams.entries())).data || {},
@@ -80,9 +107,7 @@ export default function DocumentsPage() {
 
   const getTabHref = (value: keyof typeof ExtendedDocumentStatus) => {
     const params = new URLSearchParams(searchParams);
-
     params.set('status', value);
-
     if (value === ExtendedDocumentStatus.ALL) {
       params.delete('status');
     }
@@ -116,12 +141,12 @@ export default function DocumentsPage() {
     }
   }, [session, hasRedirected, location.pathname, location.search]);
 
-  if (isEdit) {
+  if (!isStandAloneLS && s) {
     return (
-      <div className="flex h-[80vh] w-full flex-col items-center justify-center">
+      <div className="absolute flex h-[80vh] w-full flex-col items-center justify-center">
         <Loader className="text-documenso h-12 w-12 animate-spin" />
         <p className="text-muted-foreground mt-4">
-          <Trans>Loading document...</Trans>
+          <Trans>Something went wrong....</Trans>
         </p>
       </div>
     );
