@@ -26,8 +26,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   const session = await getOptionalSession(request);
   const url = new URL(request.url);
   const isInternal = url.searchParams.get('internal') === 'true';
+  const s = url.searchParams.get('s');
 
-  if (!session.isAuthenticated && !isInternal) {
+  if (!session.isAuthenticated && !isInternal && !s) {
     throw redirect('/signin');
   }
 
