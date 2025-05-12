@@ -78,7 +78,7 @@ export default function DocumentsPage() {
       localStorage.setItem('isStandAlone', JSON.stringify(isStandAlone));
       localStorage.removeItem('isInternal');
     }
-  }, [externalId, s, isStandAlone]);
+  }, [externalId, s, isStandAlone, isInternal]);
 
   useEffect(() => {
     if (ss) {
