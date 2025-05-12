@@ -68,7 +68,7 @@ export default function DocumentsPage() {
 
   useEffect(() => {
     if (isInternal) {
-      localStorage.setItem('isInternal', externalId);
+      localStorage.setItem('isInternal', isInternal);
     }
     if (externalId) {
       localStorage.setItem('externalId', externalId);
