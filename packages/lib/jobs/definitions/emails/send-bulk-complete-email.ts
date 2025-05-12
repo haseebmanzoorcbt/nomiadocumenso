@@ -30,7 +30,6 @@ export const SEND_BULK_COMPLETE_EMAIL_JOB_DEFINITION = {
   },
   handler: async ({ payload, io }) => {
     const handler = await import('./send-bulk-complete-email.handler');
-
     await handler.run({ payload, io });
   },
 } as const satisfies JobDefinition<

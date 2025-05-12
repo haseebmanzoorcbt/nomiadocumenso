@@ -48,6 +48,9 @@ export const createSession = async (
 ): Promise<Session> => {
   const hashedSessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
+
+  console.log("IpAddress", metadata.ipAddress);
+
   // console.log("Session ID", hashedSessionId);
 
   const session: Session = {

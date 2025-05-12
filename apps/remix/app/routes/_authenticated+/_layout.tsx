@@ -47,7 +47,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function Layout({ loaderData }: Route.ComponentProps) {
   const { user, teams } = useSession();
-
   const { banner, limits } = loaderData;
 
   return (
