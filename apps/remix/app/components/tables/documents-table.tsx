@@ -46,7 +46,6 @@ export const DocumentsTable = ({
 
   const team = useOptionalCurrentTeam();
   const [isPending, startTransition] = useTransition();
-
   const updateSearchParams = useUpdateSearchParams();
 
   const columns = useMemo(() => {
@@ -88,7 +87,7 @@ export const DocumentsTable = ({
           (!row.original.deletedAt || isDocumentCompleted(row.original.status)) && (
             <div className="flex items-center gap-x-4">
               <DocumentsTableActionButton internal={internal} row={row.original} />
-              <DocumentsTableActionDropdown row={row.original} />
+              <DocumentsTableActionDropdown internal={internal} row={row.original} />
             </div>
           ),
       },
@@ -207,7 +206,7 @@ const DataTableTitle = ({ row, teamUrl }: DataTableTitleProps) => {
     ))
     .with({ isRecipient: true }, () => (
       <Link
-        to={`/sign/${recipient?.token}`}
+        to={`/sign/${recipient?.token}?internal=${isInternal}`}
         title={row.title}
         className="block max-w-[10rem] truncate font-medium hover:underline md:max-w-[20rem]"
       >
