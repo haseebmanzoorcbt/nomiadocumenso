@@ -472,7 +472,7 @@ export const AddTemplateSettingsFormPartial = ({
                           </FormLabel>
 
                           <FormControl>
-                            <Input className="bg-background" {...field} />
+                            <Input disabled={true} className="bg-background" {...field} />
                           </FormControl>
 
                           <FormMessage />
