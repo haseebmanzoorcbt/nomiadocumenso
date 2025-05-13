@@ -70,13 +70,13 @@ export const TemplatesTableActionDropdown = ({
           </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           disabled={!isOwner && !isTeamTemplate}
           onClick={() => setDuplicateDialogOpen(true)}
         >
           <Copy className="mr-2 h-4 w-4" />
           <Trans>Duplicate</Trans>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
 
         <DropdownMenuItem onClick={() => setTemplateDirectLinkDialogOpen(true)}>
           <Share2Icon className="mr-2 h-4 w-4" />
