@@ -85,10 +85,10 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
         )}
 
         {!internal ||
-          (isInternalLS && <AppNavDesktop setIsCommandMenuOpen={setIsCommandMenuOpen} />)}
+          (!isInternalLS && <AppNavDesktop setIsCommandMenuOpen={setIsCommandMenuOpen} />)}
 
         {!internal ||
-          (isInternalLS && (
+          (!isInternalLS && (
             <div
               className="flex gap-x-4 md:ml-8"
               title={selectedTeam ? selectedTeam.name : (user.name ?? '')}
@@ -98,7 +98,7 @@ export const Header = ({ className, user, teams, ...props }: HeaderProps) => {
           ))}
 
         {!internal ||
-          (isInternalLS && (
+          (!isInternalLS && (
             <div className="flex flex-row items-center space-x-4 md:hidden">
               <button onClick={() => setIsCommandMenuOpen(true)}>
                 <SearchIcon className="text-muted-foreground h-6 w-6" />
