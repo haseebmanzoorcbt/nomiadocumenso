@@ -150,9 +150,7 @@ export default function DocumentsPage() {
     return (
       <div className="absolute flex h-[80vh] w-full flex-col items-center justify-center">
         <Loader className="text-documenso h-12 w-12 animate-spin" />
-        <p className="text-muted-foreground mt-4">
-          <Trans>Something went wrong....</Trans>
-        </p>
+        <p className="text-muted-foreground mt-4"></p>
       </div>
     );
   }
