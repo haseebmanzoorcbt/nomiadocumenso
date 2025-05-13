@@ -13,7 +13,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router';
-import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes';
+import { PreventFlashOnWrongTheme, Theme, ThemeProvider, useTheme } from 'remix-themes';
 
 import { getOptionalSession } from '@documenso/auth/server/lib/utils/get-session';
 import { SessionProvider } from '@documenso/lib/client-only/providers/session';
@@ -145,7 +145,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return data(
     {
       lang,
-      theme: getTheme(),
+      theme: 'light',
       session: session.isAuthenticated
         ? {
             user: session.user,
@@ -174,7 +174,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }, [location.pathname]);
 
   return (
-    <ThemeProvider specifiedTheme={theme} themeAction="/api/theme">
+    <ThemeProvider specifiedTheme={'light' as Theme} themeAction="">
       <LayoutContent>{children}</LayoutContent>
     </ThemeProvider>
   );
@@ -186,7 +186,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
   const [theme] = useTheme();
 
   return (
-    <html translate="no" lang={lang} data-theme={'light'} className={theme ?? ''}>
+    <html translate="no" lang={lang} data-theme={'light'} className={'light'}>
       <head>
         
         <meta charSet="utf-8" />
@@ -200,7 +200,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <meta name="google" content="notranslate" />
-        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
+        <PreventFlashOnWrongTheme ssrTheme={false} />
 
         {/* Fix: https://stackoverflow.com/questions/21147149/flash-of-unstyled-content-fouc-in-firefox-only-is-ff-slow-renderer */}
         <script>0</script>
