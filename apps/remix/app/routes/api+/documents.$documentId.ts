@@ -19,11 +19,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       })
-
-
-
-
-
     const document = await prisma.document.findUnique({
       where: { id: documentIdNumber },
       select: { documentDataId: true }
