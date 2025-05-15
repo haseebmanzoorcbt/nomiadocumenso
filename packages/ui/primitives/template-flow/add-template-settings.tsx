@@ -102,8 +102,8 @@ export const AddTemplateSettingsFormPartial = ({
   const form = useForm<TAddTemplateSettingsFormSchema>({
     resolver: zodResolver(ZAddTemplateSettingsFormSchema),
     defaultValues: {
-      title: externalIdLS || template.title,
-      externalId: template.externalId || undefined,
+      title: template.title,
+      externalId: externalIdLS || template.externalId || undefined,
       visibility: template.visibility || '',
       globalAccessAuth: documentAuthOption?.globalAccessAuth || undefined,
       globalActionAuth: documentAuthOption?.globalActionAuth || undefined,
