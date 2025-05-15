@@ -209,13 +209,17 @@ The environment variables listed above are a subset of those available for confi
 | `NEXT_PRIVATE_SIGNING_PASSPHRASE`            | The passphrase for the key file.                                                                    |
 | `NEXT_PRIVATE_SIGNING_LOCAL_FILE_CONTENTS`   | The base64-encoded contents of the key file will be used instead of the file path.                  |
 | `NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH`       | The path to the key file, default `/opt/documenso/cert.p12`.                                        |
-| `NEXT_PUBLIC_UPLOAD_TRANSPORT`               | The transport for file uploads (database or s3).                                                    |
+| `NEXT_PUBLIC_UPLOAD_TRANSPORT`               | The transport for file uploads (database, s3, or gcs).                                                    |
 | `NEXT_PRIVATE_UPLOAD_ENDPOINT`               | The endpoint for the S3 storage transport (for third-party S3-compatible providers).                |
 | `NEXT_PRIVATE_UPLOAD_FORCE_PATH_STYLE`       | Whether to force path-style URLs for the S3 storage transport.                                      |
 | `NEXT_PRIVATE_UPLOAD_REGION`                 | The region for the S3 storage transport (defaults to us-east-1).                                    |
 | `NEXT_PRIVATE_UPLOAD_BUCKET`                 | The bucket to use for the S3 storage transport.                                                     |
 | `NEXT_PRIVATE_UPLOAD_ACCESS_KEY_ID`          | The access key ID for the S3 storage transport.                                                     |
 | `NEXT_PRIVATE_UPLOAD_SECRET_ACCESS_KEY`      | The secret access key for the S3 storage transport.                                                 |
+| `NEXT_PRIVATE_GCS_PROJECT_ID`                | The Google Cloud project ID for GCS storage.                                                        |
+| `NEXT_PRIVATE_GCS_CLIENT_EMAIL`              | The service account email for GCS storage.                                                          |
+| `NEXT_PRIVATE_GCS_PRIVATE_KEY`               | The private key for the GCS service account.                                                        |
+| `NEXT_PRIVATE_GCS_BUCKET_NAME`               | The GCS bucket name for file storage.                                                              |
 | `NEXT_PRIVATE_SMTP_TRANSPORT`                | The transport to send emails (smtp-auth, smtp-api, resend, or mailchannels).                        |
 | `NEXT_PRIVATE_SMTP_HOST`                     | The host for the SMTP server for SMTP transports.                                                   |
 | `NEXT_PRIVATE_SMTP_PORT`                     | The port for the SMTP server for SMTP transports.                                                   |

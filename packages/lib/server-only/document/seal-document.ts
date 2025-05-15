@@ -8,7 +8,7 @@ import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-log
 import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
 import { prisma } from '@documenso/prisma';
 import { signPdf } from '@documenso/signing';
-import PDFKit from 'pdfkit';
+
 import {
   ZWebhookDocumentSchema,
   mapDocumentToWebhookDocumentPayload,
@@ -135,17 +135,7 @@ export const sealDocument = async ({
   const doc = await PDFDocument.load(pdfData);
 
 
-     // Create a new PDFKit document with permissions
-  const pdfKitDoc = new PDFKit({
-    permissions: {
-      modifying: false,
-      copying: false,
-      annotating: false,
-      fillingForms: false,
-      contentAccessibility: false,
-      documentAssembly: false
-    }
-  });
+
    
 
 

@@ -7,9 +7,6 @@ export type GetFileOptions = {
   data: string;
 };
 
-
-
-
 export const getFile = async ({ type, data }: GetFileOptions) => {
   return await match(type)
     .with(DocumentDataType.BYTES, () => getFileFromBytes(data))
@@ -32,7 +29,7 @@ const getFileFromBytes64 = (data: string) => {
   return binaryData;
 };
 
-export const getFileFromS3 = async (key: string) => {
+const getFileFromS3 = async (key: string) => {
   const getPresignedUrlResponse = await fetch(`/api/files/presigned-get-url`, {
     method: 'POST',
     headers: {

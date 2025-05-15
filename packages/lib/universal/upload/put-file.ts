@@ -11,6 +11,7 @@ import type {
 import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
 import { AppError } from '../../errors/app-error';
 
+
 type File = {
   name: string;
   type: string;
@@ -50,6 +51,7 @@ export const putFile = async (file: File) => {
 
   return await match(NEXT_PUBLIC_UPLOAD_TRANSPORT)
     .with('s3', async () => putFileInS3(file))
+    .with('gcs', async () => putFileInS3(file))
     .otherwise(async () => putFileInDatabase(file));
 };
 
@@ -88,10 +90,9 @@ const putFileInS3 = async (file: File) => {
   }
 
   const { url, key }: TGetPresignedPostUrlResponse = await getPresignedUrlResponse.json();
-
   const body = await file.arrayBuffer();
 
-  const reponse = await fetch(url, {
+  const response = await fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/octet-stream',
@@ -99,9 +100,9 @@ const putFileInS3 = async (file: File) => {
     body,
   });
 
-  if (!reponse.ok) {
+  if (!response.ok) {
     throw new Error(
-      `Failed to upload file "${file.name}", failed with status code ${reponse.status}`,
+      `Failed to upload file "${file.name}", failed with status code ${response.status}`,
     );
   }
 
@@ -110,3 +111,5 @@ const putFileInS3 = async (file: File) => {
     data: key,
   };
 };
+
+

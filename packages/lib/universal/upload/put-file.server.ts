@@ -47,10 +47,14 @@ export const putPdfFileServerSide = async (file: File) => {
  * Uploads a file to the appropriate storage location.
  */
 export const putFileServerSide = async (file: File) => {
+
+console.log('putFileServerSide');
+  
   const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
 
   return await match(NEXT_PUBLIC_UPLOAD_TRANSPORT)
     .with('s3', async () => putFileInS3(file))
+    .with('gcs', async () => putFileInS3(file))
     .otherwise(async () => putFileInDatabase(file));
 };
 
@@ -83,3 +87,4 @@ const putFileInS3 = async (file: File) => {
     data: key,
   };
 };
+
