@@ -182,7 +182,7 @@ export const sealDocument = async ({
     name: `${name}${suffix}`,
     type: 'application/pdf',
     arrayBuffer: async () => Promise.resolve(pdfBuffer),
-  });
+  },false);
 
   const postHog = PostHogServerClient();
 

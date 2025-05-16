@@ -201,12 +201,12 @@ export const run = async ({
 
     // Add suffix based on document status
     const suffix = isRejected ? '_rejected.pdf' : '_signed.pdf';
-
+    const isDocumentCompleted = true;
     const documentData = await putPdfFileServerSide({
       name: `${name}${suffix}`,
       type: 'application/pdf',
       arrayBuffer: async () => Promise.resolve(pdfBuffer),
-    });
+    }, isDocumentCompleted);
 
     console.log('Document data created');
 

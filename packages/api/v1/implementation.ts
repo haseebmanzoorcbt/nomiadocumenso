@@ -500,7 +500,7 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
         name: fileName,
         type: 'application/pdf',
         arrayBuffer: async () => Promise.resolve(prefilled),
-      });
+      }, false);
 
       documentDataId = newDocumentData.id;
     }
@@ -609,7 +609,7 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
         name: fileName,
         type: 'application/pdf',
         arrayBuffer: async () => Promise.resolve(prefilled),
-      });
+      },false);
 
       await updateDocument({
         documentId: document.id,

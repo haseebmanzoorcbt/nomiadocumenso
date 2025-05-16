@@ -127,7 +127,7 @@ export const sendDocument = async ({
       name: fileName,
       type: 'application/pdf',
       arrayBuffer: async () => Promise.resolve(prefilled),
-    });
+    },false);
 
     const result = await prisma.document.update({
       where: {
