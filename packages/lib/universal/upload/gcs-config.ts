@@ -1,12 +1,10 @@
-import { Storage } from '@google-cloud/storage';
-import { env } from '@documenso/lib/utils/env';
+import { Storage } from '@google-cloud/storage'
+import { env } from '@documenso/lib/utils/env'
 
-export const getGCSClient = () => {
-  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
-
-  if (NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
-    throw new Error('Invalid upload transport');
-  }
+export function getGCSClient() {
+  const uploadTransport = env('NEXT_PUBLIC_UPLOAD_TRANSPORT')
+  if (uploadTransport !== 'gcs') 
+    throw new Error('Invalid upload transport')
 
   return new Storage({
     projectId: env('NEXT_PRIVATE_GCS_PROJECT_ID'),

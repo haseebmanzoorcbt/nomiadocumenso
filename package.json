@@ -66,8 +66,10 @@
   "dependencies": {
     "@documenso/pdf-sign": "^0.1.0",
     "@documenso/prisma": "^0.0.0",
+    "@google-cloud/storage": "^7.16.0",
     "@lingui/conf": "^5.2.0",
     "@lingui/core": "^5.2.0",
+    "child_process": "^1.0.2",
     "cors": "^2.8.5",
     "inngest-cli": "^0.29.1",
     "luxon": "^3.5.0",

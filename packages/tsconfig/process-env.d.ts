@@ -33,6 +33,7 @@ declare namespace NodeJS {
     NEXT_PRIVATE_GCS_CLIENT_EMAIL?: string;
     NEXT_PRIVATE_GCS_PRIVATE_KEY?: string;
     NEXT_PRIVATE_GCS_BUCKET?: string;
+    
 
     NEXT_PRIVATE_SIGNING_TRANSPORT?: 'local' | 'http' | 'gcloud-hsm';
     NEXT_PRIVATE_SIGNING_PASSPHRASE?: string;
