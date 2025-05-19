@@ -55,11 +55,24 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
           <img src="/images/nomiasignatures.png" className="h-20" />
         </div>
         <hr className="-mx-6 my-4" />
-        <Trans>Nomia users are not allowed to Sign in</Trans>
-        <br />
-        <Trans>
-          Please visit <a href="https://tapp.nomiadocs.com">Nomia Docs</a>
-        </Trans>
+
+        <SignInForm
+          initialEmail={email}
+          isGoogleSSOEnabled={isGoogleSSOEnabled}
+          isOIDCSSOEnabled={isOIDCSSOEnabled}
+          oidcProviderLabel={oidcProviderLabel}
+        />
+
+        {env('NEXT_PUBLIC_DISABLE_SIGNUP') !== 'true' && (
+          <p className="text-muted-foreground mt-6 text-center text-sm">
+            <Trans>
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-documenso-700 duration-200 hover:opacity-70">
+                Sign up
+              </Link>
+            </Trans>
+          </p>
+        )}
       </div>
     </div>
   );
