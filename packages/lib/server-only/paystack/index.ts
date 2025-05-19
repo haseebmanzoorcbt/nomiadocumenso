@@ -9,13 +9,22 @@ const paystack = new Paystack("sk_test_be0b3cb028d5ea5cdf6aa15c2a60a9c9b453dba0"
 
 export { paystack };
 
+interface PaystackResponse {
+  status: boolean;
+  message: string;
+  data: {
+    authorization_url: string;
+    reference: string;
+  } | null;
+}
+
 export async function initializeTransaction(options: {
   email: string;
   amount: number;
   plan?: string;
   callback_url?: string;
   metadata?: Record<string, unknown>;
-}) {
+}): Promise<PaystackResponse> {
   return paystack.transaction.initialize({
     ...options,
     amount: options.amount.toString()
@@ -24,44 +33,4 @@ export async function initializeTransaction(options: {
 
 export async function verifyTransaction(reference: string) {
   return paystack.transaction.verify(reference);
-}
-
-export async function action({ request }: { request: Request }) {
-  try {
-    const { email, amount, plan, callback_url } = await request.json();
-    if (!email || !amount) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'Missing email or amount' }),
-        { status: 400 }
-      );
-    }
-    const result = await initializeTransaction({
-      email,
-      amount,
-      plan,
-      callback_url,
-    });
-
-    if (!result.data) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'Failed to initialize transaction' }),
-        { status: 500 }
-      );
-    }
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        authorization_url: result.data.authorization_url,
-        reference: result.data.reference,
-      }),
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error('Paystack initialize error:', error);
-    return new Response(
-      JSON.stringify({ success: false, error: 'Failed to initialize transaction' }),
-      { status: 500 }
-    );
-  }
 } 

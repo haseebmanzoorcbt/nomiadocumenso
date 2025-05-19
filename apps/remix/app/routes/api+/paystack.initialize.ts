@@ -1,7 +1,7 @@
-import { initializeTransaction } from '@documenso/lib/server-only/paystack';
-import type { Route } from './+types/webhook.trigger';
+import type { ActionFunctionArgs } from 'react-router';
+import { initializeTransaction } from "@documenso/lib/server-only/paystack";
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   try {
     const { email, amount, plan, callback_url } = await request.json();
     if (!email || !amount) {
@@ -16,6 +16,14 @@ export async function action({ request }: Route.ActionArgs) {
       plan,
       callback_url,
     });
+
+    if (!result.data) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Failed to initialize transaction' }),
+        { status: 500 }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -31,4 +39,4 @@ export async function action({ request }: Route.ActionArgs) {
       { status: 500 }
     );
   }
-} 
+}
