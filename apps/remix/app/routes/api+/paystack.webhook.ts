@@ -5,10 +5,10 @@ export async function action({ request }: { request: Request }){
     const event = await request.json();
     console.log('Paystack webhook received event:', JSON.stringify(event));
     if (event.event === 'subscription.create') {
-      const { email, plan, reference } = event.data;
-      console.log('Extracted from event:', { email, plan, reference });
+      const { customer, plan, subscription_code } = event.data;
+      console.log('Extracted from event:', { email: customer.email, plan, reference: subscription_code });
       // Find user by email
-      const user = await prisma.user.findUnique({ where: { email } });
+      const user = await prisma.user.findUnique({ where: { email: customer.email } });
       console.log('User lookup result:', user);
       if (user && plan?.plan_code) {
         try {
@@ -16,7 +16,7 @@ export async function action({ request }: { request: Request }){
             data: {
               userId: user.id,
               planId: plan.plan_code,
-              priceId: reference,
+              priceId: subscription_code,
               status: 'ACTIVE',
             },
           });
