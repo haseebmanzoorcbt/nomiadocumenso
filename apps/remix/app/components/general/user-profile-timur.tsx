@@ -22,32 +22,8 @@ export const UserProfileTimur = ({ className, rows = 2 }: UserProfileTimurProps)
         className,
       )}
     >
-      <div className="border-border bg-background text-muted-foreground inline-block max-w-full truncate rounded-md border px-2.5 py-1.5 text-sm">
-        {baseUrl.host}/u/timur
-      </div>
-
       <div className="mt-4">
-        <img
-          src={timurImage}
-          className="h-20 w-20 rounded-full"
-          alt="image of timur ercan founder of documenso"
-        />
-      </div>
-
-      <div className="mt-6">
-        <div className="flex items-center justify-center gap-x-2">
-          <h2 className="text-2xl font-semibold">Timur Ercan</h2>
-
-          <VerifiedIcon className="text-primary h-8 w-8" />
-        </div>
-
-        <p className="text-muted-foreground mt-4 max-w-[40ch] text-center text-sm">
-          <Trans>Hey I’m Timur</Trans>
-        </p>
-
-        <p className="text-muted-foreground mt-1 max-w-[40ch] text-center text-sm">
-          <Trans>Pick any of the following agreements below and start signing to get started</Trans>
-        </p>
+        <img src="/images/nomiasignatures.png" alt="nomia e-sign user profile" />
       </div>
 
       <div className="mt-8 w-full">

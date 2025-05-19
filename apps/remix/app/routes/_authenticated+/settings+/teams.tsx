@@ -24,9 +24,7 @@ export default function TeamsSettingsPage() {
       >
         <TeamCreateDialog />
       </SettingsHeader>
-
       <UserSettingsTeamsPageDataTable />
-
       <div className="mt-8 space-y-8">
         <AnimatePresence>
           {teamEmail && (
@@ -35,7 +33,6 @@ export default function TeamsSettingsPage() {
             </AnimateGenericFadeInOut>
           )}
         </AnimatePresence>
-
         <TeamInvitations />
       </div>
     </div>
