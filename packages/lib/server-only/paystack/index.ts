@@ -1,11 +1,11 @@
-import Paystack from 'paystack-api';
+import { Paystack } from 'paystack-sdk';
 
 import { env } from '../../utils/env';
 import { any } from 'zod';
 
 
 
-const paystack = Paystack("sk_test_be0b3cb028d5ea5cdf6aa15c2a60a9c9b453dba0");
+const paystack = new Paystack("sk_test_be0b3cb028d5ea5cdf6aa15c2a60a9c9b453dba0");
 
 export { paystack };
 
@@ -16,7 +16,10 @@ export async function initializeTransaction(options: {
   callback_url?: string;
   metadata?: Record<string, unknown>;
 }) {
-  return paystack.transaction.initialize(options);
+  return paystack.transaction.initialize({
+    ...options,
+    amount: options.amount.toString()
+  });
 }
 
 export async function verifyTransaction(reference: string) {
