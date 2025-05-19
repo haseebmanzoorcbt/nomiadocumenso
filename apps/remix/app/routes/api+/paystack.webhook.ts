@@ -4,7 +4,7 @@ export async function action({ request }: { request: Request }){
   try {
     const event = await request.json();
     console.log('Paystack webhook received event:', JSON.stringify(event));
-    if (event.event === 'charge.success') {
+    if (event.event === 'subscription.create') {
       const { email, plan, reference } = event.data;
       console.log('Extracted from event:', { email, plan, reference });
       // Find user by email
