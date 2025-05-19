@@ -4,4 +4,11 @@ declare module 'paystack-api' {
   
   const Paystack: any;
   export default Paystack;
+
+  export function createClient(secretKey: string): {
+    transaction: {
+      initialize: (options: any) => Promise<any>;
+      verify: (reference: string) => Promise<any>;
+    };
+  };
 }
