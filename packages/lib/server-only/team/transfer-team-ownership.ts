@@ -73,7 +73,7 @@ export const transferTeamOwnership = async ({ token }: TransferTeamOwnershipOpti
 
       if (teamSubscription) {
         await tx.subscription.upsert(
-          mapStripeSubscriptionToPrismaUpsertAction(teamSubscription, undefined, team.id),
+          await mapStripeSubscriptionToPrismaUpsertAction(teamSubscription, undefined, team.id),
         );
       }
 
