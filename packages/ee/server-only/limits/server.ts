@@ -58,6 +58,7 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
       userId: user.id,
       teamId: null,
       status: 'COMPLETED',
+
       source: {
         not: DocumentSource.TEMPLATE_DIRECT_LINK,
       },

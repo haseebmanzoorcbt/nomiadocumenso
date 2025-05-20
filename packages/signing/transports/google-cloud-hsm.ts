@@ -61,14 +61,30 @@ export const signWithGoogleCloudHSM = async ({ pdf }: SignWithGoogleCloudHSMOpti
     );
   }
 
-  const signature = signWithGCloud({
-    keyPath,
-    cert,
-    content: pdfWithoutSignature,
-  });
+  console.log('Starting GCloud signing process...');
+  console.log('Key path:', keyPath);
+  console.log('Certificate length:', cert.length);
+  console.log('Content length:', pdfWithoutSignature.length);
+  console.log('Timestamp server:', 'https://ts.ssl.com');
+
+  let signature: Buffer;
+  try {
+    signature = signWithGCloud({
+      keyPath,
+      cert,
+      content: pdfWithoutSignature,
+      timestampServer: 'https://ts.ssl.com',
+    });
+    console.log('Signature generated successfully');
+    console.log('Signature length:', signature.length);
+  } catch (error) {
+    console.error('Error during signing:', error);
+    throw error;
+  }
 
   const signatureAsHex = signature.toString('hex');
-
+  const paddedSignature = `<${signatureAsHex.padEnd(signatureLength - 2, '0')}>`;
+  
   const signedPdf = Buffer.concat([
     new Uint8Array(pdfWithPlaceholder.subarray(0, byteRange[1])),
     new Uint8Array(Buffer.from(`<${signatureAsHex.padEnd(signatureLength - 2, '0')}>`)),
