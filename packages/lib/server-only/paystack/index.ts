@@ -33,4 +33,10 @@ export async function initializeTransaction(options: {
 
 export async function verifyTransaction(reference: string) {
   return paystack.transaction.verify(reference);
-} 
+}
+export async function disableSubscription(subscriptionCode: string) {
+  return paystack.subscription.disable({
+    code: subscriptionCode,
+    token: ''
+  });
+}

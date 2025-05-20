@@ -27,6 +27,23 @@ export async function action({ request }: { request: Request }){
       } else {
         console.warn('User not found or plan_code missing:', { user, plan });
       }
+    } else if (event.event === 'subscription.disable') {
+      const { subscription_code } = event.data;
+      console.log('Processing subscription disable:', subscription_code);
+      
+      try {
+        const subscription = await prisma.subscription.update({
+          where: {
+            planId: subscription_code,
+          },
+          data: {
+            status: 'INACTIVE',
+          },
+        });
+        console.log('Subscription disabled:', subscription);
+      } catch (error) {
+        console.error('Error disabling subscription:', error);
+      }
     }
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
