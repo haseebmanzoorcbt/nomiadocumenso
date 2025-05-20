@@ -11,7 +11,7 @@ export type SignWithGoogleCloudHSMOptions = {
 };
 
 export const signWithGoogleCloudHSM = async ({ pdf }: SignWithGoogleCloudHSMOptions) => {
-  const keyPath = env('NEXT_PRIVATE_SIGNING_GCLOUD_HSM_KEY_PATH');
+  const keyPath:any = env('NEXT_PRIVATE_SIGNING_GCLOUD_HSM_KEY_PATH');
 
   if (!keyPath) {
     throw new Error('No certificate path provided for Google Cloud HSM signing');
@@ -65,7 +65,7 @@ export const signWithGoogleCloudHSM = async ({ pdf }: SignWithGoogleCloudHSMOpti
   console.log('Key path:', keyPath);
   console.log('Certificate length:', cert.length);
   console.log('Content length:', pdfWithoutSignature.length);
-  console.log('Timestamp server:', 'https://ts.ssl.com');
+  console.log('Timestamp server:', 'http://ts.ssl.com');
 
   let signature: Buffer;
   try {
@@ -73,7 +73,7 @@ export const signWithGoogleCloudHSM = async ({ pdf }: SignWithGoogleCloudHSMOpti
       keyPath,
       cert,
       content: pdfWithoutSignature,
-      timestampServer: 'https://ts.ssl.com',
+      timestampServer: 'http://ts.ssl.com',
     });
     console.log('Signature generated successfully');
     console.log('Signature length:', signature.length);

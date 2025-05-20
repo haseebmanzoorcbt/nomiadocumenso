@@ -173,7 +173,7 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
     else
     {
       console.log("user Signup from Outside");
-      const user = await createUser({ name, email, password, signature, url ,fromNomia });
+      const user = await createUser({ name, email, password, signature, url});
 
       await jobsClient.triggerJob({
         name: 'send.signup.confirmation.email',
