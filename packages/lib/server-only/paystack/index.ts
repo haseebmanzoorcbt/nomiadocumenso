@@ -40,3 +40,7 @@ export async function disableSubscription(subscriptionCode: string) {
     token: ''
   });
 }
+
+export async function manageSubscription(subscriptionCode: string) {
+  return paystack.subscription.generateSubscriptionLink(subscriptionCode);
+}
