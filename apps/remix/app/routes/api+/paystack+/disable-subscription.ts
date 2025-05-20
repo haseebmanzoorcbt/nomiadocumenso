@@ -40,7 +40,8 @@ export async function action({ request }: { request: Request }) {
     // Update subscription status in our database
     await prisma.subscription.update({
       where: {
-        planId: subscriptionCode,
+        id: subscription.id,
+        ...(subscription.teamId ? { teamId: subscription.teamId } : {}),
       },
       data: {
         status: 'INACTIVE',

@@ -8,9 +8,20 @@ export type OnSubscriptionDeletedOptions = {
 };
 
 export const onSubscriptionDeleted = async ({ subscription }: OnSubscriptionDeletedOptions) => {
-  await prisma.subscription.update({
+  const existingSubscription = await prisma.subscription.findFirst({
     where: {
       planId: subscription.id,
+    },
+  });
+
+  if (!existingSubscription) {
+    return;
+  }
+
+  await prisma.subscription.update({
+    where: {
+      id: existingSubscription.id,
+      ...(existingSubscription.teamId ? { teamId: existingSubscription.teamId } : {}),
     },
     data: {
       status: SubscriptionStatus.INACTIVE,
