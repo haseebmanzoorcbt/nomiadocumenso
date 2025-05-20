@@ -4,7 +4,9 @@ import { manageSubscription } from '@documenso/lib/server-only/paystack';
 
 export async function action({ request }: { request: Request }) {
   try {
-    const { subscriptionCode } = await request.json();
+    const body = await request.json();
+    const subscriptionCode = body.subscriptionCode;
+    console.log(subscriptionCode);  
 
     if (!subscriptionCode) {
       return new Response(
