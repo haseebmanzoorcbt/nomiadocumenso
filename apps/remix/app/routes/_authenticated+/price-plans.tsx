@@ -1,14 +1,24 @@
 import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Link } from 'react-router';
+import { Link, type LoaderFunctionArgs, useLoaderData } from 'react-router';
 
+import { getSession } from '@documenso/auth/server/lib/utils/get-session';
 import { useSession } from '@documenso/lib/client-only/providers/session';
 import { getSubscriptionsByUserId } from '@documenso/lib/server-only/subscription/get-subscriptions-by-user-id';
 import { Button } from '@documenso/ui/primitives/button';
 
 import { E_SIGN_BASE_URL } from '~/utils/config';
 import { appMetaTags } from '~/utils/meta';
+import { superLoaderJson } from '~/utils/super-json-loader';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // Get session user
+  const { user } = await getSession(request);
+  const subscriptions = await getSubscriptionsByUserId({ userId: user.id });
+
+  return superLoaderJson({ subscriptions, user });
+};
 
 const plansData = {
   'Pay-as-you-go': [
@@ -104,7 +114,9 @@ export function meta() {
 
 export default function PricePlansPage() {
   const { user } = useSession();
-  const [existingSubscriptions, setExistingSubscriptions] = useState<any>(null);
+  const { subscriptions } = useLoaderData<typeof loader>();
+
+  console.log('SUBSCRIPTIONS DATA', subscriptions);
 
   async function handleApiPaystack(
     email: string,
@@ -137,20 +149,6 @@ export default function PricePlansPage() {
     window.open(data.authorization_url, '_blank');
     // return data;s
   }
-
-  useEffect(() => {
-    async function fetchSubscription() {
-      if (user?.id) {
-        const result = await getSubscriptionsByUserId({ userId: user.id });
-        setExistingSubscriptions(result);
-        console.log('CURRENT SUBSCRIPTION', result);
-      }
-    }
-
-    fetchSubscription();
-  }, [user?.id]);
-
-  console.log('CURRENT SUBSCRIPTION', existingSubscriptions);
 
   return (
     <div className="bg-re mx-auto w-full max-w-screen-xl px-4 md:px-8">
