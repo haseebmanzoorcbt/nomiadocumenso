@@ -125,7 +125,7 @@ const plansData = {
       label: 'Monthly',
     },
   ],
-  Annually: [
+  Annual: [
     {
       name: '240 credits',
       credits: 240,
@@ -214,11 +214,11 @@ function PlanCard({
             {selectedPlan.credits}
             <br />{' '}
           </strong>
-          <Trans>Credits</Trans>
+          <Trans>Envelopes</Trans>
         </div>
 
         <div className="text-muted-foreground mb-4 rounded-xl bg-purple-50 p-2 text-center text-xl font-bold">
-          <Trans>Starts at </Trans> <br />{' '}
+          <Trans>Costing at </Trans> <br />{' '}
           <strong className="text-primary text-2xl">{selectedPlan.amount}</strong>
         </div>
       </div>
