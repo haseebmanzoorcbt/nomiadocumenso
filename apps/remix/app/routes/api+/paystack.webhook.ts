@@ -13,13 +13,22 @@ export async function action({ request }: { request: Request }){
       if (event.event === 'subscription.create') {
         if (user && plan?.plan_code) {
           try {
+            const PAY_AS_YOU_GO_PLANS = [
+              'PLN_f54sm9jv38v7r5m',
+              'PLN_5nmok91ploz44u6', 
+              'PLN_kxqcw02dow71g6c',
+              'PLN_ktbomtrjkiz73i1',
+              'PLN_59961ig3ply5r3s',
+              'PLN_bit1oy0ayiqpkdu'
+            ];
+
             const subscription = await prisma.subscription.create({
               data: {
                 userId: user.id,
                 planId: plan.plan_code,
                 priceId: subscription_code,
                 status: 'ACTIVE',
-                periodEnd: next_payment_date,
+                periodEnd: PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? null : next_payment_date,
               },
             });
             console.log('Subscription created:', subscription);
