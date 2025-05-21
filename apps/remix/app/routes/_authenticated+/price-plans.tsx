@@ -7,10 +7,11 @@ import { getSession } from '@documenso/auth/server/lib/utils/get-session';
 import { useSession } from '@documenso/lib/client-only/providers/session';
 import { getSubscriptionsByUserId } from '@documenso/lib/server-only/subscription/get-subscriptions-by-user-id';
 import { Button } from '@documenso/ui/primitives/button';
+import { useToast } from '@documenso/ui/primitives/use-toast';
 
 import { E_SIGN_BASE_URL } from '~/utils/config';
 import { appMetaTags } from '~/utils/meta';
-import { superLoaderJson } from '~/utils/super-json-loader';
+import { superLoaderJson, useSuperLoaderData } from '~/utils/super-json-loader';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Get session user
@@ -22,32 +23,135 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 const plansData = {
   'Pay-as-you-go': [
-    { name: '20 credits', credits: 20, amount: 'ZAR 190', planCode: 'PLN_bit1oy0ayiqpkdu' },
-    { name: '50 credits', credits: 50, amount: 'ZAR 450', planCode: 'PLN_59961ig3ply5r3s' },
-    { name: '100 credits', credits: 100, amount: 'ZAR 850', planCode: 'PLN_ktbomtrjkiz73i1' },
-    { name: '200 credits', credits: 200, amount: 'ZAR 1,600', planCode: 'PLN_kxqcw02dow71g6c' },
-    { name: '500 credits', credits: 500, amount: 'ZAR 3,750', planCode: 'PLN_5nmok91ploz44u6' },
-    { name: '1000 credits', credits: 1000, amount: 'ZAR 7,000', planCode: 'PLN_f54sm9jv38v7r5m' },
+    {
+      name: '20 credits',
+      credits: 20,
+      amount: 'ZAR 190',
+      planCode: 'PLN_bit1oy0ayiqpkdu',
+      label: 'Pay as you go',
+    },
+    {
+      name: '50 credits',
+      credits: 50,
+      amount: 'ZAR 450',
+      planCode: 'PLN_59961ig3ply5r3s',
+      label: 'Pay as you go',
+    },
+    {
+      name: '100 credits',
+      credits: 100,
+      amount: 'ZAR 850',
+      planCode: 'PLN_ktbomtrjkiz73i1',
+      label: 'Pay as you go',
+    },
+    {
+      name: '200 credits',
+      credits: 200,
+      amount: 'ZAR 1,600',
+      planCode: 'PLN_kxqcw02dow71g6c',
+      label: 'Pay as you go',
+    },
+    {
+      name: '500 credits',
+      credits: 500,
+      amount: 'ZAR 3,750',
+      planCode: 'PLN_5nmok91ploz44u6',
+      label: 'Pay as you go',
+    },
+    {
+      name: '1000 credits',
+      credits: 1000,
+      amount: 'ZAR 7,000',
+      planCode: 'PLN_f54sm9jv38v7r5m',
+      label: 'Pay as you go',
+    },
   ],
   Monthly: [
-    { name: '20 credits', credits: 20, amount: 'ZAR 170', planCode: 'PLN_1croxh14pyq4cj7' },
-    { name: '50 credits', credits: 50, amount: 'ZAR 400', planCode: 'PLN_zel9llutx085dp9' },
-    { name: '100 credits', credits: 100, amount: 'ZAR 750', planCode: 'PLN_yvo5ujkxt1diiak' },
-    { name: '200 credits', credits: 200, amount: 'ZAR 1,400', planCode: 'PLN_0oqk4fljy5uais0' },
-    { name: '500 credits', credits: 500, amount: 'ZAR 3,250', planCode: 'PLN_27yc6cxtga9huy7' },
-    { name: '1000 credits', credits: 1000, amount: 'ZAR 6,000', planCode: 'PLN_q4qbiwreibc8qr5' },
+    {
+      name: '20 credits',
+      credits: 20,
+      amount: 'ZAR 170',
+      planCode: 'PLN_1croxh14pyq4cj7',
+      label: 'Monthly',
+    },
+    {
+      name: '50 credits',
+      credits: 50,
+      amount: 'ZAR 400',
+      planCode: 'PLN_zel9llutx085dp9',
+      label: 'Monthly',
+    },
+    {
+      name: '100 credits',
+      credits: 100,
+      amount: 'ZAR 750',
+      planCode: 'PLN_yvo5ujkxt1diiak',
+      label: 'Monthly',
+    },
+    {
+      name: '200 credits',
+      credits: 200,
+      amount: 'ZAR 1,400',
+      planCode: 'PLN_0oqk4fljy5uais0',
+      label: 'Monthly',
+    },
+    {
+      name: '500 credits',
+      credits: 500,
+      amount: 'ZAR 3,250',
+      planCode: 'PLN_27yc6cxtga9huy7',
+      label: 'Monthly',
+    },
+    {
+      name: '1000 credits',
+      credits: 1000,
+      amount: 'ZAR 6,000',
+      planCode: 'PLN_q4qbiwreibc8qr5',
+      label: 'Monthly',
+    },
   ],
   Annually: [
-    { name: '240 credits', credits: 240, amount: 'ZAR 1,800', planCode: 'PLN_coac3n7m4jo59ct' },
-    { name: '600 credits', credits: 600, amount: 'ZAR 4,200', planCode: 'PLN_8kh731h1ojcx37d' },
-    { name: '1200 credits', credits: 1200, amount: 'ZAR 7,800', planCode: 'PLN_tzngz1lbhvxnufb' },
-    { name: '2400 credits', credits: 2400, amount: 'ZAR 14,400', planCode: 'PLN_kn6j6ur12pedilo' },
-    { name: '6000 credits', credits: 6000, amount: 'ZAR 33,000', planCode: 'PLN_moko1x694rvm5l8' },
+    {
+      name: '240 credits',
+      credits: 240,
+      amount: 'ZAR 1,800',
+      planCode: 'PLN_coac3n7m4jo59ct',
+      label: 'Annually',
+    },
+    {
+      name: '600 credits',
+      credits: 600,
+      amount: 'ZAR 4,200',
+      planCode: 'PLN_8kh731h1ojcx37d',
+      label: 'Annually',
+    },
+    {
+      name: '1200 credits',
+      credits: 1200,
+      amount: 'ZAR 7,800',
+      planCode: 'PLN_tzngz1lbhvxnufb',
+      label: 'Annually',
+    },
+    {
+      name: '2400 credits',
+      credits: 2400,
+      amount: 'ZAR 14,400',
+      planCode: 'PLN_kn6j6ur12pedilo',
+      label: 'Annually',
+    },
+    {
+      name: '6000 credits',
+      credits: 6000,
+      amount: 'ZAR 33,000',
+      planCode: 'PLN_moko1x694rvm5l8',
+      label: 'Annually',
+    },
     {
       name: '12000 credits',
       credits: 12000,
       amount: 'ZAR 60,000',
       planCode: 'PLN_scnf05tt3vrui2i',
+      label: 'Annually',
     },
   ],
 };
@@ -57,11 +161,13 @@ function PlanCard({
   plans,
   user,
   onClick,
+  activePlanId,
 }: {
   title: string | any;
   plans: any;
   user: any;
   onClick: any;
+  activePlanId?: any;
 }) {
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
 
@@ -75,7 +181,11 @@ function PlanCard({
               key={plan.name}
               onClick={() => setSelectedPlan(plan)}
               className={`rounded-md border px-3 py-1 text-sm ${
-                selectedPlan.name === plan.name ? 'bg-primary text-white' : 'hover:bg-muted'
+                selectedPlan.name === plan.name
+                  ? 'bg-primary text-white'
+                  : activePlanId === plan.planCode
+                    ? 'animate-bounce border border-green-400 bg-gradient-to-bl from-green-500 to-blue-500 text-white'
+                    : 'hover:bg-muted'
               }`}
             >
               {plan.name}
@@ -113,10 +223,22 @@ export function meta() {
 }
 
 export default function PricePlansPage() {
+  const { toast } = useToast();
   const { user } = useSession();
-  const { subscriptions } = useLoaderData<typeof loader>();
+  const { subscriptions } = useSuperLoaderData<typeof loader>();
+  const currentSubscriptionData: any = subscriptions?.find((data: any) => data.status === 'ACTIVE');
+  const planId = currentSubscriptionData?.planId;
+  const priceId = currentSubscriptionData?.priceId;
 
-  console.log('SUBSCRIPTIONS DATA', subscriptions);
+  const getActiveSubscriptionDetails = (planId: string) => {
+    for (const [_, plans] of Object?.entries(plansData)) {
+      const matchedPlan = plans?.find((plan) => plan.planCode === planId);
+      if (matchedPlan) return matchedPlan;
+    }
+    return null;
+  };
+
+  const activePlanDetails = getActiveSubscriptionDetails(planId);
 
   async function handleApiPaystack(
     email: string,
@@ -150,23 +272,67 @@ export default function PricePlansPage() {
     // return data;s
   }
 
+  async function handleApiCancelPaystackSubscription(subscriptionCode: string) {
+    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/update-subscription-link`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        subscriptionCode,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('API CANCEL SUBSCRIPTION ERROR', errorData?.message);
+    }
+
+    const data = await response.json();
+    console.log('API PAYSTACK DATA CANCEL SUBSCRIPTION', data);
+
+    toast({
+      title: 'Cancellation started',
+      description: 'please follow opened url to cancel your subscription',
+      variant: 'default',
+    });
+
+    window.open(data?.link, '_blank');
+  }
+
   return (
     <div className="bg-re mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <div className="w-full">
-        <h1 className="py-6 text-3xl font-semibold text-gray-700">
-          <Trans>Active Subscription</Trans>
-        </h1>
-        <div className="flex h-[20vh] w-full flex-col justify-start rounded-xl border border-dashed border-purple-500 bg-gradient-to-br from-blue-100 to-purple-100 p-4">
-          <h1 className="text-primary text-xl font-extrabold">
-            <Trans>Pay-as-you-go</Trans>
-          </h1>
-          <h2 className="text-lg text-gray-500">
-            <Trans>20 Credits</Trans>
-          </h2>
-          <h3 className="text-md text-gray-500">
-            <Trans>1500 ZAR</Trans>
-          </h3>
-        </div>
+        {currentSubscriptionData && (
+          <div>
+            <h1 className="py-6 text-3xl font-semibold text-gray-700">
+              <Trans>Active Subscription</Trans>
+            </h1>
+            <div className="flex h-[20vh] w-full flex-col justify-between rounded-xl border border-dashed border-purple-500 bg-gradient-to-br from-blue-100 to-purple-100 p-4">
+              <div>
+                <h1 className="text-primary text-xl font-extrabold">
+                  <Trans>{activePlanDetails?.label}</Trans>
+                </h1>
+                <h2 className="text-xl text-gray-500">
+                  <Trans>{activePlanDetails?.name}</Trans>
+                </h2>
+                <h3 className="text-lg text-gray-400">
+                  <Trans>{activePlanDetails?.amount}</Trans>
+                </h3>
+              </div>
+              <div>
+                <Button
+                  onClick={() => {
+                    handleApiCancelPaystackSubscription(priceId);
+                  }}
+                >
+                  Cancel subscription
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <h1 className="py-6 text-3xl font-semibold text-gray-700">
           <Trans>Please select plan as you like</Trans>
         </h1>
@@ -179,6 +345,7 @@ export default function PricePlansPage() {
               plans={plans}
               user={user}
               onClick={handleApiPaystack}
+              activePlanId={activePlanDetails?.planCode}
             />
           ))}
         </div>
