@@ -41,38 +41,17 @@ const plansData = {
   ],
 };
 
-async function handleApiPaystack(
-  email: string,
-  amount: number,
-  planId: string,
-  reference: null | string = '',
-  callback_url: null | string = '',
-) {
-  const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/initialize`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      amount,
-      plan: planId,
-      reference: reference,
-      callback_url: callback_url,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.log('API ERROR', errorData?.message);
-  }
-
-  const data = await response.json();
-  console.log('API PAYSTACK DATA', data);
-  return data;
-}
-
-function PlanCard({ title, plans, user }: { title: string | any; plans: any; user: any }) {
+function PlanCard({
+  title,
+  plans,
+  user,
+  onClick,
+}: {
+  title: string | any;
+  plans: any;
+  user: any;
+  onClick: any;
+}) {
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
 
   return (
@@ -111,7 +90,7 @@ function PlanCard({ title, plans, user }: { title: string | any; plans: any; use
         <Button
           className="w-full"
           onClick={() => {
-            handleApiPaystack(user?.email, 100, selectedPlan.planCode);
+            onClick(user?.email, 100, selectedPlan.planCode);
           }}
         >
           <Trans>Proceed with this plan</Trans>
@@ -128,6 +107,37 @@ export function meta() {
 export default function PricePlansPage() {
   const { user } = useSession();
 
+  async function handleApiPaystack(
+    email: string,
+    amount: number,
+    planId: string,
+    reference: null | string = '',
+    callback_url: null | string = '',
+  ) {
+    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/initialize`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        amount,
+        plan: planId,
+        reference: reference,
+        callback_url: callback_url,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('API ERROR', errorData?.message);
+    }
+
+    const data = await response.json();
+    console.log('API PAYSTACK DATA', data);
+    return data;
+  }
+
   return (
     <div className="bg-re mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <div className="w-full">
@@ -137,7 +147,13 @@ export default function PricePlansPage() {
 
         <div className="mt-6 flex flex-col gap-4 md:flex-row">
           {Object.entries(plansData).map(([interval, plans]) => (
-            <PlanCard key={interval} title={interval} plans={plans} user={user} />
+            <PlanCard
+              key={interval}
+              title={interval}
+              plans={plans}
+              user={user}
+              onClick={handleApiPaystack}
+            />
           ))}
         </div>
       </div>
