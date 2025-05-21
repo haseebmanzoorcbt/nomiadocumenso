@@ -83,10 +83,7 @@ function PlanCard({
           <strong className="text-primary text-2xl">{selectedPlan.amount}</strong>
         </div>
       </div>
-      <Link
-        to="/signin"
-        className="text-primary bottom-0 w-full text-sm underline duration-200 hover:opacity-70"
-      >
+      <div className="text-primary bottom-0 w-full text-sm underline duration-200 hover:opacity-70">
         <Button
           className="w-full"
           onClick={() => {
@@ -95,7 +92,7 @@ function PlanCard({
         >
           <Trans>Proceed with this plan</Trans>
         </Button>
-      </Link>
+      </div>
     </div>
   );
 }
