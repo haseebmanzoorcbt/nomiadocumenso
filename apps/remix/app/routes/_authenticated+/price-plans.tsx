@@ -135,7 +135,8 @@ export default function PricePlansPage() {
 
     const data = await response.json();
     console.log('API PAYSTACK DATA', data);
-    return data;
+    window.open(data.authorization_url, '_blank');
+    // return data;
   }
 
   return (
