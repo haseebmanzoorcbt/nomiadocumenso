@@ -5,8 +5,8 @@ export async function action({ request }: { request: Request }){
     const event = await request.json();
     console.log('Paystack webhook received event:', JSON.stringify(event));
     if (event.event === 'subscription.create' || event.event === 'invoice.update') {
-      const { customer, plan, subscription_code } = event.data;
-      console.log('Extracted from event:', { email: customer.email, plan, reference: subscription_code });
+      const { customer, plan, subscription_code , next_payment_date } = event.data;
+      console.log('Extracted from event:', { email: customer.email, plan, reference: subscription_code ,next_payment_date});
       // Find user by email
       const user = await prisma.user.findUnique({ where: { email: customer.email } });
       console.log('User lookup result:', user);
@@ -19,6 +19,7 @@ export async function action({ request }: { request: Request }){
                 planId: plan.plan_code,
                 priceId: subscription_code,
                 status: 'ACTIVE',
+                periodEnd: next_payment_date,
               },
             });
             console.log('Subscription created:', subscription);
@@ -39,7 +40,7 @@ export async function action({ request }: { request: Request }){
           if (existingSubscription) {
             const subscription = await prisma.subscription.update({
               where: { id: existingSubscription.id },
-              data: { status: 'ACTIVE', planId: plan.plan_code },
+              data: { status: 'ACTIVE', planId: plan.plan_code, periodEnd: next_payment_date },
             });
           }
         }
@@ -85,7 +86,7 @@ export async function action({ request }: { request: Request }){
       if (existingSubscription) {
         const subscription = await prisma.subscription.update({
           where: { id: existingSubscription.id },
-          data: { status: 'INACTIVE' },
+          data: { status: 'INACTIVE' , periodEnd: new Date() },
         });
       }
     }

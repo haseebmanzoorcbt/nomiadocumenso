@@ -43,21 +43,82 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
   // Default to free credits
   let documentQuota = DEFAULT_FREE_CREDITS;
 
-  // Get all subscriptions with known plan codes
-  const allSubscriptions = user.subscriptions.filter(
-    (sub) => PLAN_DOCUMENT_QUOTAS[sub.planId]
-  );
+  const now = new Date();
 
-  console.log('all subscriptions:', allSubscriptions);
+  // Sort subscriptions by periodEnd date to find the most recent
+  const sortedSubscriptions = [...user.subscriptions].sort((a, b) => {
+    if (!a.periodEnd) return 1;
+    if (!b.periodEnd) return -1;
+    return new Date(b.periodEnd).getTime() - new Date(a.periodEnd).getTime();
+  });
 
-  if (allSubscriptions.length > 0) {
-    // Calculate total quota from all subscriptions
-    documentQuota = allSubscriptions.reduce((total, sub) => {
-      const planQuota = PLAN_DOCUMENT_QUOTAS[sub.planId] ?? 0;
-      return total + planQuota;
-    }, 0);
+  const mostRecentSubscription = sortedSubscriptions[0];
+  const isMostRecentValid = mostRecentSubscription?.periodEnd && new Date(mostRecentSubscription.periodEnd) > now;
 
-    console.log('total document quota from all subscriptions:', documentQuota);
+  // console.log('most recent subscription:', mostRecentSubscription);
+  // console.log('is most recent valid:', isMostRecentValid);
+
+  if (isMostRecentValid) {
+    // If most recent subscription is valid, consider all subscriptions with future periodEnd
+    const validSubscriptions = user.subscriptions.filter(
+      (sub) => 
+        PLAN_DOCUMENT_QUOTAS[sub.planId] && 
+        sub.periodEnd && 
+        new Date(sub.periodEnd) > now
+    );
+
+    // console.log('valid subscriptions:', validSubscriptions);
+    // console.log('PLAN_DOCUMENT_QUOTAS:', PLAN_DOCUMENT_QUOTAS);
+
+    if (validSubscriptions.length > 0) {
+      // Group subscriptions by planId to handle multiple subscriptions of the same plan
+      const planGroups = validSubscriptions.reduce((groups, sub) => {
+        if (!groups[sub.planId]) {
+          groups[sub.planId] = [];
+        }
+        groups[sub.planId].push(sub);
+        return groups;
+      }, {} as Record<string, typeof validSubscriptions>);
+
+      // console.log('plan groups:', planGroups);
+
+      // Calculate total quota from all valid subscriptions
+      documentQuota = Object.entries(planGroups).reduce((total, [planId, subscriptions]) => {
+        const planQuota = PLAN_DOCUMENT_QUOTAS[planId] ?? 0;
+        const groupTotal = planQuota * subscriptions.length;
+        console.log(`Plan ${planId} has ${subscriptions.length} subscriptions, total quota:`, groupTotal);
+        return total + groupTotal;
+      }, 0);
+
+      console.log('total document quota from all valid subscriptions:', documentQuota);
+    }
+  } else {
+    // If most recent subscription is expired, mark all as cancelled and reset to free credits
+    const expiredSubscriptions = user.subscriptions.filter(
+      (sub) => sub.periodEnd && new Date(sub.periodEnd) <= now
+    );
+
+    if (expiredSubscriptions.length > 0) {
+      // Update all expired subscriptions in the database
+      await Promise.all(
+        expiredSubscriptions.map((sub) =>
+          prisma.subscription.update({
+            where: { id: sub.id },
+            data: { 
+              status: SubscriptionStatus.INACTIVE,
+              cancelAtPeriodEnd: true 
+            },
+          })
+        )
+      );
+      // console.log('marked all expired subscriptions as inactive and cancelled:', expiredSubscriptions);
+    }
+
+    // Reset to free credits since most recent subscription is expired
+    documentQuota = DEFAULT_FREE_CREDITS;
+
+
+    // console.log('most recent subscription expired, using default free credits:', documentQuota);
   }
 
   // Count all current documents (not just this month)
@@ -72,7 +133,7 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     },
   });
 
-  console.log('documents used:', documentsUsed);
+  // console.log('documents used:', documentsUsed);
 
   // For simplicity, keep recipients/directTemplates logic as before
   const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
