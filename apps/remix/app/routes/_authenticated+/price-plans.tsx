@@ -39,42 +39,42 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 const plansData = {
   'Pay-as-you-go': [
     {
-      name: '20 credits',
+      name: '20 envelopes',
       credits: 20,
       amount: 'ZAR 190',
       planCode: 'PLN_bit1oy0ayiqpkdu',
       label: 'Pay as you go',
     },
     {
-      name: '50 credits',
+      name: '50 envelopes',
       credits: 50,
       amount: 'ZAR 450',
       planCode: 'PLN_59961ig3ply5r3s',
       label: 'Pay as you go',
     },
     {
-      name: '100 credits',
+      name: '100 envelopes',
       credits: 100,
       amount: 'ZAR 850',
       planCode: 'PLN_ktbomtrjkiz73i1',
       label: 'Pay as you go',
     },
     {
-      name: '200 credits',
+      name: '200 envelopes',
       credits: 200,
       amount: 'ZAR 1,600',
       planCode: 'PLN_kxqcw02dow71g6c',
       label: 'Pay as you go',
     },
     {
-      name: '500 credits',
+      name: '500 envelopes',
       credits: 500,
       amount: 'ZAR 3,750',
       planCode: 'PLN_5nmok91ploz44u6',
       label: 'Pay as you go',
     },
     {
-      name: '1000 credits',
+      name: '1000 envelopes',
       credits: 1000,
       amount: 'ZAR 7,000',
       planCode: 'PLN_f54sm9jv38v7r5m',
@@ -83,86 +83,86 @@ const plansData = {
   ],
   Monthly: [
     {
-      name: '20 credits',
+      name: '20 envelopes',
       credits: 20,
       amount: 'ZAR 170',
       planCode: 'PLN_1croxh14pyq4cj7',
       label: 'Monthly',
     },
     {
-      name: '50 credits',
+      name: '50 envelopes',
       credits: 50,
       amount: 'ZAR 400',
       planCode: 'PLN_zel9llutx085dp9',
       label: 'Monthly',
     },
     {
-      name: '100 credits',
+      name: '100 envelopes',
       credits: 100,
       amount: 'ZAR 750',
       planCode: 'PLN_yvo5ujkxt1diiak',
       label: 'Monthly',
     },
     {
-      name: '200 credits',
+      name: '200 envelopes',
       credits: 200,
       amount: 'ZAR 1,400',
       planCode: 'PLN_0oqk4fljy5uais0',
       label: 'Monthly',
     },
     {
-      name: '500 credits',
+      name: '500 envelopes',
       credits: 500,
       amount: 'ZAR 3,250',
       planCode: 'PLN_27yc6cxtga9huy7',
       label: 'Monthly',
     },
     {
-      name: '1000 credits',
+      name: '1000 envelopes',
       credits: 1000,
       amount: 'ZAR 6,000',
       planCode: 'PLN_q4qbiwreibc8qr5',
       label: 'Monthly',
     },
   ],
-  Annually: [
+  Annual: [
     {
-      name: '240 credits',
+      name: '240 envelopes',
       credits: 240,
       amount: 'ZAR 1,800',
       planCode: 'PLN_coac3n7m4jo59ct',
       label: 'Annually',
     },
     {
-      name: '600 credits',
+      name: '600 envelopes',
       credits: 600,
       amount: 'ZAR 4,200',
       planCode: 'PLN_8kh731h1ojcx37d',
       label: 'Annually',
     },
     {
-      name: '1200 credits',
+      name: '1200 envelopes',
       credits: 1200,
       amount: 'ZAR 7,800',
       planCode: 'PLN_tzngz1lbhvxnufb',
       label: 'Annually',
     },
     {
-      name: '2400 credits',
+      name: '2400 envelopes',
       credits: 2400,
       amount: 'ZAR 14,400',
       planCode: 'PLN_kn6j6ur12pedilo',
       label: 'Annually',
     },
     {
-      name: '6000 credits',
+      name: '6000 envelopes',
       credits: 6000,
       amount: 'ZAR 33,000',
       planCode: 'PLN_moko1x694rvm5l8',
       label: 'Annually',
     },
     {
-      name: '12000 credits',
+      name: '12000 envelopes',
       credits: 12000,
       amount: 'ZAR 60,000',
       planCode: 'PLN_scnf05tt3vrui2i',
@@ -188,22 +188,25 @@ function PlanCard({
 
   return (
     <div className="flex w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
-      <div className="max-h-32">
+      <div className="h-44">
         <h2 className="mb-4 text-xl font-semibold">{title}</h2>
+        <h1 className="pb-3 text-sm text-gray-500">
+          <Trans>Choose amount of envelopes you want :</Trans>
+        </h1>
         <div className="mb-4 flex flex-wrap gap-2">
           {plans.map((plan: any) => (
             <button
               key={plan.name}
               onClick={() => setSelectedPlan(plan)}
-              className={`rounded-md border px-3 py-1 text-sm ${
+              className={`rounded-2xl border px-3 py-1 text-sm shadow-md ${
                 selectedPlan.name === plan.name
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary border-teal-400 text-white'
                   : activePlanId === plan.planCode
-                    ? 'animate-bounce border border-green-400 bg-gradient-to-bl from-green-500 to-blue-500 text-white'
-                    : 'hover:bg-muted'
+                    ? 'animate-bounce border-teal-300 bg-gradient-to-bl from-green-500 to-blue-500 text-white'
+                    : 'border-teal-200 hover:bg-blue-100'
               }`}
             >
-              {plan.name}
+              {plan.credits}
             </button>
           ))}
         </div>
@@ -214,11 +217,11 @@ function PlanCard({
             {selectedPlan.credits}
             <br />{' '}
           </strong>
-          <Trans>Credits</Trans>
+          <Trans>Envelopes</Trans>
         </div>
 
         <div className="text-muted-foreground mb-4 rounded-xl bg-purple-50 p-2 text-center text-xl font-bold">
-          <Trans>Starts at </Trans> <br />{' '}
+          <Trans>Costing at </Trans> <br />{' '}
           <strong className="text-primary text-2xl">{selectedPlan.amount}</strong>
         </div>
       </div>
@@ -390,13 +393,19 @@ export default function PricePlansPage() {
                 </h3>
               </div>
               <div>
-                <Button
-                  onClick={() => {
-                    handleApiCancelPaystackSubscription(priceId);
-                  }}
-                >
-                  Cancel subscription
-                </Button>
+                {activePlanDetails?.label === 'Pay as you go' ? (
+                  <h1 className="text-sm text-gray-400">
+                    <Trans>*This is life time envelopes you can use on this platform</Trans>
+                  </h1>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      handleApiCancelPaystackSubscription(priceId);
+                    }}
+                  >
+                    Cancel subscription
+                  </Button>
+                )}
               </div>
             </div>
           </div>

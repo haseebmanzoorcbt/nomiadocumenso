@@ -135,10 +135,10 @@ export const DocumentPageViewDropdown = ({ document }: DocumentPageViewDropdownP
           </Link>
         </DropdownMenuItem>
 
-        {/* <DropdownMenuItem onClick={() => setDuplicateDialogOpen(true)}>
+        <DropdownMenuItem onClick={() => setDuplicateDialogOpen(true)}>
           <Copy className="mr-2 h-4 w-4" />
           <Trans>Duplicate</Trans>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
 
         <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)} disabled={isDeleted}>
           <Trash2 className="mr-2 h-4 w-4" />

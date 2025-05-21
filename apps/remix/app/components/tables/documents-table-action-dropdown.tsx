@@ -156,10 +156,10 @@ export const DocumentsTableActionDropdown = ({
           <Trans>Download</Trans>
         </DropdownMenuItem>
 
-        {/* <DropdownMenuItem onClick={() => setDuplicateDialogOpen(true)}>
+        <DropdownMenuItem onClick={() => setDuplicateDialogOpen(true)}>
           <Copy className="mr-2 h-4 w-4" />
           <Trans>Duplicate</Trans>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
 
         {/* We don't want to allow teams moving documents across at the moment. */}
         {/* {!team && !row.teamId && (

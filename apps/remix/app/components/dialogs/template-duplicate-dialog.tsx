@@ -71,7 +71,7 @@ export const TemplateDuplicateDialog = ({
             <Trans>Cancel</Trans>
           </Button>
 
-          {/* <Button
+          <Button
             type="button"
             loading={isPending}
             onClick={async () =>
@@ -81,7 +81,7 @@ export const TemplateDuplicateDialog = ({
             }
           >
             <Trans>Duplicate</Trans>
-          </Button> */}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
