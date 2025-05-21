@@ -17,7 +17,7 @@ export const RecipientRemovedFromDocumentTemplate = ({
 }: DocumentCancelEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
+  branding.brandingEnabled = false;
   branding.brandingLogo =
     'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
   branding.brandingAltText = 'Nomia Logo';
@@ -45,7 +45,7 @@ export const RecipientRemovedFromDocumentTemplate = ({
               ) : (
                 <Img
                   src={getAssetUrl('/static/logo.png')}
-                  alt="Documenso Logo"
+                   alt="Nomia Logo"
                   className="mb-4 h-6"
                 />
               )}

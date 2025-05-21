@@ -15,8 +15,7 @@ export const ConfirmEmailTemplate = ({
   const branding:any= useBranding();
 
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    '';
+  branding.brandingLogo ='';
   branding.brandingAltText = 'Nomia Logo';
 
   const previewText = msg`Please confirm your email address`;
@@ -42,7 +41,7 @@ export const ConfirmEmailTemplate = ({
               ) : (
                 <Img
                   src={getAssetUrl('/static/logo.png')}
-                  alt="Documenso Logo"
+                  alt="Nomia Logo"
                   className="mb-4 h-6"
                 />
               )}
