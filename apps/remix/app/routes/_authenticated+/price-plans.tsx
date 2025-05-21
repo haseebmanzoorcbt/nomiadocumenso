@@ -64,7 +64,7 @@ async function handleApiPaystack(
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData?.message || 'Failed to initialize transaction');
+    console.log('API ERROR', errorData?.message);
   }
 
   const data = await response.json();
@@ -111,7 +111,7 @@ function PlanCard({ title, plans, user }: { title: string | any; plans: any; use
         <Button
           className="w-full"
           onClick={() => {
-            handleApiPaystack(user?.email, 0, selectedPlan.planCode);
+            handleApiPaystack(user?.email, 100, selectedPlan.planCode);
           }}
         >
           <Trans>Proceed with this plan</Trans>
