@@ -34,7 +34,7 @@ export const PLAN_DOCUMENT_QUOTAS: Record<string, number> = {
   PLN_f54sm9jv38v7r5m: 1000,
   PLN_5nmok9z1loz44u6: 500,
   PLN_kocqw02dow71g6c: 200,
-  PLN_ktbomtrjkz73i1: 100,
+  PLN_ktbomtrjkiz73i1: 100,
   PLN_5996i1g3ply5r3s: 50,
   PLN_bit1oy0ayiqpkdu: 20,
 };

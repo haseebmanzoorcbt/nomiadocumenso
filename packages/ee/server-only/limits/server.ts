@@ -15,16 +15,16 @@ export type GetServerLimitsOptions = {
   teamId?: number | null;
 };
 
-export const getServerLimits = async ({
+export async function getServerLimits({
   email,
   teamId,
-}: GetServerLimitsOptions): Promise<TLimitsResponseSchema> => {
+}: GetServerLimitsOptions): Promise<TLimitsResponseSchema> {
   if (!email) {
     throw new Error(ERROR_CODES.UNAUTHORIZED);
   }
 
   return teamId ? handleTeamLimits({ email, teamId }) : handleUserLimits({ email });
-};
+}
 
 type HandleUserLimitsOptions = {
   email: string;
@@ -43,13 +43,21 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
   // Default to free credits
   let documentQuota = DEFAULT_FREE_CREDITS;
 
-  // Find active subscription with a known plan code
-  const activeSubscription = user.subscriptions.find(
-    (sub) => sub.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[sub.priceId]
+  // Get all subscriptions with known plan codes
+  const allSubscriptions = user.subscriptions.filter(
+    (sub) => PLAN_DOCUMENT_QUOTAS[sub.planId]
   );
 
-  if (activeSubscription) {
-    documentQuota = PLAN_DOCUMENT_QUOTAS[activeSubscription.priceId] ?? DEFAULT_FREE_CREDITS;
+  console.log('all subscriptions:', allSubscriptions);
+
+  if (allSubscriptions.length > 0) {
+    // Calculate total quota from all subscriptions
+    documentQuota = allSubscriptions.reduce((total, sub) => {
+      const planQuota = PLAN_DOCUMENT_QUOTAS[sub.planId] ?? 0;
+      return total + planQuota;
+    }, 0);
+
+    console.log('total document quota from all subscriptions:', documentQuota);
   }
 
   // Count all current documents (not just this month)
@@ -58,12 +66,13 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
       userId: user.id,
       teamId: null,
       status: 'COMPLETED',
-
       source: {
         not: DocumentSource.TEMPLATE_DIRECT_LINK,
       },
     },
   });
+
+  console.log('documents used:', documentsUsed);
 
   // For simplicity, keep recipients/directTemplates logic as before
   const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
@@ -99,8 +108,8 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
   const { subscription } = team;
 
   let documentQuota = DEFAULT_FREE_CREDITS;
-  if (subscription && subscription.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[subscription.priceId]) {
-    documentQuota = PLAN_DOCUMENT_QUOTAS[subscription.priceId];
+  if (subscription && subscription.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[subscription.planId]) {
+    documentQuota = PLAN_DOCUMENT_QUOTAS[subscription.planId];
   }
 
   // Count documents for the team this month

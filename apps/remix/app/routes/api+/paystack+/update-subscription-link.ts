@@ -2,7 +2,34 @@ import { prisma } from '@documenso/prisma';
 import { paystack } from '@documenso/lib/server-only/paystack';
 import { manageSubscription } from '@documenso/lib/server-only/paystack';
 
+// Handle OPTIONS requests for CORS
+export async function loader({ request }: { request: Request }) {
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    });
+  }
+  return new Response(null, { status: 405 });
+}
+
 export async function action({ request }: { request: Request }) {
+  // Handle CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    });
+  }
+
   console.log('API endpoint called');
   try {
     console.log('Parsing request body...');
@@ -16,7 +43,13 @@ export async function action({ request }: { request: Request }) {
       console.log('Missing subscription code');
       return new Response(
         JSON.stringify({ success: false, error: 'Missing subscription code' }),
-        { status: 400 }
+        { 
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }
+        }
       );
     }
 
@@ -34,7 +67,13 @@ export async function action({ request }: { request: Request }) {
       console.log('Active subscription not found');
       return new Response(
         JSON.stringify({ success: false, error: 'Active subscription not found' }),
-        { status: 404 }
+        { 
+          status: 404,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }
+        }
       );
     }
 
@@ -47,7 +86,13 @@ export async function action({ request }: { request: Request }) {
       console.log('Paystack API error:', result.message);
       return new Response(
         JSON.stringify({ success: false, error: result.message }),
-        { status: 500 }
+        { 
+          status: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }
+        }
       );
     }
 
@@ -59,7 +104,13 @@ export async function action({ request }: { request: Request }) {
           success: true,
           link: result.data.link,
         }),
-        { status: 200 }
+        { 
+          status: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }
+        }
       );
     }
 
@@ -69,13 +120,25 @@ export async function action({ request }: { request: Request }) {
         success: false, 
         error: 'Invalid response from Paystack' 
       }),
-      { status: 500 }
+      { 
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        }
+      }
     );
   } catch (error) {
     console.error('Error in API endpoint:', error);
     return new Response(
       JSON.stringify({ success: false, error: 'Failed to generate update link' }),
-      { status: 500 }
+      { 
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        }
+      }
     );
   }
 } 
