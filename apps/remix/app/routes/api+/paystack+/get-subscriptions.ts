@@ -13,6 +13,8 @@ export async function loader({ request }: { request: Request }) {
       },
     });
 
+
+
     if (!session?.user?.id) {
       return new Response(
         JSON.stringify({ success: false, error: 'Unauthorized' }),
@@ -20,9 +22,13 @@ export async function loader({ request }: { request: Request }) {
       );
     }
 
+    console.log('user id', session.user.id);
+
     const subscriptions = await getSubscriptionsByUserId({
       userId: session.user.id,
     });
+
+    console.log('subscriptions', subscriptions);
 
     return new Response(
       JSON.stringify({ success: true, data: subscriptions }),
