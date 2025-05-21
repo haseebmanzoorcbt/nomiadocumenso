@@ -7,6 +7,21 @@ import { getSession } from '@documenso/auth/server/lib/utils/get-session';
 import { useSession } from '@documenso/lib/client-only/providers/session';
 import { getSubscriptionsByUserId } from '@documenso/lib/server-only/subscription/get-subscriptions-by-user-id';
 import { Button } from '@documenso/ui/primitives/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@documenso/ui/primitives/dialog';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@documenso/ui/primitives/table';
 import { useToast } from '@documenso/ui/primitives/use-toast';
 
 import { E_SIGN_BASE_URL } from '~/utils/config';
@@ -172,7 +187,7 @@ function PlanCard({
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
 
   return (
-    <div className="flex h-[70vh] w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
+    <div className="flex w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
       <div className="max-h-32">
         <h2 className="mb-4 text-xl font-semibold">{title}</h2>
         <div className="mb-4 flex flex-wrap gap-2">
@@ -194,12 +209,15 @@ function PlanCard({
         </div>
       </div>
       <div>
-        <div className="text-muted-foreground mb-4 text-center text-xl font-bold">
-          <Trans>Credits</Trans> <br />{' '}
-          <strong className="text-primary text-2xl">{selectedPlan.credits}</strong>
+        <div className="text-muted-foreground mb-4 rounded-xl bg-purple-50 p-2 text-center text-xl font-bold">
+          <strong className="text-primary text-2xl">
+            {selectedPlan.credits}
+            <br />{' '}
+          </strong>
+          <Trans>Credits</Trans>
         </div>
 
-        <div className="text-muted-foreground mb-4 text-center text-xl font-bold">
+        <div className="text-muted-foreground mb-4 rounded-xl bg-purple-50 p-2 text-center text-xl font-bold">
           <Trans>Starts at </Trans> <br />{' '}
           <strong className="text-primary text-2xl">{selectedPlan.amount}</strong>
         </div>
@@ -301,13 +319,64 @@ export default function PricePlansPage() {
   }
 
   return (
-    <div className="bg-re mx-auto w-full max-w-screen-xl px-4 md:px-8">
+    <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <div className="w-full">
+        <Dialog>
+          <DialogTrigger asChild className="flex w-full items-end justify-end">
+            <button className="text-md cursor-pointer pb-6 text-blue-500 underline">
+              <Trans>View History</Trans>
+            </button>
+          </DialogTrigger>
+          <DialogContent className="w-full max-w-5xl p-6">
+            <DialogHeader>
+              <DialogTitle className="text-primary text-2xl font-bold">
+                Subscription History
+              </DialogTitle>
+            </DialogHeader>
+            <div className="mt-6 overflow-x-auto">
+              <Table className="border-primary/30 w-full rounded-lg border shadow-md">
+                <TableHeader className="bg-primary/10">
+                  <TableRow>
+                    <TableHead className="text-primary font-semibold">Name</TableHead>
+                    <TableHead className="text-primary font-semibold">Price</TableHead>
+                    <TableHead className="text-primary font-semibold">Credits</TableHead>
+                    <TableHead className="text-primary font-semibold">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {subscriptions?.map((sub: any, i: number) => (
+                    <TableRow key={i} className="hover:bg-muted/50 transition">
+                      <TableCell>
+                        {getActiveSubscriptionDetails(sub.planId)?.label || (
+                          <span className="italic text-gray-400">Unknown</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {getActiveSubscriptionDetails(sub.planId)?.amount || (
+                          <span className="italic text-gray-400">Unknown</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {getActiveSubscriptionDetails(sub.planId)?.credits || (
+                          <span className="italic text-gray-400">Unknown</span>
+                        )}
+                      </TableCell>
+                      <TableCell>{sub.status}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </DialogContent>
+        </Dialog>
         {currentSubscriptionData && (
           <div>
-            <h1 className="py-6 text-3xl font-semibold text-gray-700">
-              <Trans>Active Subscription</Trans>
-            </h1>
+            <div className="flex w-full items-center justify-between">
+              <h1 className="pb-6 text-xl font-semibold text-gray-500">
+                <Trans>Active Subscription</Trans>
+              </h1>
+            </div>
+
             <div className="flex h-[20vh] w-full flex-col justify-between rounded-xl border border-dashed border-purple-500 bg-gradient-to-br from-blue-100 to-purple-100 p-4">
               <div>
                 <h1 className="text-primary text-xl font-extrabold">
@@ -333,7 +402,7 @@ export default function PricePlansPage() {
           </div>
         )}
 
-        <h1 className="py-6 text-3xl font-semibold text-gray-700">
+        <h1 className="py-6 text-xl font-semibold text-gray-500">
           <Trans>Please select plan as you like</Trans>
         </h1>
 
