@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
 import { Link } from 'react-router';
 
 import { useSession } from '@documenso/lib/client-only/providers/session';
+import { getSubscriptionsByUserId } from '@documenso/lib/server-only/subscription/get-subscriptions-by-user-id';
 import { Button } from '@documenso/ui/primitives/button';
 
 import { E_SIGN_BASE_URL } from '~/utils/config';
@@ -103,6 +104,7 @@ export function meta() {
 
 export default function PricePlansPage() {
   const { user } = useSession();
+  const [existingSubscriptions, setExistingSubscriptions] = useState<any>(null);
 
   async function handleApiPaystack(
     email: string,
@@ -133,17 +135,45 @@ export default function PricePlansPage() {
     const data = await response.json();
     console.log('API PAYSTACK DATA', data);
     window.open(data.authorization_url, '_blank');
-    // return data;
+    // return data;s
   }
+
+  useEffect(() => {
+    async function fetchSubscription() {
+      if (user?.id) {
+        const result = await getSubscriptionsByUserId({ userId: user.id });
+        setExistingSubscriptions(result);
+        console.log('CURRENT SUBSCRIPTION', result);
+      }
+    }
+
+    fetchSubscription();
+  }, [user?.id]);
+
+  console.log('CURRENT SUBSCRIPTION', existingSubscriptions);
 
   return (
     <div className="bg-re mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <div className="w-full">
-        <h1 className="text-3xl font-semibold">
+        <h1 className="py-6 text-3xl font-semibold text-gray-700">
+          <Trans>Active Subscription</Trans>
+        </h1>
+        <div className="flex h-[20vh] w-full flex-col justify-start rounded-xl border border-dashed border-purple-500 bg-gradient-to-br from-blue-100 to-purple-100 p-4">
+          <h1 className="text-primary text-xl font-extrabold">
+            <Trans>Pay-as-you-go</Trans>
+          </h1>
+          <h2 className="text-lg text-gray-500">
+            <Trans>20 Credits</Trans>
+          </h2>
+          <h3 className="text-md text-gray-500">
+            <Trans>1500 ZAR</Trans>
+          </h3>
+        </div>
+        <h1 className="py-6 text-3xl font-semibold text-gray-700">
           <Trans>Please select plan as you like</Trans>
         </h1>
 
-        <div className="mt-6 flex flex-col gap-4 md:flex-row">
+        <div className="flex flex-col gap-4 md:flex-row">
           {Object.entries(plansData).map(([interval, plans]) => (
             <PlanCard
               key={interval}
