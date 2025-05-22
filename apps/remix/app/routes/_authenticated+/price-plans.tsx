@@ -296,7 +296,8 @@ export default function PricePlansPage() {
         variant: 'destructive',
       });
     } else {
-      window.open(data.authorization_url, '_self');
+      window.location.href = data?.authorization_url;
+      // window.open(data.authorization_url, '_self');
     }
   }
 
@@ -331,7 +332,8 @@ export default function PricePlansPage() {
         variant: 'default',
       });
 
-      window.open(data?.link, '_self');
+      // window.open(data?.link, '_self');
+      window.location.href = data?.link;
     }
   }
 
