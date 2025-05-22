@@ -288,8 +288,16 @@ export default function PricePlansPage() {
     }
 
     const data = await response.json();
-    window.open(data.authorization_url, '_self');
-    // return data;s
+
+    if (data?.error) {
+      toast({
+        title: 'Something went wrong',
+        description: data?.error,
+        variant: 'destructive',
+      });
+    } else {
+      window.open(data.authorization_url, '_self');
+    }
   }
 
   async function handleApiCancelPaystackSubscription(subscriptionCode: string) {
@@ -309,15 +317,22 @@ export default function PricePlansPage() {
     }
 
     const data = await response.json();
-    console.log('API PAYSTACK DATA CANCEL SUBSCRIPTION', data);
 
-    toast({
-      title: 'Cancellation started',
-      description: 'please follow opened url to cancel your subscription',
-      variant: 'default',
-    });
+    if (data?.error) {
+      toast({
+        title: 'Something went wrong',
+        description: data?.error,
+        variant: 'destructive',
+      });
+    } else {
+      toast({
+        title: 'Cancellation started',
+        description: 'please follow opened url to cancel your subscription',
+        variant: 'default',
+      });
 
-    window.open(data?.link, '_self');
+      window.open(data?.link, '_self');
+    }
   }
 
   return (
