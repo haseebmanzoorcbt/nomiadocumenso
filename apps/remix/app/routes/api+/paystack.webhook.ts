@@ -28,7 +28,7 @@ export async function action({ request }: { request: Request }){
                 planId: plan.plan_code,
                 priceId: subscription_code,
                 status: 'ACTIVE',
-                periodEnd:next_payment_date,
+                periodEnd: PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? null : next_payment_date,
               },
             });
             console.log('Subscription created:', subscription);

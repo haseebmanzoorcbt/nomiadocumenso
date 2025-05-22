@@ -191,7 +191,7 @@ function PlanCard({
       <div className="h-44">
         <h2 className="mb-4 text-xl font-semibold">{title}</h2>
         <h1 className="pb-3 text-sm text-gray-500">
-          <Trans>Choose amount of envelopes you want :</Trans>
+          <Trans>Select the number of envelopes you require</Trans>
         </h1>
         <div className="mb-4 flex flex-wrap gap-2">
           {plans.map((plan: any) => (
@@ -221,7 +221,7 @@ function PlanCard({
         </div>
 
         <div className="text-muted-foreground mb-4 rounded-xl bg-purple-50 p-2 text-center text-xl font-bold">
-          <Trans>Costing at </Trans> <br />{' '}
+          <Trans>Price </Trans> <br />{' '}
           <strong className="text-primary text-2xl">{selectedPlan.amount}</strong>
         </div>
       </div>
@@ -232,7 +232,7 @@ function PlanCard({
             onClick(user?.email, 100, selectedPlan.planCode);
           }}
         >
-          <Trans>Proceed with this plan</Trans>
+          <Trans>Proceed with this subscription</Trans>
         </Button>
       </div>
     </div>
@@ -428,7 +428,7 @@ export default function PricePlansPage() {
         )}
 
         <h1 className="py-6 text-xl font-semibold text-gray-500">
-          <Trans>Please select plan as you like</Trans>
+          <Trans>Please select subscription</Trans>
         </h1>
 
         <div className="flex flex-col gap-4 md:flex-row">
