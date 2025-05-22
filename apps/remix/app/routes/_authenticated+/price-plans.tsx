@@ -266,7 +266,7 @@ export default function PricePlansPage() {
     amount: number,
     planId: string,
     reference: null | string = '',
-    callback_url: null | string = '',
+    callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
   ) {
     const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/initialize`, {
       method: 'POST',
@@ -288,8 +288,7 @@ export default function PricePlansPage() {
     }
 
     const data = await response.json();
-    console.log('API PAYSTACK DATA', data);
-    window.open(data.authorization_url, '_blank');
+    window.open(data.authorization_url, '_self');
     // return data;s
   }
 
@@ -318,7 +317,7 @@ export default function PricePlansPage() {
       variant: 'default',
     });
 
-    window.open(data?.link, '_blank');
+    window.open(data?.link, '_self');
   }
 
   return (
