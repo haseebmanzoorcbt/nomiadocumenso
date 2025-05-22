@@ -10,6 +10,15 @@ import { ERROR_CODES } from './errors';
 import type { TLimitsResponseSchema } from './schema';
 import { ZLimitsSchema } from './schema';
 
+const PAY_AS_YOU_GO_PLANS = [
+  'PLN_f54sm9jv38v7r5m',
+  'PLN_5nmok91ploz44u6', 
+  'PLN_kxqcw02dow71g6c',
+  'PLN_ktbomtrjkiz73i1',
+  'PLN_59961ig3ply5r3s',
+  'PLN_bit1oy0ayiqpkdu'
+];
+
 export type GetServerLimitsOptions = {
   email: string;
   teamId?: number | null;
@@ -53,7 +62,10 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
   });
 
   const mostRecentSubscription = sortedSubscriptions[0];
-  const isMostRecentValid = mostRecentSubscription?.periodEnd && new Date(mostRecentSubscription.periodEnd) > now;
+  const isMostRecentValid = mostRecentSubscription && (
+    PAY_AS_YOU_GO_PLANS.includes(mostRecentSubscription.planId) || 
+    (mostRecentSubscription.periodEnd && new Date(mostRecentSubscription.periodEnd) > now)
+  );
 
   // console.log('most recent subscription:', mostRecentSubscription);
   // console.log('is most recent valid:', isMostRecentValid);
@@ -63,8 +75,8 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     const validSubscriptions = user.subscriptions.filter(
       (sub) => 
         PLAN_DOCUMENT_QUOTAS[sub.planId] && 
-        sub.periodEnd && 
-        new Date(sub.periodEnd) > now
+        (PAY_AS_YOU_GO_PLANS.includes(sub.planId) || 
+         (sub.periodEnd && new Date(sub.periodEnd) > now))
     );
 
     // console.log('valid subscriptions:', validSubscriptions);
@@ -86,11 +98,11 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
       documentQuota = Object.entries(planGroups).reduce((total, [planId, subscriptions]) => {
         const planQuota = PLAN_DOCUMENT_QUOTAS[planId] ?? 0;
         const groupTotal = planQuota * subscriptions.length;
-        console.log(`Plan ${planId} has ${subscriptions.length} subscriptions, total quota:`, groupTotal);
+        // console.log(`Plan ${planId} has ${subscriptions.length} subscriptions, total quota:`, groupTotal);
         return total + groupTotal;
       }, 0);
 
-      console.log('total document quota from all valid subscriptions:', documentQuota);
+      // console.log('total document quota from all valid subscriptions:', documentQuota);
     }
   } else {
     // If most recent subscription is expired, mark all as cancelled and reset to free credits
