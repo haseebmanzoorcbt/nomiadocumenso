@@ -50,3 +50,10 @@ yarn-error.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.p12
+*.p12
+*.crt
+*.key
+*.json
+apps/remix/example/cert.p12
+apps/remix/certs/

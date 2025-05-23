@@ -55,7 +55,7 @@ const handleFallbackErrorMessages = (code: string) => {
   return message;
 };
 
-const LOGIN_REDIRECT_PATH = '/dasdwda';
+const LOGIN_REDIRECT_PATH = '/documents';
 
 export const ZSignInFormSchema = z.object({
   email: z.string().email().min(1),
@@ -389,7 +389,7 @@ export const SignInForm = ({
             </div>
           )}
 
-          {/* {isGoogleSSOEnabled && (
+          {isGoogleSSOEnabled && (
             <Button
               type="button"
               size="lg"
@@ -401,9 +401,9 @@ export const SignInForm = ({
               <FcGoogle className="mr-2 h-5 w-5" />
               Google
             </Button>
-          )} */}
+          )}
 
-          {/* {isOIDCSSOEnabled && (
+          {isOIDCSSOEnabled && (
             <Button
               type="button"
               size="lg"
@@ -415,7 +415,7 @@ export const SignInForm = ({
               <FaIdCardClip className="mr-2 h-5 w-5" />
               {oidcProviderLabel || 'OIDC'}
             </Button>
-          )} */}
+          )}
 
           {/* <Button
             type="button"

@@ -15,8 +15,7 @@ export const ConfirmEmailTemplate = ({
   const branding:any= useBranding();
 
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    '';
+  branding.brandingLogo ='https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
   branding.brandingAltText = 'Nomia Logo';
 
   const previewText = msg`Please confirm your email address`;
@@ -41,8 +40,8 @@ export const ConfirmEmailTemplate = ({
                 />
               ) : (
                 <Img
-                  src={getAssetUrl('/static/logo.png')}
-                  alt="Documenso Logo"
+                  src={'packages/email/static/logo.png'}
+                  alt="Nomia Logo"
                   className="mb-4 h-6"
                 />
               )}

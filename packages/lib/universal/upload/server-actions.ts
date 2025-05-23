@@ -10,21 +10,32 @@ import path from 'node:path';
 import { env } from '@documenso/lib/utils/env';
 
 import { ONE_HOUR, ONE_SECOND } from '../../constants/time';
+
+import { Storage } from '@google-cloud/storage';
 import { alphaid } from '../id';
 
 export const getPresignPostUrl = async (fileName: string, contentType: string, userId?: number) => {
-  const client = getS3Client();
-
-  const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
-
-  // Get the basename and extension for the file
+  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
   const { name, ext } = path.parse(fileName);
-
   let key = `${alphaid(12)}/${slugify(name)}${ext}`;
 
   if (userId) {
     key = `${userId}/${key}`;
   }
+
+  if (NEXT_PUBLIC_UPLOAD_TRANSPORT === 'gcs') {
+    const bucket = getGCSBucket();
+    const [url] = await bucket.file(key).getSignedUrl({
+      version: 'v4',
+      action: 'write',
+      expires: Date.now() + ONE_HOUR,
+      contentType,
+    });
+    return { key, url };
+  }
+
+  const client = getS3Client();
+  const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: env('NEXT_PRIVATE_UPLOAD_BUCKET'),
@@ -40,8 +51,19 @@ export const getPresignPostUrl = async (fileName: string, contentType: string, u
 };
 
 export const getAbsolutePresignPostUrl = async (key: string) => {
-  const client = getS3Client();
+  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
 
+  if (NEXT_PUBLIC_UPLOAD_TRANSPORT === 'gcs') {
+    const bucket = getGCSBucket();
+    const [url] = await bucket.file(key).getSignedUrl({
+      version: 'v4',
+      action: 'write',
+      expires: Date.now() + ONE_HOUR,
+    });
+    return { key, url };
+  }
+
+  const client = getS3Client();
   const { getSignedUrl: getS3SignedUrl } = await import('@aws-sdk/s3-request-presigner');
 
   const putObjectCommand = new PutObjectCommand({
@@ -57,6 +79,18 @@ export const getAbsolutePresignPostUrl = async (key: string) => {
 };
 
 export const getPresignGetUrl = async (key: string) => {
+  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
+
+  if (NEXT_PUBLIC_UPLOAD_TRANSPORT === 'gcs') {
+    const bucket = getGCSBucket();
+    const [url] = await bucket.file(key).getSignedUrl({
+      version: 'v4',
+      action: 'read',
+      expires: Date.now() + ONE_HOUR,
+    });
+    return { key, url };
+  }
+
   if (env('NEXT_PRIVATE_UPLOAD_DISTRIBUTION_DOMAIN')) {
     const distributionUrl = new URL(key, `${env('NEXT_PRIVATE_UPLOAD_DISTRIBUTION_DOMAIN')}`);
 
@@ -92,15 +126,21 @@ export const getPresignGetUrl = async (key: string) => {
  * Uploads a file to S3.
  */
 export const uploadS3File = async (file: File) => {
-  const client = getS3Client();
-
-  // Get the basename and extension for the file
+  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
   const { name, ext } = path.parse(file.name);
-
   const key = `${alphaid(12)}/${slugify(name)}${ext}`;
-
   const fileBuffer = await file.arrayBuffer();
 
+  if (NEXT_PUBLIC_UPLOAD_TRANSPORT === 'gcs') {
+    const bucket = getGCSBucket();
+    const gcsFile = bucket.file(key);
+    await gcsFile.save(Buffer.from(fileBuffer), {
+      contentType: file.type,
+    });
+    return { key };
+  }
+
+  const client = getS3Client();
   const response = await client.send(
     new PutObjectCommand({
       Bucket: env('NEXT_PRIVATE_UPLOAD_BUCKET'),
@@ -113,9 +153,17 @@ export const uploadS3File = async (file: File) => {
   return { key, response };
 };
 
-export const deleteS3File = async (key: string) => {
-  const client = getS3Client();
 
+export const deleteS3File = async (key: string) => {
+  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
+
+  if (NEXT_PUBLIC_UPLOAD_TRANSPORT === 'gcs') {
+    const bucket = getGCSBucket();
+    await bucket.file(key).delete();
+    return;
+  }
+
+  const client = getS3Client();
   await client.send(
     new DeleteObjectCommand({
       Bucket: env('NEXT_PRIVATE_UPLOAD_BUCKET'),
@@ -145,4 +193,36 @@ const getS3Client = () => {
         }
       : undefined,
   });
+};
+
+export const getGCSClient = () => {
+  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
+  if (NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
+    throw new Error('Invalid upload transport');
+  }
+
+  const clientEmail = env('NEXT_PRIVATE_GCS_CLIENT_EMAIL');
+  const privateKey = env('NEXT_PRIVATE_GCS_PRIVATE_KEY');
+  const bucketName = env('NEXT_PRIVATE_GCS_BUCKET');
+
+  if (!clientEmail || !privateKey || !bucketName) {
+    throw new Error('Missing required GCS credentials');
+  }
+
+  return new Storage({
+    projectId: env('NEXT_PRIVATE_GCS_PROJECT_ID'),
+    credentials: {
+      client_email: clientEmail,
+      private_key: privateKey.replace(/\\n/g, '\n'),
+    },
+  });
+};
+
+export const getGCSBucket = () => {
+  const client = getGCSClient();
+  const bucketName = env('NEXT_PRIVATE_GCS_BUCKET');
+  if (!bucketName) {
+    throw new Error('Missing GCS bucket name');
+  }
+  return client.bucket(bucketName);
 };

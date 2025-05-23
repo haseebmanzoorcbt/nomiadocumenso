@@ -134,10 +134,18 @@ export const sealDocument = async ({
 
   const doc = await PDFDocument.load(pdfData);
 
+
+
+   
+
+
+
   // Normalize and flatten layers that could cause issues with the signature
   normalizeSignatureAppearances(doc);
   flattenForm(doc);
   flattenAnnotations(doc);
+
+
 
   // Add rejection stamp if the document is rejected
   if (isRejected && rejectionReason) {
@@ -174,7 +182,7 @@ export const sealDocument = async ({
     name: `${name}${suffix}`,
     type: 'application/pdf',
     arrayBuffer: async () => Promise.resolve(pdfBuffer),
-  });
+  },false);
 
   const postHog = PostHogServerClient();
 

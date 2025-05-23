@@ -58,7 +58,6 @@ export const createUser = async ({ name, email, password, signature, url , fromN
         password: hashedPassword, // Todo: (RR7) Drop password.
         signature,
         url,
-        emailVerified : DateTime.now().toJSDate(), // Todo: (RR7) Remove this after RR7.
       },
     });
 

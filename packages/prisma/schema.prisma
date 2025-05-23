@@ -240,7 +240,7 @@ enum SubscriptionStatus {
 model Subscription {
   id                Int                @id @default(autoincrement())
   status            SubscriptionStatus @default(INACTIVE)
-  planId            String             @unique
+  planId            String
   priceId           String
   periodEnd         DateTime?
   userId            Int?
@@ -253,6 +253,8 @@ model Subscription {
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([planId])
+  @@index([priceId])
 }
 
 model Account {

@@ -83,12 +83,12 @@ export const TemplatesTableActionDropdown = ({
           <Trans>Direct link</Trans>
         </DropdownMenuItem>
 
-        {/* {!teamId && !row.teamId && (
+        {!teamId && !row.teamId && (
           <DropdownMenuItem onClick={() => setMoveDialogOpen(true)}>
             <MoveRight className="mr-2 h-4 w-4" />
             <Trans>Move to Team</Trans>
           </DropdownMenuItem>
-        )} */}
+        )}
 
         <TemplateBulkSendDialog
           templateId={row.id}

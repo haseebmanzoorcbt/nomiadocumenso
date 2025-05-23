@@ -5,33 +5,35 @@ import { IS_BILLING_ENABLED } from '@documenso/lib/constants/app';
 import { prisma } from '@documenso/prisma';
 
 import { getDocumentRelatedPrices } from '../stripe/get-document-related-prices.ts';
-import { FREE_PLAN_LIMITS, SELFHOSTED_PLAN_LIMITS, TEAM_PLAN_LIMITS } from './constants';
+import { PLAN_DOCUMENT_QUOTAS, DEFAULT_FREE_CREDITS, FREE_PLAN_LIMITS, SELFHOSTED_PLAN_LIMITS, TEAM_PLAN_LIMITS } from './constants';
 import { ERROR_CODES } from './errors';
 import type { TLimitsResponseSchema } from './schema';
 import { ZLimitsSchema } from './schema';
+
+const PAY_AS_YOU_GO_PLANS = [
+  'PLN_f54sm9jv38v7r5m',
+  'PLN_5nmok91ploz44u6', 
+  'PLN_kxqcw02dow71g6c',
+  'PLN_ktbomtrjkiz73i1',
+  'PLN_59961ig3ply5r3s',
+  'PLN_bit1oy0ayiqpkdu'
+];
 
 export type GetServerLimitsOptions = {
   email: string;
   teamId?: number | null;
 };
 
-export const getServerLimits = async ({
+export async function getServerLimits({
   email,
   teamId,
-}: GetServerLimitsOptions): Promise<TLimitsResponseSchema> => {
-  if (!IS_BILLING_ENABLED()) {
-    return {
-      quota: SELFHOSTED_PLAN_LIMITS,
-      remaining: SELFHOSTED_PLAN_LIMITS,
-    };
-  }
-
+}: GetServerLimitsOptions): Promise<TLimitsResponseSchema> {
   if (!email) {
     throw new Error(ERROR_CODES.UNAUTHORIZED);
   }
 
   return teamId ? handleTeamLimits({ email, teamId }) : handleUserLimits({ email });
-};
+}
 
 type HandleUserLimitsOptions = {
   email: string;
@@ -39,81 +41,121 @@ type HandleUserLimitsOptions = {
 
 const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
   const user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-    include: {
-      subscriptions: true,
-    },
+    where: { email },
+    include: { subscriptions: true },
   });
 
   if (!user) {
     throw new Error(ERROR_CODES.USER_FETCH_FAILED);
   }
 
-  let quota = structuredClone(FREE_PLAN_LIMITS);
-  let remaining = structuredClone(FREE_PLAN_LIMITS);
+  // Default to free credits
+  let documentQuota = DEFAULT_FREE_CREDITS;
 
-  const activeSubscriptions = user.subscriptions.filter(
-    ({ status }) => status === SubscriptionStatus.ACTIVE,
+  const now = new Date();
+
+  // Sort subscriptions by periodEnd date to find the most recent
+  const sortedSubscriptions = [...user.subscriptions].sort((a, b) => {
+    if (!a.periodEnd) return 1;
+    if (!b.periodEnd) return -1;
+    return new Date(b.periodEnd).getTime() - new Date(a.periodEnd).getTime();
+  });
+
+  const mostRecentSubscription = sortedSubscriptions[0];
+  const isMostRecentValid = mostRecentSubscription && (
+    PAY_AS_YOU_GO_PLANS.includes(mostRecentSubscription.planId) || 
+    (mostRecentSubscription.periodEnd && new Date(mostRecentSubscription.periodEnd) > now)
   );
 
-  if (activeSubscriptions.length > 0) {
-    const documentPlanPrices = await getDocumentRelatedPrices();
+  // console.log('most recent subscription:', mostRecentSubscription);
+  // console.log('is most recent valid:', isMostRecentValid);
 
-    for (const subscription of activeSubscriptions) {
-      const price = documentPlanPrices.find((price) => price.id === subscription.priceId);
+  if (isMostRecentValid) {
+    // If most recent subscription is valid, consider all subscriptions with future periodEnd
+    const validSubscriptions = user.subscriptions.filter(
+      (sub) => 
+        PLAN_DOCUMENT_QUOTAS[sub.planId] && 
+        (PAY_AS_YOU_GO_PLANS.includes(sub.planId) || 
+         (sub.periodEnd && new Date(sub.periodEnd) > now))
+    );
 
-      if (!price || typeof price.product === 'string' || price.product.deleted) {
-        continue;
-      }
+    // console.log('valid subscriptions:', validSubscriptions);
+    // console.log('PLAN_DOCUMENT_QUOTAS:', PLAN_DOCUMENT_QUOTAS);
 
-      const currentQuota = ZLimitsSchema.parse(
-        'metadata' in price.product ? price.product.metadata : {},
+    if (validSubscriptions.length > 0) {
+      // Group subscriptions by planId to handle multiple subscriptions of the same plan
+      const planGroups = validSubscriptions.reduce((groups, sub) => {
+        if (!groups[sub.planId]) {
+          groups[sub.planId] = [];
+        }
+        groups[sub.planId].push(sub);
+        return groups;
+      }, {} as Record<string, typeof validSubscriptions>);
+
+      // console.log('plan groups:', planGroups);
+
+      // Calculate total quota from all valid subscriptions
+      documentQuota = Object.entries(planGroups).reduce((total, [planId, subscriptions]) => {
+        const planQuota = PLAN_DOCUMENT_QUOTAS[planId] ?? 0;
+        const groupTotal = planQuota * subscriptions.length;
+        // console.log(`Plan ${planId} has ${subscriptions.length} subscriptions, total quota:`, groupTotal);
+        return total + groupTotal;
+      }, 0);
+
+      // console.log('total document quota from all valid subscriptions:', documentQuota);
+    }
+  } else {
+    // If most recent subscription is expired, mark all as cancelled and reset to free credits
+    const expiredSubscriptions = user.subscriptions.filter(
+      (sub) => sub.periodEnd && new Date(sub.periodEnd) <= now
+    );
+
+    if (expiredSubscriptions.length > 0) {
+      // Update all expired subscriptions in the database
+      await Promise.all(
+        expiredSubscriptions.map((sub) =>
+          prisma.subscription.update({
+            where: { id: sub.id },
+            data: { 
+              status: SubscriptionStatus.INACTIVE,
+              cancelAtPeriodEnd: true 
+            },
+          })
+        )
       );
-
-      // Use the subscription with the highest quota.
-      if (currentQuota.documents > quota.documents && currentQuota.recipients > quota.recipients) {
-        quota = currentQuota;
-        remaining = structuredClone(quota);
-      }
+      // console.log('marked all expired subscriptions as inactive and cancelled:', expiredSubscriptions);
     }
 
-    // Assume all active subscriptions provide unlimited direct templates.
-    remaining.directTemplates = Infinity;
+    // Reset to free credits since most recent subscription is expired
+    documentQuota = DEFAULT_FREE_CREDITS;
+
+
+    // console.log('most recent subscription expired, using default free credits:', documentQuota);
   }
 
-  const [documents, directTemplates] = await Promise.all([
-    prisma.document.count({
-      where: {
-        userId: user.id,
-        teamId: null,
-        createdAt: {
-          gte: DateTime.utc().startOf('month').toJSDate(),
-        },
-        source: {
-          not: DocumentSource.TEMPLATE_DIRECT_LINK,
-        },
+  // Count all current documents (not just this month)
+  const documentsUsed = await prisma.document.count({
+    where: {
+      userId: user.id,
+      teamId: null,
+      status: 'COMPLETED',
+      source: {
+        not: DocumentSource.TEMPLATE_DIRECT_LINK,
       },
-    }),
-    prisma.template.count({
-      where: {
-        userId: user.id,
-        teamId: null,
-        directLink: {
-          isNot: null,
-        },
-      },
-    }),
-  ]);
+    },
+  });
 
-  remaining.documents = Math.max(remaining.documents - documents, 0);
-  remaining.directTemplates = Math.max(remaining.directTemplates - directTemplates, 0);
+  // console.log('documents used:', documentsUsed);
 
-  return {
-    quota,
-    remaining,
+  // For simplicity, keep recipients/directTemplates logic as before
+  const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+  const remaining = {
+    documents: Math.max(documentQuota - documentsUsed, 0),
+    recipients: 10, // You can adjust this if you want per-plan recipient quotas
+    directTemplates: 3, // You can adjust this if you want per-plan template quotas
   };
+
+  return { quota, remaining };
 };
 
 type HandleTeamLimitsOptions = {
@@ -127,40 +169,36 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
       id: teamId,
       members: {
         some: {
-          user: {
-            email,
-          },
+          user: { email },
         },
       },
     },
-    include: {
-      subscription: true,
-    },
+    include: { subscription: true },
   });
 
-  if (!team) {
-    throw new Error('Team not found');
-  }
+  if (!team) throw new Error('Team not found');
 
   const { subscription } = team;
 
-  if (subscription && subscription.status === SubscriptionStatus.INACTIVE) {
-    return {
-      quota: {
-        documents: 0,
-        recipients: 0,
-        directTemplates: 0,
-      },
-      remaining: {
-        documents: 0,
-        recipients: 0,
-        directTemplates: 0,
-      },
-    };
+  let documentQuota = DEFAULT_FREE_CREDITS;
+  if (subscription && subscription.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[subscription.planId]) {
+    documentQuota = PLAN_DOCUMENT_QUOTAS[subscription.planId];
   }
 
-  return {
-    quota: structuredClone(TEAM_PLAN_LIMITS),
-    remaining: structuredClone(TEAM_PLAN_LIMITS),
+  // Count documents for the team this month
+  const documentsUsed = await prisma.document.count({
+    where: {
+      teamId: team.id,
+      source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
+    },
+  });
+
+  const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+  const remaining = {
+    documents: Math.max(documentQuota - documentsUsed, 0),
+    recipients: 10,
+    directTemplates: 3,
   };
+
+  return { quota, remaining };
 };

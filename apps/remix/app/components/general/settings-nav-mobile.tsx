@@ -33,7 +33,7 @@ export const SettingsMobileNav = ({ className, ...props }: SettingsMobileNavProp
         </Button>
       </Link>
 
-      <Link to="/settings/public-profile">
+      {/* <Link to="/settings/public-profile">
         <Button
           variant="ghost"
           className={cn(
@@ -111,7 +111,7 @@ export const SettingsMobileNav = ({ className, ...props }: SettingsMobileNavProp
             <Trans>Billing</Trans>
           </Button>
         </Link>
-      )}
+      )} */}
     </div>
   );
 };

@@ -326,7 +326,7 @@ export const AddSettingsFormPartial = ({
                           </FormLabel>
 
                           <FormControl>
-                            <Input disabled={isInternal} className="bg-background" {...field} />
+                            <Input disabled={true} className="bg-background" {...field} />
                           </FormControl>
 
                           <FormMessage />

@@ -105,7 +105,7 @@ export const createDocumentV2 = async ({
         name: title.endsWith('.pdf') ? title : `${title}.pdf`,
         type: 'application/pdf',
         arrayBuffer: async () => Promise.resolve(normalizedPdf),
-      });
+      },false);
 
       // eslint-disable-next-line require-atomic-updates
       documentDataId = newDocumentData.id;

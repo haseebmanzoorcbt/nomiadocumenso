@@ -102,8 +102,8 @@ export const AddTemplateSettingsFormPartial = ({
   const form = useForm<TAddTemplateSettingsFormSchema>({
     resolver: zodResolver(ZAddTemplateSettingsFormSchema),
     defaultValues: {
-      title: externalIdLS || template.title,
-      externalId: template.externalId || undefined,
+      title: template.title,
+      externalId: externalIdLS || template.externalId || undefined,
       visibility: template.visibility || '',
       globalAccessAuth: documentAuthOption?.globalAccessAuth || undefined,
       globalActionAuth: documentAuthOption?.globalActionAuth || undefined,
@@ -472,7 +472,7 @@ export const AddTemplateSettingsFormPartial = ({
                           </FormLabel>
 
                           <FormControl>
-                            <Input className="bg-background" {...field} />
+                            <Input disabled={true} className="bg-background" {...field} />
                           </FormControl>
 
                           <FormMessage />

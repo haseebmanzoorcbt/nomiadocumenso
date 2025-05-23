@@ -269,8 +269,8 @@ export const createTeamFromPendingTeam = async ({
       },
     });
 
-    await tx.subscription.upsert(
-      mapStripeSubscriptionToPrismaUpsertAction(subscription, undefined, team.id),
+    await prisma.subscription.upsert(
+      await mapStripeSubscriptionToPrismaUpsertAction(subscription, undefined, team.id),
     );
 
     return team;

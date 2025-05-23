@@ -17,15 +17,15 @@ export const onSubscriptionUpdated = async ({
   subscription,
 }: OnSubscriptionUpdatedOptions) => {
   await prisma.subscription.upsert(
-    mapStripeSubscriptionToPrismaUpsertAction(subscription, userId, teamId),
+    await mapStripeSubscriptionToPrismaUpsertAction(subscription, userId, teamId),
   );
 };
 
-export const mapStripeSubscriptionToPrismaUpsertAction = (
+export const mapStripeSubscriptionToPrismaUpsertAction = async (
   subscription: Stripe.Subscription,
   userId?: number,
   teamId?: number,
-): Prisma.SubscriptionUpsertArgs => {
+): Promise<Prisma.SubscriptionUpsertArgs> => {
   if ((!userId && !teamId) || (userId && teamId)) {
     throw new Error('Either userId or teamId must be provided.');
   }
@@ -35,9 +35,16 @@ export const mapStripeSubscriptionToPrismaUpsertAction = (
     .with('past_due', () => SubscriptionStatus.PAST_DUE)
     .otherwise(() => SubscriptionStatus.INACTIVE);
 
-  return {
+  const existingSubscription = await prisma.subscription.findFirst({
     where: {
       planId: subscription.id,
+    },
+  });
+
+  return {
+    where: {
+      id: existingSubscription?.id ?? 0,
+      ...(existingSubscription?.teamId ? { teamId: existingSubscription.teamId } : {}),
     },
     create: {
       status: status,

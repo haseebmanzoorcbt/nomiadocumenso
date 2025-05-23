@@ -7,9 +7,6 @@ export type GetFileOptions = {
   data: string;
 };
 
-
-
-
 export const getFile = async ({ type, data }: GetFileOptions) => {
   return await match(type)
     .with(DocumentDataType.BYTES, () => getFileFromBytes(data))
