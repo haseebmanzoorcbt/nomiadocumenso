@@ -252,13 +252,13 @@ export default function PricePlansPage() {
   const currentSubscriptionData: any = subscriptions?.find((data: any) => data.status === 'ACTIVE');
   const planId = currentSubscriptionData?.planId;
   const priceId = currentSubscriptionData?.priceId;
-  const txRef: any = new URLSearchParams(location.search).get('txref');
+  const trxref: any = new URLSearchParams(location.search).get('trxref');
 
   useEffect(() => {
-    if (txRef) {
+    if (trxref) {
       window.location.href = `${E_SIGN_BASE_URL}/price-plans`;
     }
-  }, [txRef]);
+  }, [trxref]);
 
   const getActiveSubscriptionDetails = (planId: string) => {
     for (const [_, plans] of Object?.entries(plansData)) {
