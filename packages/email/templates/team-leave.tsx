@@ -20,9 +20,9 @@ export type TeamLeaveEmailProps = {
 
 export const TeamLeaveEmailTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
-  baseUrl = 'https://documenso.com',
+  baseUrl = 'https://e-sign.nomiadocs.com',
   memberName = 'John Doe',
-  memberEmail = 'johndoe@documenso.com',
+  memberEmail = 'abuzarmohammad945@gmail.com',
   teamName = 'Team Name',
   teamUrl = 'demo',
 }: TeamLeaveEmailProps) => {

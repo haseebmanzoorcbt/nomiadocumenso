@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Link, type LoaderFunctionArgs, useLoaderData, useLocation } from 'react-router';
+import {
+  Link,
+  type LoaderFunctionArgs,
+  useLoaderData,
+  useLocation,
+  useRevalidator,
+} from 'react-router';
 
 import { getSession } from '@documenso/auth/server/lib/utils/get-session';
 import { useSession } from '@documenso/lib/client-only/providers/session';
@@ -247,6 +253,7 @@ export default function PricePlansPage() {
   const { toast } = useToast();
   const { user } = useSession();
   const location = useLocation();
+  const revalidator = useRevalidator();
 
   const { subscriptions } = useSuperLoaderData<typeof loader>();
   const currentSubscriptionData: any = subscriptions?.find((data: any) => data.status === 'ACTIVE');
@@ -254,11 +261,85 @@ export default function PricePlansPage() {
   const priceId = currentSubscriptionData?.priceId;
   const trxref: any = new URLSearchParams(location.search).get('trxref');
 
+  // State for polling
+  const [isPolling, setIsPolling] = useState(false);
+  const [pollCount, setPollCount] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Polling logic when trxref is present
   useEffect(() => {
-    if (trxref) {
-      window.location.href = `${E_SIGN_BASE_URL}/price-plans`;
+    if (trxref && !currentSubscriptionData) {
+      setIsPolling(true);
+      setPollCount(0);
+
+      toast({
+        title: 'Processing payment...',
+        description: 'Please wait while we confirm your subscription.',
+        variant: 'default',
+      });
+
+      intervalRef.current = setInterval(() => {
+        setPollCount((prev) => {
+          const newCount = prev + 1;
+
+          if (newCount >= 20) {
+            setIsPolling(false);
+            toast({
+              title: 'Taking longer than expected',
+              description:
+                'Your payment is being processed. Please refresh the page in a few minutes.',
+              variant: 'destructive',
+            });
+
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.delete('trxref');
+            window.history.replaceState({}, document.title, newUrl.pathname + newUrl.search);
+
+            return newCount;
+          }
+          revalidator.revalidate();
+          return newCount;
+        });
+      }, 3000);
+
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+      };
     }
-  }, [trxref]);
+  }, [trxref, currentSubscriptionData, revalidator, toast]);
+
+  useEffect(() => {
+    if (trxref && currentSubscriptionData && isPolling) {
+      setIsPolling(false);
+
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+
+      // Show success toast
+      toast({
+        title: 'Subscription activated!',
+        description: 'Your subscription has been successfully activated.',
+        variant: 'default',
+      });
+
+      // Clean up URL by removing trxref
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('trxref');
+      window.history.replaceState({}, document.title, newUrl.pathname + newUrl.search);
+    }
+  }, [trxref, currentSubscriptionData, isPolling, toast]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   const getActiveSubscriptionDetails = (planId: string) => {
     for (const [_, plans] of Object?.entries(plansData)) {
@@ -306,7 +387,6 @@ export default function PricePlansPage() {
       });
     } else {
       window.location.href = data?.authorization_url;
-      // window.open(data.authorization_url, '_self');
     }
   }
 
@@ -341,7 +421,6 @@ export default function PricePlansPage() {
         variant: 'default',
       });
 
-      // window.open(data?.link, '_self');
       window.location.href = data?.link;
     }
   }
@@ -371,7 +450,6 @@ export default function PricePlansPage() {
         variant: 'destructive',
       });
     } else {
-      // window.open(data?.link, '_self');
       window.location.href = data?.link;
     }
   }
@@ -379,6 +457,21 @@ export default function PricePlansPage() {
   return (
     <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <div className="w-full">
+        {/* Loading indicator when polling */}
+        {isPolling && (
+          <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+            <div className="flex items-center space-x-3">
+              <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-blue-600"></div>
+              <div>
+                <p className="font-medium text-blue-800">Processing your subscription...</p>
+                <p className="text-sm text-blue-600">
+                  This may take a few moments. Please don't refresh the page.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <Dialog>
           <DialogTrigger asChild className="flex w-full items-end justify-end">
             <button className="text-md cursor-pointer pb-6 text-blue-500 underline">
@@ -427,6 +520,7 @@ export default function PricePlansPage() {
             </div>
           </DialogContent>
         </Dialog>
+
         {currentSubscriptionData && (
           <div>
             <div className="flex w-full items-center justify-between">
