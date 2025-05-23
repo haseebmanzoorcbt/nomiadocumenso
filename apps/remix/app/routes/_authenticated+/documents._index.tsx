@@ -45,7 +45,6 @@ const ZSearchParamsSchema = ZFindDocumentsInternalRequestSchema.pick({
 export default function DocumentsPage() {
   const [searchParams] = useSearchParams();
   const { theme, session } = useLoaderData<any>() || {};
-
   const team = useOptionalCurrentTeam();
 
   const [stats, setStats] = useState<TFindDocumentsInternalResponse['stats']>({
