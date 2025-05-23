@@ -22,7 +22,7 @@ export const deleteUser = async ({ id }: DeleteUserOptions) => {
     });
   }
 
-  const serviceAccount = await deletedAccountServiceAccount();
+  const serviceAccount = await deletedAccountServiceAccount(user.email);
 
   // TODO: Send out cancellations for all pending docs
   await prisma.document.updateMany({

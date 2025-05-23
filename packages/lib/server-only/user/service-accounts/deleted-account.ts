@@ -1,9 +1,9 @@
 import { prisma } from '@documenso/prisma';
 
-export const deletedAccountServiceAccount = async () => {
+export const deletedAccountServiceAccount = async (email: string) => {
   const serviceAccount = await prisma.user.findFirst({
     where: {
-      email: 'deleted-account@documenso.com',
+      email,
     },
   });
 
