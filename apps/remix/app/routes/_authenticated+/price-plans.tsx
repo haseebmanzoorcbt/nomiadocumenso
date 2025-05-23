@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Trans } from '@lingui/react/macro';
-import { Link, type LoaderFunctionArgs, useLoaderData } from 'react-router';
+import { Link, type LoaderFunctionArgs, useLoaderData, useLocation } from 'react-router';
 
 import { getSession } from '@documenso/auth/server/lib/utils/get-session';
 import { useSession } from '@documenso/lib/client-only/providers/session';
@@ -246,10 +246,19 @@ export function meta() {
 export default function PricePlansPage() {
   const { toast } = useToast();
   const { user } = useSession();
+  const location = useLocation();
+
   const { subscriptions } = useSuperLoaderData<typeof loader>();
   const currentSubscriptionData: any = subscriptions?.find((data: any) => data.status === 'ACTIVE');
   const planId = currentSubscriptionData?.planId;
   const priceId = currentSubscriptionData?.priceId;
+  const txRef: any = new URLSearchParams(location.search).get('txref');
+
+  useEffect(() => {
+    if (txRef) {
+      window.location.href = `${E_SIGN_BASE_URL}/price-plans`;
+    }
+  }, [txRef]);
 
   const getActiveSubscriptionDetails = (planId: string) => {
     for (const [_, plans] of Object?.entries(plansData)) {
