@@ -337,6 +337,36 @@ export default function PricePlansPage() {
     }
   }
 
+  async function handleManageCards(subscriptionCode: string) {
+    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/update-subscription-link`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        subscriptionCode,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('API CANCEL SUBSCRIPTION ERROR', errorData?.message);
+    }
+
+    const data = await response.json();
+
+    if (data?.error) {
+      toast({
+        title: 'Something went wrong',
+        description: data?.error,
+        variant: 'destructive',
+      });
+    } else {
+      // window.open(data?.link, '_self');
+      window.location.href = data?.link;
+    }
+  }
+
   return (
     <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
       <div className="w-full">
@@ -396,7 +426,7 @@ export default function PricePlansPage() {
               </h1>
             </div>
 
-            <div className="flex h-[20vh] w-full flex-col justify-between rounded-xl border border-dashed border-purple-500 bg-gradient-to-br from-blue-100 to-purple-100 p-4">
+            <div className="flex h-[25vh] w-full flex-col justify-between rounded-xl border border-dashed border-purple-500 bg-gradient-to-br from-blue-100 to-purple-100 p-4">
               <div>
                 <h1 className="text-primary text-xl font-extrabold">
                   <Trans>{activePlanDetails?.label}</Trans>
@@ -414,13 +444,25 @@ export default function PricePlansPage() {
                     <Trans>*This is life time envelopes you can use on this platform</Trans>
                   </h1>
                 ) : (
-                  <Button
-                    onClick={() => {
-                      handleApiCancelPaystackSubscription(priceId);
-                    }}
-                  >
-                    Cancel subscription
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      onClick={() => {
+                        handleApiCancelPaystackSubscription(priceId);
+                      }}
+                      className=""
+                    >
+                      Cancel subscription
+                    </Button>
+
+                    <Button
+                      onClick={() => {
+                        handleManageCards(priceId);
+                      }}
+                      className="bg-gradient-to-br from-pink-400 to-blue-400"
+                    >
+                      Manage Cards
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
