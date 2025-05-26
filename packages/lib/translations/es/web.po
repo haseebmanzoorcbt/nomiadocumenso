@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: es\n"
-"Project-Id-Version: Nomia Signatures-app\n"
+"Project-Id-Version: documenso-app\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2025-03-25 12:05\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: Nomia Signatures-app\n"
+"X-Crowdin-Project: documenso-app\n"
 "X-Crowdin-Project-ID: 694691\n"
 "X-Crowdin-Language: es-ES\n"
 "X-Crowdin-File: web.po\n"
@@ -133,13 +133,13 @@ msgstr "{0} te invitó a {recipientActionVerb} un documento"
 
 #. placeholder {0}: memberName || memberEmail
 #: packages/email/templates/team-join.tsx
-msgid "{0} joined the team {teamName} on Nomia Signatures"
-msgstr "{0} se unió al equipo {teamName} en Nomia Signatures"
+msgid "{0} joined the team {teamName} on Documenso"
+msgstr "{0} se unió al equipo {teamName} en Documenso"
 
 #. placeholder {0}: memberName || memberEmail
 #: packages/email/templates/team-leave.tsx
-msgid "{0} left the team {teamName} on Nomia Signatures"
-msgstr "{0} dejó el equipo {teamName} en Nomia Signatures"
+msgid "{0} left the team {teamName} on Documenso"
+msgstr "{0} dejó el equipo {teamName} en Documenso"
 
 #. placeholder {0}: remaining.documents
 #. placeholder {1}: quota.documents
@@ -412,8 +412,8 @@ msgid "<0>{senderName}</0> has requested that you take ownership of the followin
 msgstr "<0>{senderName}</0> ha solicitado que asumas la propiedad del siguiente equipo"
 
 #: packages/email/templates/confirm-team-email.tsx
-msgid "<0>{teamName}</0> has requested to use your email address for their team on Nomia Signatures."
-msgstr "<0>{teamName}</0> ha solicitado usar tu dirección de correo electrónico para su equipo en Nomia Signatures."
+msgid "<0>{teamName}</0> has requested to use your email address for their team on Documenso."
+msgstr "<0>{teamName}</0> ha solicitado usar tu dirección de correo electrónico para su equipo en Documenso."
 
 #: apps/remix/app/components/dialogs/template-use-dialog.tsx
 msgid "<0>Click to upload</0> or drag and drop"
@@ -591,25 +591,25 @@ msgstr "Se ha enviado una solicitud para transferir la propiedad de este equipo 
 
 #. placeholder {0}: team.name
 #: packages/lib/server-only/team/create-team-email-verification.ts
-msgid "A request to use your email has been initiated by {0} on Nomia Signatures"
-msgstr "Se ha iniciado una solicitud para usar tu correo electrónico por {0} en Nomia Signatures"
+msgid "A request to use your email has been initiated by {0} on Documenso"
+msgstr "Se ha iniciado una solicitud para usar tu correo electrónico por {0} en Documenso"
 
 #: apps/remix/app/components/dialogs/webhook-create-dialog.tsx
-msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Nomia Signatures"
-msgstr "Un secreto que se enviará a tu URL para que puedas verificar que la solicitud ha sido enviada por Nomia Signatures"
+msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso"
+msgstr "Un secreto que se enviará a tu URL para que puedas verificar que la solicitud ha sido enviada por Documenso"
 
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks.$id.tsx
 #: apps/remix/app/routes/_authenticated+/settings+/webhooks.$id.tsx
-msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Nomia Signatures."
-msgstr "Un secreto que se enviará a tu URL para que puedas verificar que la solicitud ha sido enviada por Nomia Signatures."
+msgid "A secret that will be sent to your URL so you can verify that the request has been sent by Documenso."
+msgstr "Un secreto que se enviará a tu URL para que puedas verificar que la solicitud ha sido enviada por Documenso."
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
 msgid "A stable internet connection"
 msgstr "Una conexión a Internet estable"
 
 #: packages/email/templates/team-join.tsx
-msgid "A team member has joined a team on Nomia Signatures"
-msgstr "Un miembro del equipo se ha unido a un equipo en Nomia Signatures"
+msgid "A team member has joined a team on Documenso"
+msgstr "Un miembro del equipo se ha unido a un equipo en Documenso"
 
 #. placeholder {0}: team.name
 #: packages/lib/jobs/definitions/emails/send-team-member-left-email.handler.ts
@@ -617,8 +617,8 @@ msgid "A team member has left {0}"
 msgstr "Un miembro del equipo ha dejado {0}"
 
 #: packages/email/templates/team-leave.tsx
-msgid "A team member has left a team on Nomia Signatures"
-msgstr "Un miembro del equipo ha dejado un equipo en Nomia Signatures"
+msgid "A team member has left a team on Documenso"
+msgstr "Un miembro del equipo ha dejado un equipo en Documenso"
 
 #: packages/email/templates/team-delete.tsx
 #: packages/email/templates/team-delete.tsx
@@ -646,16 +646,16 @@ msgid "Accept"
 msgstr "Aceptar"
 
 #: packages/email/templates/team-invite.tsx
-msgid "Accept invitation to join a team on Nomia Signatures"
-msgstr "Aceptar invitación para unirse a un equipo en Nomia Signatures"
+msgid "Accept invitation to join a team on Documenso"
+msgstr "Aceptar invitación para unirse a un equipo en Documenso"
 
 #: packages/email/templates/confirm-team-email.tsx
-msgid "Accept team email request for {teamName} on Nomia Signatures"
-msgstr "Aceptar la solicitud de correo electrónico del equipo para {teamName} en Nomia Signatures"
+msgid "Accept team email request for {teamName} on Documenso"
+msgstr "Aceptar la solicitud de correo electrónico del equipo para {teamName} en Documenso"
 
 #: packages/email/templates/team-transfer-request.tsx
-msgid "Accept team transfer request on Nomia Signatures"
-msgstr "Aceptar solicitud de transferencia de equipo en Nomia Signatures"
+msgid "Accept team transfer request on Documenso"
+msgstr "Aceptar solicitud de transferencia de equipo en Documenso"
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
 msgid "Acceptance and Consent"
@@ -1406,8 +1406,8 @@ msgid "By enabling 2FA, you will be required to enter a code from your authentic
 msgstr "Al habilitar 2FA, se te requerirá ingresar un código de tu aplicación de autenticación cada vez que inicies sesión usando email y contraseña."
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
-msgid "By proceeding to use the electronic signature service provided by Nomia Signatures, you affirm that you have read and understood this disclosure. You agree to all terms and conditions related to the use of electronic signatures and electronic transactions as outlined herein."
-msgstr "Al continuar utilizando el servicio de firma electrónica proporcionado por Nomia Signatures, usted afirma que ha leído y entendido esta divulgación. Acepta todos los términos y condiciones relacionados con el uso de firmas electrónicas y transacciones electrónicas según lo detallado aquí."
+msgid "By proceeding to use the electronic signature service provided by Documenso, you affirm that you have read and understood this disclosure. You agree to all terms and conditions related to the use of electronic signatures and electronic transactions as outlined herein."
+msgstr "Al continuar utilizando el servicio de firma electrónica proporcionado por Documenso, usted afirma que ha leído y entendido esta divulgación. Acepta todos los términos y condiciones relacionados con el uso de firmas electrónicas y transacciones electrónicas según lo detallado aquí."
 
 #: apps/remix/app/components/general/document-signing/document-signing-disclosure.tsx
 msgid "By proceeding with your electronic signature, you acknowledge and consent that it will be used to sign the given document and holds the same legal validity as a handwritten signature. By completing the electronic signing process, you affirm your understanding and acceptance of these conditions."
@@ -2226,8 +2226,8 @@ msgid "Do you want to duplicate this template?"
 msgstr "¿Desea duplicar esta plantilla?"
 
 #: apps/remix/app/components/dialogs/account-delete-dialog.tsx
-msgid "Nomia Signatures will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
-msgstr "Nomia Signatures eliminará <0>todos sus documentos</0>, junto con todos sus documentos completados, firmas y todos los demás recursos de su cuenta."
+msgid "Documenso will delete <0>all of your documents</0>, along with all of your completed documents, signatures, and all other resources belonging to your Account."
+msgstr "Documenso eliminará <0>todos sus documentos</0>, junto con todos sus documentos completados, firmas y todos los demás recursos de su cuenta."
 
 #: apps/remix/app/routes/_authenticated+/documents.$id.logs.tsx
 #: apps/remix/app/components/general/template/template-page-view-documents-table.tsx
@@ -3227,8 +3227,8 @@ msgid "It's currently not your turn to sign. You will receive an email with inst
 msgstr "Actualmente no es tu turno para firmar. Recibirás un correo electrónico con instrucciones una vez sea tu turno para firmar el documento."
 
 #: packages/email/templates/team-invite.tsx
-msgid "Join {teamName} on Nomia Signatures"
-msgstr "Únete a {teamName} en Nomia Signatures"
+msgid "Join {teamName} on Documenso"
+msgstr "Únete a {teamName} en Documenso"
 
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/text-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/radio-field.tsx
@@ -5121,8 +5121,8 @@ msgstr "Equipo"
 
 #. placeholder {0}: team.name
 #: packages/lib/server-only/team/delete-team.ts
-msgid "Team \"{0}\" has been deleted on Nomia Signatures"
-msgstr "El equipo \"{0}\" ha sido eliminado en Nomia Signatures"
+msgid "Team \"{0}\" has been deleted on Documenso"
+msgstr "El equipo \"{0}\" ha sido eliminado en Documenso"
 
 #: apps/remix/app/components/dialogs/team-checkout-create-dialog.tsx
 msgid "Team checkout"
@@ -5155,8 +5155,8 @@ msgid "Team email removed"
 msgstr "Correo electrónico del equipo eliminado"
 
 #: packages/email/templates/team-email-removed.tsx
-msgid "Team email removed for {teamName} on Nomia Signatures"
-msgstr "Correo electrónico del equipo eliminado para {teamName} en Nomia Signatures"
+msgid "Team email removed for {teamName} on Documenso"
+msgstr "Correo electrónico del equipo eliminado para {teamName} en Documenso"
 
 #: apps/remix/app/routes/_unauthenticated+/team.verify.email.$token.tsx
 msgid "Team email verification"
@@ -5338,8 +5338,8 @@ msgid "Text Color"
 msgstr "Color de texto"
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
-msgid "Thank you for using Nomia Signatures to perform your electronic document signing. The purpose of this disclosure is to inform you about the process, legality, and your rights regarding the use of electronic signatures on our platform. By opting to use an electronic signature, you are agreeing to the terms and conditions outlined below."
-msgstr "Gracias por usar Nomia Signatures para realizar su firma electrónica de documentos. El propósito de esta divulgación es informarle sobre el proceso, la legalidad y sus derechos con respecto al uso de firmas electrónicas en nuestra plataforma. Al optar por usar una firma electrónica, usted está aceptando los términos y condiciones descritos a continuación."
+msgid "Thank you for using Documenso to perform your electronic document signing. The purpose of this disclosure is to inform you about the process, legality, and your rights regarding the use of electronic signatures on our platform. By opting to use an electronic signature, you are agreeing to the terms and conditions outlined below."
+msgstr "Gracias por usar Documenso para realizar su firma electrónica de documentos. El propósito de esta divulgación es informarle sobre el proceso, la legalidad y sus derechos con respecto al uso de firmas electrónicas en nuestra plataforma. Al optar por usar una firma electrónica, usted está aceptando los términos y condiciones descritos a continuación."
 
 #: packages/email/template-components/template-forgot-password.tsx
 msgid "That's okay, it happens! Click the button below to reset your password."
@@ -5567,8 +5567,8 @@ msgstr "Los tipos de firmas que los destinatarios pueden usar al firmar el docum
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/settings.webhooks.$id.tsx
 #: apps/remix/app/routes/_authenticated+/settings+/webhooks.$id.tsx
 #: apps/remix/app/components/dialogs/webhook-create-dialog.tsx
-msgid "The URL for Nomia Signatures to send webhook events to."
-msgstr "La URL para Nomia Signatures para enviar eventos de webhook."
+msgid "The URL for Documenso to send webhook events to."
+msgstr "La URL para Documenso para enviar eventos de webhook."
 
 #: apps/remix/app/components/dialogs/webhook-delete-dialog.tsx
 msgid "The webhook has been successfully deleted."
@@ -5666,8 +5666,8 @@ msgid "This document was created using a direct link."
 msgstr "Este documento fue creado usando un enlace directo."
 
 #: packages/email/template-components/template-footer.tsx
-msgid "This document was sent using <0>Nomia Signatures.</0>"
-msgstr "Este documento fue enviado usando <0>Nomia Signatures.</0>"
+msgid "This document was sent using <0>Documenso.</0>"
+msgstr "Este documento fue enviado usando <0>Documenso.</0>"
 
 #: packages/email/template-components/template-document-rejection-confirmed.tsx
 msgid "This email confirms that you have rejected the document <0>\"{documentName}\"</0> sent by {documentOwnerName}."
@@ -6439,8 +6439,8 @@ msgid "Waiting for Your Turn"
 msgstr "Esperando tu turno"
 
 #: apps/remix/app/routes/_recipient+/sign.$token+/_index.tsx
-msgid "Want to send slick signing links like this one? <0>Check out Nomia Signatures.</0>"
-msgstr "¿Quieres enviar enlaces de firma elegantes como este? <0>Consulta Nomia Signatures.</0>"
+msgid "Want to send slick signing links like this one? <0>Check out Documenso.</0>"
+msgstr "¿Quieres enviar enlaces de firma elegantes como este? <0>Consulta Documenso.</0>"
 
 #: apps/remix/app/routes/_profile+/_layout.tsx
 msgid "Want your own public profile?"
@@ -6724,8 +6724,8 @@ msgid "Welcome back, we are lucky to have you."
 msgstr "Bienvenido de nuevo, somos afortunados de tenerte."
 
 #: packages/email/template-components/template-confirmation-email.tsx
-msgid "Welcome to Nomia Signatures!"
-msgstr "¡Bienvenido a Nomia Signatures!"
+msgid "Welcome to Documenso!"
+msgstr "¡Bienvenido a Documenso!"
 
 #: apps/remix/app/routes/_recipient+/sign.$token+/waiting.tsx
 msgid "Were you trying to edit this document instead?"
@@ -6749,8 +6749,8 @@ msgid "When you use our platform to affix your electronic signature to documents
 msgstr "Cuando utilice nuestra plataforma para colocar su firma electrónica en documentos, está consintiendo hacerlo bajo la Ley de Firmas Electrónicas en el Comercio Global y Nacional (Ley E-Sign) y otras leyes aplicables. Esta acción indica su aceptación de usar medios electrónicos para firmar documentos y recibir notificaciones."
 
 #: apps/remix/app/routes/_profile+/p.$url.tsx
-msgid "While waiting for them to do so you can create your own Nomia Signatures account and get started with document signing right away."
-msgstr "Mientras esperas a que ellos lo hagan, puedes crear tu propia cuenta de Nomia Signatures y comenzar a firmar documentos de inmediato."
+msgid "While waiting for them to do so you can create your own Documenso account and get started with document signing right away."
+msgstr "Mientras esperas a que ellos lo hagan, puedes crear tu propia cuenta de Documenso y comenzar a firmar documentos de inmediato."
 
 #: apps/remix/app/components/dialogs/document-resend-dialog.tsx
 msgid "Who do you want to remind?"
@@ -6854,8 +6854,8 @@ msgid "You can copy and share these links to recipients so they can action the d
 msgstr "Puede copiar y compartir estos enlaces con los destinatarios para que puedan gestionar el documento."
 
 #: packages/email/templates/confirm-team-email.tsx
-msgid "You can revoke access at any time in your team settings on Nomia Signatures <0>here.</0>"
-msgstr "Puedes revocar el acceso en cualquier momento en la configuración de tu equipo en Nomia Signatures <0>aquí.</0>"
+msgid "You can revoke access at any time in your team settings on Documenso <0>here.</0>"
+msgstr "Puedes revocar el acceso en cualquier momento en la configuración de tu equipo en Documenso <0>aquí.</0>"
 
 #: apps/remix/app/components/forms/public-profile-form.tsx
 msgid "You can update the profile URL by updating the team URL in the general settings page."
@@ -6933,8 +6933,8 @@ msgstr "Has sido invitado por <0>{0}</0> para unirte a su equipo."
 
 #. placeholder {0}: team.name
 #: packages/lib/server-only/team/create-team-member-invites.ts
-msgid "You have been invited to join {0} on Nomia Signatures"
-msgstr "Te han invitado a unirte a {0} en Nomia Signatures"
+msgid "You have been invited to join {0} on Documenso"
+msgstr "Te han invitado a unirte a {0} en Documenso"
 
 #: packages/email/templates/team-invite.tsx
 msgid "You have been invited to join the following team"
@@ -6947,8 +6947,8 @@ msgstr "Te han eliminado de un documento"
 
 #. placeholder {0}: team.name
 #: packages/lib/server-only/team/request-team-ownership-transfer.ts
-msgid "You have been requested to take ownership of team {0} on Nomia Signatures"
-msgstr "Se te ha solicitado asumir la propiedad del equipo {0} en Nomia Signatures"
+msgid "You have been requested to take ownership of team {0} on Documenso"
+msgstr "Se te ha solicitado asumir la propiedad del equipo {0} en Documenso"
 
 #. placeholder {0}: data.teamName
 #: apps/remix/app/routes/_unauthenticated+/team.decline.$token.tsx
@@ -7070,8 +7070,8 @@ msgid "You need to setup 2FA to mark this document as viewed."
 msgstr "Debes configurar 2FA para marcar este documento como visto."
 
 #: apps/remix/app/components/forms/signup.tsx
-msgid "You will get notified & be able to set up your Nomia Signatures public profile when we launch the feature."
-msgstr "Recibirás una notificación y podrás configurar tu perfil público de Nomia Signatures cuando lanzemos la función."
+msgid "You will get notified & be able to set up your documenso public profile when we launch the feature."
+msgstr "Recibirás una notificación y podrás configurar tu perfil público de Documenso cuando lanzemos la función."
 
 #: apps/remix/app/components/forms/2fa/enable-authenticator-app-dialog.tsx
 msgid "You will now be required to enter a code from your authenticator app when signing in."
@@ -7158,12 +7158,12 @@ msgid "Your documents"
 msgstr "Tus documentos"
 
 #: apps/remix/app/routes/_unauthenticated+/verify-email.$token.tsx
-msgid "Your email has already been confirmed. You can now use all features of Nomia Signatures."
-msgstr "Tu correo electrónico ya ha sido confirmado. Ahora puedes usar todas las funciones de Nomia Signatures."
+msgid "Your email has already been confirmed. You can now use all features of Documenso."
+msgstr "Tu correo electrónico ya ha sido confirmado. Ahora puedes usar todas las funciones de Documenso."
 
 #: apps/remix/app/routes/_unauthenticated+/verify-email.$token.tsx
-msgid "Your email has been successfully confirmed! You can now use all features of Nomia Signatures."
-msgstr "¡Tu correo electrónico ha sido confirmado con éxito! Ahora puedes usar todas las funciones de Nomia Signatures."
+msgid "Your email has been successfully confirmed! You can now use all features of Documenso."
+msgstr "¡Tu correo electrónico ha sido confirmado con éxito! Ahora puedes usar todas las funciones de Documenso."
 
 #. placeholder {0}: teamEmail.team.name
 #. placeholder {1}: teamEmail.team.url
