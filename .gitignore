@@ -55,3 +55,4 @@ yarn-error.log*
 *.crt
 *.key
 apps/remix/example/cert.p12
+apps/remix/certs/nomiasign-92f257410b69 (1).json
