@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
+
 import { Plural, Trans } from '@lingui/react/macro';
 import { TeamMemberRole } from '@prisma/client';
-import { ChevronLeft, Users2 } from 'lucide-react';
+import { ChevronLeft, Loader, Users2 } from 'lucide-react';
 import { Link, redirect, useLocation } from 'react-router';
 import { match } from 'ts-pattern';
 
@@ -98,10 +100,50 @@ export default function DocumentEditPage() {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const isInternal = searchParams.get('internal') === 'true';
+  const isInternal: any = searchParams.get('internal') === 'true';
   const hideBackBtn = searchParams.get('hideBackBtn') === 'true';
   const externalId = searchParams.get('externalId');
   const docId = searchParams.get('docId');
+  const ss: any = new URLSearchParams(location.search).get('ss');
+  const s: any = new URLSearchParams(location.search).get('s');
+  const isStandAlone = /^([^0-9]*1[^0-9]*)$/.test(s);
+
+  useEffect(() => {
+    if (isInternal) {
+      localStorage.setItem('isInternal', isInternal);
+    }
+    if (externalId) {
+      localStorage.setItem('externalId', externalId);
+      localStorage.removeItem('isInternal');
+    }
+    if (s && typeof isStandAlone === 'boolean') {
+      localStorage.setItem('isStandAlone', JSON.stringify(isStandAlone));
+      localStorage.removeItem('isInternal');
+    }
+  }, [externalId, s, isStandAlone, isInternal]);
+
+  useEffect(() => {
+    if (ss) {
+      localStorage.removeItem('externalId');
+      localStorage.removeItem('isStandAlone');
+    }
+  }, [ss]);
+
+  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
+
+  const isStandAloneRaw =
+    typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
+
+  const isStandAloneLS = isStandAloneRaw === 'true';
+
+  if (!isStandAloneLS && s) {
+    return (
+      <div className="absolute flex h-[80vh] w-full flex-col items-center justify-center">
+        <Loader className="text-documenso h-12 w-12 animate-spin" />
+        <p className="text-muted-foreground mt-4"></p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto -mt-4 w-full max-w-screen-xl px-4 md:px-8">
