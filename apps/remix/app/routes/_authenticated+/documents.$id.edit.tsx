@@ -114,7 +114,6 @@ export default function DocumentEditPage() {
     }
     if (externalId) {
       localStorage.setItem('externalId', externalId);
-      localStorage.removeItem('isInternal');
     }
     if (s && typeof isStandAlone === 'boolean') {
       localStorage.setItem('isStandAlone', JSON.stringify(isStandAlone));
