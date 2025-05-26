@@ -104,7 +104,6 @@ const getUpdatedFieldMeta = (field: Field, prefillField?: TFieldMetaPrefillField
     });
   }
 
-  // We've already validated that the field types match at a higher level
   // Start with the existing field meta or an empty object
   const existingMeta = field.fieldMeta || {};
 
