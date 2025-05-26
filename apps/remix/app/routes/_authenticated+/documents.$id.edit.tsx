@@ -19,7 +19,6 @@ import { DocumentStatus } from '~/components/general/document/document-status';
 import { StackAvatarsWithTooltip } from '~/components/general/stack-avatars-with-tooltip';
 import { superLoaderJson, useSuperLoaderData } from '~/utils/super-json-loader';
 
-// Make sure this is imported
 import type { Route } from './+types/documents.$id.edit';
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -33,7 +32,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
   const url = new URL(request.url);
   const isInternal = url.searchParams.get('internal') === 'true';
-  const queryDocId = url.searchParams.get('docId');
 
   const { id } = params;
   const documentId = Number(id);
@@ -100,17 +98,17 @@ export default function DocumentEditPage() {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const isInternal: any = searchParams.get('internal') === 'true';
+  const isInternal = searchParams.get('internal') === 'true';
   const hideBackBtn = searchParams.get('hideBackBtn') === 'true';
   const externalId = searchParams.get('externalId');
   const docId = searchParams.get('docId');
-  const ss: any = new URLSearchParams(location.search).get('ss');
-  const s: any = new URLSearchParams(location.search).get('s');
-  const isStandAlone = /^([^0-9]*1[^0-9]*)$/.test(s);
+  const ss = searchParams.get('ss');
+  const s = searchParams.get('s');
+  const isStandAlone = s ? /^([^0-9]*1[^0-9]*)$/.test(s) : false;
 
   useEffect(() => {
     if (isInternal) {
-      localStorage.setItem('isInternal', isInternal);
+      localStorage.setItem('isInternal', String(isInternal));
     }
     if (externalId) {
       localStorage.setItem('externalId', externalId);
@@ -128,11 +126,7 @@ export default function DocumentEditPage() {
     }
   }, [ss]);
 
-  const externalIdLS = typeof window !== 'undefined' ? localStorage.getItem('externalId') : null;
-
-  const isStandAloneRaw =
-    typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
-
+  const isStandAloneRaw = typeof window !== 'undefined' ? localStorage.getItem('isStandAlone') : null;
   const isStandAloneLS = isStandAloneRaw === 'true';
 
   if (!isStandAloneLS && s) {
