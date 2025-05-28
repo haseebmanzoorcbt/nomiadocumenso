@@ -120,9 +120,9 @@ export const AddSubjectFormPartial = ({
               <TabsTrigger className="w-full" value={DocumentDistributionMethod.EMAIL}>
                 Email
               </TabsTrigger>
-              <TabsTrigger className="w-full" value={DocumentDistributionMethod.NONE}>
+              {/* <TabsTrigger className="w-full" value={DocumentDistributionMethod.NONE}>
                 None
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
           </Tabs>
 

@@ -149,7 +149,7 @@ export const DocumentPageViewDropdown = ({ document }: DocumentPageViewDropdownP
           <Trans>Share</Trans>
         </DropdownMenuLabel>
 
-        {canManageDocument && (
+        {/* {canManageDocument && (
           <DocumentRecipientLinkCopyDialog
             recipients={document.recipients}
             trigger={
@@ -162,7 +162,7 @@ export const DocumentPageViewDropdown = ({ document }: DocumentPageViewDropdownP
               </DropdownMenuItem>
             }
           />
-        )}
+        )} */}
 
         <DocumentResendDialog document={document} recipients={nonSignedRecipients} />
 
