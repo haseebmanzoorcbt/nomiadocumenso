@@ -173,32 +173,110 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
         },
       },
     },
-    include: { subscription: true },
+    include: { 
+      subscription: true,
+      owner: {
+        include: {
+          subscriptions: true
+        }
+      }
+    },
   });
-
+  console.log('team:', team);
   if (!team) throw new Error('Team not found');
 
-  const { subscription } = team;
-
+  // Default to free credits
   let documentQuota = DEFAULT_FREE_CREDITS;
-  if (subscription && subscription.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[subscription.planId]) {
-    documentQuota = PLAN_DOCUMENT_QUOTAS[subscription.planId];
+
+  // First check team subscription
+  if (team.subscription && team.subscription.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[team.subscription.planId]) {
+    console.log('team subscription:');
+    documentQuota = PLAN_DOCUMENT_QUOTAS[team.subscription.planId];
+  } else {
+    // If no team subscription, use owner's credits
+    console.log('no team subscription, using owner\'s credits');
+    const now = new Date();
+    const ownerSubscriptions = team.owner.subscriptions;
+    console.log('owner subscriptions:', ownerSubscriptions);
+
+    // Sort subscriptions by periodEnd date to find the most recent
+    const sortedSubscriptions = [...ownerSubscriptions].sort((a, b) => {
+      if (!a.periodEnd) return 1;
+      if (!b.periodEnd) return -1;
+      return new Date(b.periodEnd).getTime() - new Date(a.periodEnd).getTime();
+    });
+
+    const mostRecentSubscription = sortedSubscriptions[0];
+    const isMostRecentValid = mostRecentSubscription && (
+      PAY_AS_YOU_GO_PLANS.includes(mostRecentSubscription.planId) || 
+      (mostRecentSubscription.periodEnd && new Date(mostRecentSubscription.periodEnd) > now)
+    );
+
+    if (isMostRecentValid) {
+      // If most recent subscription is valid, consider all subscriptions with future periodEnd
+      const validSubscriptions = ownerSubscriptions.filter(
+        (sub) => 
+          PLAN_DOCUMENT_QUOTAS[sub.planId] && 
+          (PAY_AS_YOU_GO_PLANS.includes(sub.planId) || 
+           (sub.periodEnd && new Date(sub.periodEnd) > now))
+      );
+
+      if (validSubscriptions.length > 0) {
+        // Group subscriptions by planId to handle multiple subscriptions of the same plan
+        const planGroups = validSubscriptions.reduce((groups, sub) => {
+          if (!groups[sub.planId]) {
+            groups[sub.planId] = [];
+          }
+          groups[sub.planId].push(sub);
+          return groups;
+        }, {} as Record<string, typeof validSubscriptions>);
+
+        // Calculate total quota from all valid subscriptions
+        documentQuota = Object.entries(planGroups).reduce((total, [planId, subscriptions]) => {
+          const planQuota = PLAN_DOCUMENT_QUOTAS[planId] ?? 0;
+          const groupTotal = planQuota * subscriptions.length;
+          return total + groupTotal;
+        }, 0);
+      }
+    }
   }
 
-  // Count documents for the team this month
+  // Count documents for the team and its owner
   const documentsUsed = await prisma.document.count({
     where: {
-      teamId: team.id,
-      source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
+      OR: [
+        // Team documents
+        {
+          teamId: team.id,
+          source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
+        },
+        // Owner's documents
+        {
+          userId: team.ownerUserId,
+          teamId: null,
+          source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
+        }
+      ],
+      status: 'COMPLETED',
+
     },
   });
 
   const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+  
   const remaining = {
     documents: Math.max(documentQuota - documentsUsed, 0),
     recipients: 10,
     directTemplates: 3,
   };
-
+  if (email === "abuzarmohammad@gmail.com" || email === "nomiacreator@gmail.com" || email === "abuzarmohammad945@gmail.com") {
   return { quota, remaining };
+  }
+  else
+  {
+    return { quota: { documents: 0, recipients: 0, directTemplates: 0 }, remaining: { documents: 0, recipients: 0, directTemplates: 0 } };
+    }
 };
+
+
+
