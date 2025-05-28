@@ -77,7 +77,7 @@ export const TeamInviteEmailTemplate = ({
 
             <Section className="p-2 text-slate-500">
               <Text className="text-center text-lg font-medium text-black">
-                <Trans>Join {teamName} on Documenso</Trans>
+                <Trans>Join {teamName} on Nomia Signatures</Trans>
               </Text>
 
               <Text className="my-1 text-center text-base">

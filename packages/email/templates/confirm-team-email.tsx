@@ -43,7 +43,7 @@ export const ConfirmTeamEmailTemplate = ({
     'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
   branding.brandingAltText = 'Nomia Logo';
 
-  const previewText = msg`Accept team email request for ${teamName} on Documenso`;
+  const previewText = msg`Accept team email request for ${teamName} on Nomia Signatures`;
 
   return (
     <Html>

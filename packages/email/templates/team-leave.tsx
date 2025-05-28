@@ -67,7 +67,7 @@ export const TeamLeaveEmailTemplate = ({
             <Section className="p-2 text-slate-500">
               <Text className="text-center text-lg font-medium text-black">
                 <Trans>
-                  {memberName || memberEmail} left the team {teamName} on Documenso
+                  {memberName || memberEmail} left the team {teamName} on Nomia Signatures
                 </Trans>
               </Text>
 
