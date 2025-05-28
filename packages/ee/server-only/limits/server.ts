@@ -45,6 +45,15 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     include: { subscriptions: true },
   });
 
+
+  const team = await prisma.team.findFirst({
+    where: {
+      members: {
+        some: { user: { email } }
+      }
+    }
+  });
+
   if (!user) {
     throw new Error(ERROR_CODES.USER_FETCH_FAILED);
   }
@@ -136,12 +145,31 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
   // Count all current documents (not just this month)
   const documentsUsed = await prisma.document.count({
     where: {
-      userId: user.id,
-      teamId: null,
-      status: 'COMPLETED',
-      source: {
-        not: DocumentSource.TEMPLATE_DIRECT_LINK,
-      },
+      OR: [
+        // Personal documents
+        {
+          userId: user.id,
+          teamId: null,
+          status: 'COMPLETED',
+          source: {
+            not: DocumentSource.TEMPLATE_DIRECT_LINK,
+          },
+        },
+        // Team documents where user is a member
+        {
+          team: {
+            members: {
+              some: {
+                userId: user.id,
+              },
+            },
+          },
+          status: 'COMPLETED',
+          source: {
+            not: DocumentSource.TEMPLATE_DIRECT_LINK,
+          },
+        },
+      ],
     },
   });
 
@@ -269,7 +297,7 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
     recipients: 10,
     directTemplates: 3,
   };
-  if (email === "abuzarmohammad@gmail.com" || email === "nomiacreator@gmail.com" || email === "abuzarmohammad945@gmail.com") {
+  if (email === "abuzarmohammad@gmail.com" || email === "nomiacreator@gmail.com" || email === "nomiadeveloper@gmail.com") {
   return { quota, remaining };
   }
   else
