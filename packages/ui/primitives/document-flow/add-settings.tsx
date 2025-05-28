@@ -236,7 +236,7 @@ export const AddSettingsFormPartial = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="globalAccessAuth"
               render={({ field }) => (
@@ -251,7 +251,7 @@ export const AddSettingsFormPartial = ({
                   </FormControl>
                 </FormItem>
               )}
-            />
+            /> */}
 
             {currentTeamMemberRole && (
               <FormField
