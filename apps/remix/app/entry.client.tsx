@@ -37,7 +37,6 @@ async function main() {
         <I18nProvider i18n={i18n}>
           <HydratedRouter />
         </I18nProvider>
-
         <PosthogInit />
       </StrictMode>,
     );

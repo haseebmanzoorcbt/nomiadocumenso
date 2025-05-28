@@ -149,7 +149,7 @@ export const DocumentPageViewDropdown = ({ document }: DocumentPageViewDropdownP
           <Trans>Share</Trans>
         </DropdownMenuLabel>
 
-        {canManageDocument && (
+        {/* {canManageDocument && (
           <DocumentRecipientLinkCopyDialog
             recipients={document.recipients}
             trigger={
@@ -162,11 +162,11 @@ export const DocumentPageViewDropdown = ({ document }: DocumentPageViewDropdownP
               </DropdownMenuItem>
             }
           />
-        )}
+        )} */}
 
         <DocumentResendDialog document={document} recipients={nonSignedRecipients} />
 
-        <DocumentShareButton
+        {/* <DocumentShareButton
           documentId={document.id}
           token={isOwner ? undefined : recipient?.token}
           trigger={({ loading, disabled }) => (
@@ -177,7 +177,7 @@ export const DocumentPageViewDropdown = ({ document }: DocumentPageViewDropdownP
               </div>
             </DropdownMenuItem>
           )}
-        />
+        /> */}
       </DropdownMenuContent>
 
       <DocumentDeleteDialog

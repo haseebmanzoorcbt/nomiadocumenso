@@ -41,12 +41,10 @@ export function AvatarWithRecipient({ recipient, documentStatus }: AvatarWithRec
 
   return (
     <div
-      className={cn('my-1 flex items-center gap-2', {
-        'cursor-pointer hover:underline': signingToken,
-      })}
-      role={signingToken ? 'button' : undefined}
-      title={signingToken ? _(msg`Click to copy signing link for sending to recipient`) : undefined}
-      onClick={onRecipientClick}
+      className={cn('my-1 flex cursor-text items-center gap-2')}
+      role={'button'}
+      title={undefined}
+      // onClick={onRecipientClick}
     >
       <StackAvatar
         first={true}
@@ -55,12 +53,7 @@ export function AvatarWithRecipient({ recipient, documentStatus }: AvatarWithRec
         fallbackText={recipientAbbreviation(recipient)}
       />
 
-      <div
-        className="text-muted-foreground text-sm"
-        title={
-          signingToken ? _(msg`Click to copy signing link for sending to recipient`) : undefined
-        }
-      >
+      <div className="text-muted-foreground text-sm" title={undefined}>
         <p>{recipient.email}</p>
         <p className="text-muted-foreground/70 text-xs">
           {_(RECIPIENT_ROLES_DESCRIPTION[recipient.role].roleName)}

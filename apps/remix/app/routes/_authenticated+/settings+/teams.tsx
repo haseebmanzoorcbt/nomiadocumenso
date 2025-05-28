@@ -13,7 +13,6 @@ import { UserSettingsTeamsPageDataTable } from '~/components/tables/user-setting
 
 export default function TeamsSettingsPage() {
   const { _ } = useLingui();
-
   const { data: teamEmail } = trpc.team.getTeamEmailByEmail.useQuery();
 
   return (

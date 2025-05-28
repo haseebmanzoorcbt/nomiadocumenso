@@ -184,7 +184,7 @@ export const DocumentsTableActionDropdown = ({
           <Trans>Share</Trans>
         </DropdownMenuLabel>
 
-        {canManageDocument && (
+        {/* {canManageDocument && (
           <DocumentRecipientLinkCopyDialog
             recipients={row.recipients}
             trigger={
@@ -196,11 +196,11 @@ export const DocumentsTableActionDropdown = ({
               </DropdownMenuItem>
             }
           />
-        )}
+        )} */}
 
         <DocumentResendDialog document={row} recipients={nonSignedRecipients} />
 
-        <DocumentShareButton
+        {/* <DocumentShareButton
           documentId={row.id}
           token={isOwner ? undefined : recipient?.token}
           trigger={({ loading, disabled }) => (
@@ -211,7 +211,7 @@ export const DocumentsTableActionDropdown = ({
               </div>
             </DropdownMenuItem>
           )}
-        />
+        /> */}
       </DropdownMenuContent>
 
       <DocumentDeleteDialog
