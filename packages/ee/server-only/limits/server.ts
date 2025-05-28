@@ -277,16 +277,16 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
         {
           teamId: team.id,
           source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
+          status: 'COMPLETED',
         },
-        // Owner's documents
+        // Owner's documents that are not team documents
         {
           userId: team.ownerUserId,
           teamId: null,
           source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
+          status: 'COMPLETED',
         }
       ],
-      status: 'COMPLETED',
-
     },
   });
 
@@ -297,13 +297,8 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
     recipients: 10,
     directTemplates: 3,
   };
-  // if (email === "abuzarmohammad@gmail.com" || email === "nomiacreator@gmail.com" || email === "nomiadeveloper@gmail.com") {
+
   return { quota, remaining };
-  // }
-  // else
-  // {
-  //   return { quota: { documents: 0, recipients: 0, directTemplates: 0 }, remaining: { documents: 0, recipients: 0, directTemplates: 0 } };
-  //   }
 };
 
 
