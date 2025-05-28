@@ -45,15 +45,6 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     include: { subscriptions: true },
   });
 
-
-  const team = await prisma.team.findFirst({
-    where: {
-      members: {
-        some: { user: { email } }
-      }
-    }
-  });
-
   if (!user) {
     throw new Error(ERROR_CODES.USER_FETCH_FAILED);
   }
@@ -76,9 +67,6 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     (mostRecentSubscription.periodEnd && new Date(mostRecentSubscription.periodEnd) > now)
   );
 
-  // console.log('most recent subscription:', mostRecentSubscription);
-  // console.log('is most recent valid:', isMostRecentValid);
-
   if (isMostRecentValid) {
     // If most recent subscription is valid, consider all subscriptions with future periodEnd
     const validSubscriptions = user.subscriptions.filter(
@@ -87,9 +75,6 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
         (PAY_AS_YOU_GO_PLANS.includes(sub.planId) || 
          (sub.periodEnd && new Date(sub.periodEnd) > now))
     );
-
-    // console.log('valid subscriptions:', validSubscriptions);
-    // console.log('PLAN_DOCUMENT_QUOTAS:', PLAN_DOCUMENT_QUOTAS);
 
     if (validSubscriptions.length > 0) {
       // Group subscriptions by planId to handle multiple subscriptions of the same plan
@@ -101,17 +86,12 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
         return groups;
       }, {} as Record<string, typeof validSubscriptions>);
 
-      // console.log('plan groups:', planGroups);
-
       // Calculate total quota from all valid subscriptions
       documentQuota = Object.entries(planGroups).reduce((total, [planId, subscriptions]) => {
         const planQuota = PLAN_DOCUMENT_QUOTAS[planId] ?? 0;
         const groupTotal = planQuota * subscriptions.length;
-        // console.log(`Plan ${planId} has ${subscriptions.length} subscriptions, total quota:`, groupTotal);
         return total + groupTotal;
       }, 0);
-
-      // console.log('total document quota from all valid subscriptions:', documentQuota);
     }
   } else {
     // If most recent subscription is expired, mark all as cancelled and reset to free credits
@@ -132,15 +112,23 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
           })
         )
       );
-      // console.log('marked all expired subscriptions as inactive and cancelled:', expiredSubscriptions);
     }
 
     // Reset to free credits since most recent subscription is expired
     documentQuota = DEFAULT_FREE_CREDITS;
-
-
-    // console.log('most recent subscription expired, using default free credits:', documentQuota);
   }
+
+  // Get all teams where the user is the owner
+  const ownedTeams = await prisma.team.findMany({
+    where: {
+      ownerUserId: user.id
+    },
+    select: {
+      id: true
+    }
+  });
+
+  const ownedTeamIds = ownedTeams.map(team => team.id);
 
   // Count all current documents (not just this month)
   const documentsUsed = await prisma.document.count({
@@ -155,32 +143,25 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
             not: DocumentSource.TEMPLATE_DIRECT_LINK,
           },
         },
-        // Team documents where user is a member
+        // Documents in teams where user is the owner
         {
-          team: {
-            members: {
-              some: {
-                userId: user.id,
-              },
-            },
+          teamId: {
+            in: ownedTeamIds
           },
           status: 'COMPLETED',
           source: {
             not: DocumentSource.TEMPLATE_DIRECT_LINK,
           },
-        },
+        }
       ],
     },
   });
 
-  // console.log('documents used:', documentsUsed);
-
-  // For simplicity, keep recipients/directTemplates logic as before
-  const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+  const quota = { documents: documentQuota, recipients: Infinity, directTemplates: Infinity };
   const remaining = {
     documents: Math.max(documentQuota - documentsUsed, 0),
-    recipients: 10, // You can adjust this if you want per-plan recipient quotas
-    directTemplates: 3, // You can adjust this if you want per-plan template quotas
+    recipients: Infinity,
+    directTemplates: Infinity,
   };
 
   return { quota, remaining };
@@ -290,12 +271,12 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
     },
   });
 
-  const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+  const quota = { documents: documentQuota, recipients: Infinity, directTemplates: Infinity };
   
   const remaining = {
     documents: Math.max(documentQuota - documentsUsed, 0),
-    recipients: 10,
-    directTemplates: 3,
+    recipients: Infinity,
+    directTemplates: Infinity,
   };
 
   return { quota, remaining };
