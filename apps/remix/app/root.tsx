@@ -182,7 +182,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const { publicEnv, session, lang, ...data } = useLoaderData<typeof loader>() || {};
-
   const [theme] = useTheme();
 
   return (
