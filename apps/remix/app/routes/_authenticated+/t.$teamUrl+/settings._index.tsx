@@ -135,30 +135,31 @@ export default function TeamsSettingsPage({ loaderData }: Route.ComponentProps) 
         )}
 
         {!team.teamEmail && !team.emailVerification && (
-          <Alert
-            className="flex flex-col justify-between p-6 sm:flex-row sm:items-center"
-            variant="neutral"
-          >
-            <div className="mb-4 sm:mb-0">
-              <AlertTitle>
-                <Trans>Team email</Trans>
-              </AlertTitle>
+          <></>
+          // <Alert
+          //   className="flex flex-col justify-between p-6 sm:flex-row sm:items-center"
+          //   variant="neutral"
+          // >
+          //   <div className="mb-4 sm:mb-0">
+          //     <AlertTitle>
+          //       <Trans>Team email</Trans>
+          //     </AlertTitle>
 
-              <AlertDescription className="mr-2">
-                <ul className="text-muted-foreground mt-0.5 list-inside list-disc text-sm">
-                  {/* Feature not available yet. */}
-                  {/* <li>Display this name and email when sending documents</li> */}
-                  {/* <li>View documents associated with this email</li> */}
+          //     <AlertDescription className="mr-2">
+          //       <ul className="text-muted-foreground mt-0.5 list-inside list-disc text-sm">
+          //         {/* Feature not available yet. */}
+          //         {/* <li>Display this name and email when sending documents</li> */}
+          //         {/* <li>View documents associated with this email</li> */}
 
-                  <span>
-                    <Trans>View documents associated with this email</Trans>
-                  </span>
-                </ul>
-              </AlertDescription>
-            </div>
+          //         <span>
+          //           <Trans>View documents associated with this email</Trans>
+          //         </span>
+          //       </ul>
+          //     </AlertDescription>
+          //   </div>
 
-            <TeamEmailAddDialog teamId={team.id} />
-          </Alert>
+          //   <TeamEmailAddDialog teamId={team.id} />
+          // </Alert>
         )}
 
         {team.ownerUserId === user.id && (

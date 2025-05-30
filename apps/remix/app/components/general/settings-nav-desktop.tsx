@@ -70,7 +70,7 @@ export const SettingsDesktopNav = ({ className, ...props }: SettingsDesktopNavPr
         </Button>
       </Link>
 
-      <Link to="/settings/tokens">
+      {/* <Link to="/settings/tokens">
         <Button
           variant="ghost"
           className={cn(
@@ -81,7 +81,7 @@ export const SettingsDesktopNav = ({ className, ...props }: SettingsDesktopNavPr
           <Braces className="mr-2 h-5 w-5" />
           <Trans>API Tokens</Trans>
         </Button>
-      </Link>
+      </Link> */}
 
       <Link to="/settings/webhooks">
         <Button

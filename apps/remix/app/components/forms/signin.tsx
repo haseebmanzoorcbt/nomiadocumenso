@@ -68,7 +68,7 @@ export type TSignInFormSchema = z.infer<typeof ZSignInFormSchema>;
 
 export type SignInFormProps = {
   className?: string;
-  initialEmail?:  any;
+  initialEmail?: any;
   isGoogleSSOEnabled?: boolean;
   isOIDCSSOEnabled?: boolean;
   oidcProviderLabel?: string;
@@ -89,7 +89,7 @@ export const SignInForm = ({
   const navigate = useNavigate();
 
   const [docId, setDocId] = useState<string | null>(null);
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -218,7 +218,6 @@ export const SignInForm = ({
     }
   };
 
-
   const onFormSubmit = async ({ email, password, totpCode, backupCode }: TSignInFormSchema) => {
     try {
       await authClient.emailPassword.signIn({
@@ -226,7 +225,7 @@ export const SignInForm = ({
         password,
         totpCode,
         backupCode,
-        docId
+        docId,
       });
     } catch (err) {
       console.log(err);
@@ -314,7 +313,6 @@ export const SignInForm = ({
     }
   }, [form]);
 
-   
   return (
     <Form {...form}>
       <form
@@ -363,7 +361,7 @@ export const SignInForm = ({
                     to="/forgot-password"
                     className="text-muted-foreground text-sm duration-200 hover:opacity-70"
                   >
-                    {/* <Trans>Forgot your password?</Trans> */}
+                    <Trans>Forgot your password?</Trans>
                   </Link>
                 </p>
               </FormItem>
@@ -374,7 +372,7 @@ export const SignInForm = ({
             type="submit"
             size="lg"
             loading={isSubmitting}
-            className="dark:bg-documenso dark:hover:opacity-90 mt-3"
+            className="dark:bg-documenso mt-3 dark:hover:opacity-90"
           >
             {isSubmitting ? <Trans>Signing in...</Trans> : <Trans>Sign In</Trans>}
           </Button>
