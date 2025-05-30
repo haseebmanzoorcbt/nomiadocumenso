@@ -36,7 +36,7 @@ export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
         </Text>
       ) : (
         <Text className="my-8 text-sm text-slate-400">
-          Nomia Signatures Inc.
+          Nomia Africa (Pty) Ltd.
           <br />
       
         </Text>
