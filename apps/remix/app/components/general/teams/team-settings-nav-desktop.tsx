@@ -76,7 +76,7 @@ export const TeamSettingsNavDesktop = ({ className, ...props }: TeamSettingsNavD
         </Button>
       </Link>
 
-      <Link to={tokensPath}>
+      {/* <Link to={tokensPath}>
         <Button
           variant="ghost"
           className={cn('w-full justify-start', pathname?.startsWith(tokensPath) && 'bg-secondary')}
@@ -84,7 +84,7 @@ export const TeamSettingsNavDesktop = ({ className, ...props }: TeamSettingsNavD
           <Braces className="mr-2 h-5 w-5" />
           <Trans>API Tokens</Trans>
         </Button>
-      </Link>
+      </Link> */}
 
       <Link to={webhooksPath}>
         <Button
