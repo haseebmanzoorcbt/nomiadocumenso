@@ -8,7 +8,7 @@ import {
   type TemplateDocumentDeleteProps,
 } from '../template-components/template-document-super-delete';
 import { TemplateFooter } from '../template-components/template-footer';
-
+import { nomiaBrand } from '../nomiabrand';
 export type DocumentDeleteEmailTemplateProps = Partial<TemplateDocumentDeleteProps>;
 
 export const DocumentSuperDeleteEmailTemplate = ({
@@ -19,8 +19,7 @@ export const DocumentSuperDeleteEmailTemplate = ({
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
+  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
   branding.brandingAltText = 'Nomia Logo';
   const previewText = msg`An admin has deleted your document "${documentName}".`;
 

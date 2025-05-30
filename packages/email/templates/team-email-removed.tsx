@@ -8,7 +8,7 @@ import { Body, Container, Head, Hr, Html, Img, Preview, Section, Text } from '..
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import TemplateImage from '../template-components/template-image';
-
+import { nomiaBrand } from '../nomiabrand';
 export type TeamEmailRemovedTemplateProps = {
   assetBaseUrl: string;
   baseUrl: string;
@@ -27,8 +27,7 @@ export const TeamEmailRemovedTemplate = ({
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
+  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
   branding.brandingAltText = 'Nomia Logo';
   const previewText = msg`Team email removed for ${teamName} on Nomia Signatures`;
 

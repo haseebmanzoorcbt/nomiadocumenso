@@ -6,6 +6,7 @@ import { useBranding } from '../providers/branding';
 import type { TemplateConfirmationEmailProps } from '../template-components/template-confirmation-email';
 import { TemplateConfirmationEmail } from '../template-components/template-confirmation-email';
 import { TemplateFooter } from '../template-components/template-footer';
+import { nomiaBrand } from '../nomiabrand';
 
 export const ConfirmEmailTemplate = ({
   confirmationLink,
@@ -15,7 +16,7 @@ export const ConfirmEmailTemplate = ({
   const branding:any= useBranding();
 
   branding.brandingEnabled = true;
-  branding.brandingLogo ='https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
+  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
   branding.brandingAltText = 'Nomia Logo';
 
   const previewText = msg`Please confirm your email address`;
