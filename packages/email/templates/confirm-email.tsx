@@ -15,8 +15,7 @@ export const ConfirmEmailTemplate = ({
   const branding:any= useBranding();
 
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    '';
+  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
   branding.brandingAltText = 'Nomia Logo';
 
   const previewText = msg`Please confirm your email address`;
