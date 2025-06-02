@@ -47,12 +47,10 @@ export async function action({ request }: { request: Request }){
             // Get new plan credits
             const newPlanCredits = PLAN_DOCUMENT_QUOTAS[plan.plan_code] ?? 0;
 
-            const userCredits = await prisma.userCredits.create({
+            const userCredits = await prisma.userCredits.update({
+              where: { id: user.userCredits[0]?.id },
               data: {
-                userId: user.id,
                 credits: existingCredits + newPlanCredits,
-                expiresAt: PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? null : next_payment_date,
-                isActive: true,
               },
             });
 

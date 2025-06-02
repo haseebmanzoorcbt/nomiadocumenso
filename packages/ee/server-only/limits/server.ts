@@ -45,6 +45,7 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     where: { email },
     include: { subscriptions: true },
   });
+  console.log("user subscription found", user?.subscriptions);
 
   if (!user) {
     throw new Error(ERROR_CODES.USER_FETCH_FAILED);
