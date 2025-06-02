@@ -49,6 +49,7 @@ export const run = async ({
       recipients: true,
       team: {
         select: {
+          ownerUserId: true,
           teamGlobalSettings: {
             select: {
               includeSigningCertificate: true,
@@ -244,6 +245,41 @@ export const run = async ({
           completedAt: new Date(),
         },
       });
+
+      if (!isRejected) {
+        if (document.teamId && document.team?.ownerUserId) {
+          const teamOwnerCredits = await tx.userCredits.findFirst({
+            where: {
+              user: {
+                id: document.team.ownerUserId
+              }
+            }
+          });
+          if (teamOwnerCredits) {
+            await tx.userCredits.update({
+              where: { id: teamOwnerCredits.id },
+              data: { credits: { decrement: 1 } },
+            });
+          }
+        } else {
+          const userCredits = await tx.userCredits.findFirst({
+            where: {
+              user: {
+                id: document.userId
+              }
+            }
+          });
+          if (userCredits) {
+            await tx.userCredits.update({
+              where: { id: userCredits.id },
+              data: { credits: { decrement: 1 } },
+            });
+          }
+        }
+      }
+
+
+      
 
       // Update the document data with the new data
       console.log('Updating document data:');

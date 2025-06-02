@@ -1,16 +1,26 @@
 import { prisma } from '@documenso/prisma';
+import { PLAN_DOCUMENT_QUOTAS } from '@documenso/ee/server-only/limits/constants';
 
 export async function action({ request }: { request: Request }){
   try {
     const event = await request.json();
     console.log('Paystack webhook received event:', JSON.stringify(event));
     if (event.event === 'subscription.create' || event.event === 'invoice.update') {
-      const { customer, plan, subscription_code , next_payment_date } = event.data;
-      console.log('Extracted from event:', { email: customer.email, plan, reference: subscription_code ,next_payment_date});
+      const { customer, plan, subscription_code, next_payment_date } = event.data;
+      console.log('Extracted from event:', { email: customer.email, plan, reference: subscription_code, next_payment_date });
       // Find user by email
-      const user = await prisma.user.findUnique({ where: { email: customer.email } });
+      const user = await prisma.user.findUnique({ 
+        where: { email: customer.email },
+        include: {
+          userCredits: {
+            where: { isActive: true },
+            orderBy: { lastUpdatedAt: 'desc' },
+            take: 1
+          }
+        }
+      });
       console.log('User lookup result:', user);
-      if (event.event === 'subscription.create') {
+    
         if (user && plan?.plan_code) {
           try {
             const PAY_AS_YOU_GO_PLANS = [
@@ -31,29 +41,31 @@ export async function action({ request }: { request: Request }){
                 periodEnd: PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? null : next_payment_date,
               },
             });
-            console.log('Subscription created:', subscription);
+
+            // Get existing credits
+            const existingCredits = user.userCredits[0]?.credits ?? 0;
+            // Get new plan credits
+            const newPlanCredits = PLAN_DOCUMENT_QUOTAS[plan.plan_code] ?? 0;
+
+            const userCredits = await prisma.userCredits.create({
+              data: {
+                userId: user.id,
+                credits: existingCredits + newPlanCredits,
+                expiresAt: PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? null : next_payment_date,
+                isActive: true,
+              },
+            });
+
+            console.log('Subscription and credits created:', { subscription, userCredits });
           } catch (subError) {
             console.error('Error creating subscription:', subError);
           }
         } else {
           console.warn('User not found or plan_code missing:', { user, plan });
         }
-      }
-      else
-      {
-        const user = await prisma.user.findUnique({ where: { email: customer.email } });
-        if (user) {
-          const existingSubscription = await prisma.subscription.findFirst({
-            where: { priceId: subscription_code }
-          });
-          if (existingSubscription) {
-            const subscription = await prisma.subscription.update({
-              where: { id: existingSubscription.id },
-              data: { status: 'ACTIVE', planId: plan.plan_code, periodEnd: next_payment_date },
-            });
-          }
-        }
-      }
+      
+      
+      
     } else if (event.event === 'subscription.disable') {
       const { subscription_code } = event.data;
       console.log('Processing subscription disable:', subscription_code);
