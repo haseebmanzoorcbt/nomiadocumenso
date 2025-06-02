@@ -138,11 +138,11 @@ export const DocumentUploadDropzone = ({ className }: DocumentUploadDropzoneProp
               <Trans>
                 {team?.id && user?.roles?.includes('ADMIN') ? (
                   <>
-                    Team: {remaining.documents} of {quota.documents} envelopes remaining
+                    Team: {remaining.documents} envelopes remaining
                   </>
                 ) : (
                   <>
-                    Personal: {remaining.documents} of {quota.documents} envelopes remaining
+                    Personal: {remaining.documents} envelopes remaining
                   </>
                 )}
               </Trans>
