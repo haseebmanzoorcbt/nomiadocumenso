@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { Link, redirect } from 'react-router';
 
 import { getEntireDocument } from '@documenso/lib/server-only/admin/get-entire-document';
+import { downloadPDF } from '@documenso/lib/client-only/download-pdf';
 import { trpc } from '@documenso/trpc/react';
 import {
   Accordion,
@@ -28,6 +29,7 @@ import { DocumentStatus } from '~/components/general/document/document-status';
 import { AdminDocumentRecipientItemTable } from '~/components/tables/admin-document-recipient-item-table';
 
 import type { Route } from './+types/documents.$id';
+import { prisma } from '@documenso/prisma';
 
 export async function loader({ params }: Route.LoaderArgs) {
   const id = Number(params.id);
@@ -63,6 +65,34 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
         });
       },
     });
+
+  const onDownloadClick = async () => {
+    try {
+      if (!document.documentDataId) {
+        throw new Error('No document data available');
+      }
+
+      //get document data from database
+      const documentData = await prisma.documentData.findUnique({
+        where: {
+          id: document.documentDataId,
+
+        },
+      });
+
+      if (!documentData) {
+        throw new Error('No document data available');
+      }
+
+      await downloadPDF({ documentData: documentData, fileName: document.title });
+    } catch (err) {
+      toast({
+        title: _(msg`Error`),
+        description: _(msg`Failed to download document`),
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div>
@@ -121,6 +151,10 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
+        <Button variant="outline" onClick={onDownloadClick}>
+          <Trans>Download PDF</Trans>
+        </Button>
 
         <Button variant="outline" asChild>
           <Link to={`/admin/users/${document.userId}`}>
