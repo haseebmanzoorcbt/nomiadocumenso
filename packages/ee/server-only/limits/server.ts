@@ -54,11 +54,11 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
   // Get available credits from the new credit system
   const availableCredits = await getAvailableCredits({ userId: user.id });
 
-
+  console.log("available credits", availableCredits);
   // Count all current documents (not just this month)
 
   const quota = { 
-    documents: availableCredits || DEFAULT_FREE_CREDITS, 
+    documents: availableCredits, 
     recipients: Infinity, 
     directTemplates: Infinity 
   };

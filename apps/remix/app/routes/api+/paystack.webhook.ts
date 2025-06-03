@@ -61,6 +61,7 @@ export async function action({ request }: { request: Request }){
               where: { id: user.userCredits[0]?.id },
               data: {
                 credits: existingCredits + newPlanCredits,
+                expiresAt: next_payment_date,
               },
             });
 
