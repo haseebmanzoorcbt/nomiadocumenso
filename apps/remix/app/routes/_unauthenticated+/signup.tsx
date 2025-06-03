@@ -13,15 +13,15 @@ export function meta() {
 }
 
 export function loader() {
-  const NEXT_PUBLIC_DISABLE_SIGNUP = 'false';
+  const NEXT_PUBLIC_DISABLE_SIGNUP = env('NEXT_PUBLIC_DISABLE_SIGNUP');
 
   // SSR env variables.
   const isGoogleSSOEnabled = IS_GOOGLE_SSO_ENABLED;
   const isOIDCSSOEnabled = IS_OIDC_SSO_ENABLED;
 
-  // if (NEXT_PUBLIC_DISABLE_SIGNUP === 'true') {
-  //   throw redirect('/signin');
-  // }
+  if (NEXT_PUBLIC_DISABLE_SIGNUP === 'true') {
+    throw redirect('/signin');
+  }
 
   return {
     isGoogleSSOEnabled,

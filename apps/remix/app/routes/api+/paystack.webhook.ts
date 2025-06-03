@@ -7,6 +7,8 @@ export async function action({ request }: { request: Request }){
     console.log('Paystack webhook received event:', JSON.stringify(event));
     if (event.event === 'subscription.create' || event.event === 'invoice.update') {
       const { customer, plan, subscription_code, next_payment_date } = event.data;
+
+    
       console.log('Extracted from event:', { email: customer.email, plan, reference: subscription_code, next_payment_date });
       // Find user by email
       const user = await prisma.user.findUnique({ 
@@ -29,7 +31,13 @@ export async function action({ request }: { request: Request }){
               'PLN_kxqcw02dow71g6c',
               'PLN_ktbomtrjkiz73i1',
               'PLN_59961ig3ply5r3s',
-              'PLN_bit1oy0ayiqpkdu'
+              'PLN_bit1oy0ayiqpkdu',
+              'PLN_aiohn8rtai2dtq1',
+              'PLN_9n7qj5gj3462buu',
+              'PLN_y1fcc9z6et50sx3',
+              'PLN_arl2oksyipcd4aq',
+              'PLN_jw0og1p6hc4oz9d',
+              'PLN_qcz1c2zdiyk3lw3',
             ];
 
             const subscription = await prisma.subscription.create({
@@ -37,7 +45,7 @@ export async function action({ request }: { request: Request }){
                 userId: user.id,
                 planId: plan.plan_code,
                 priceId: subscription_code,
-                status: 'ACTIVE',
+                status:  PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? 'INACTIVE' : 'ACTIVE',
                 periodEnd: PAY_AS_YOU_GO_PLANS.includes(plan.plan_code) ? null : next_payment_date,
               },
             });
@@ -47,6 +55,8 @@ export async function action({ request }: { request: Request }){
             // Get new plan credits
             const newPlanCredits = PLAN_DOCUMENT_QUOTAS[plan.plan_code] ?? 0;
 
+
+            
             const userCredits = await prisma.userCredits.update({
               where: { id: user.userCredits[0]?.id },
               data: {

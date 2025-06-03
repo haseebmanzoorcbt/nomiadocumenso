@@ -23,10 +23,14 @@ import { useToast } from '@documenso/ui/primitives/use-toast';
 
 export const TeamInvitations = () => {
   const { data, isLoading } = trpc.team.getTeamInvitations.useQuery();
+  
+  // Filter out accepted invitations
+  const pendingInvitations = data?.filter(invitation => invitation.status === 'PENDING') ?? [];
+  const hasPendingInvitations = pendingInvitations.length > 0;
 
   return (
     <AnimatePresence>
-      {data && data.length > 0 && !isLoading && (
+      {hasPendingInvitations && !isLoading && (
         <AnimateGenericFadeInOut>
           <Alert variant="secondary">
             <div className="flex h-full flex-row items-center p-2">
@@ -34,7 +38,7 @@ export const TeamInvitations = () => {
 
               <AlertDescription className="mr-2">
                 <Plural
-                  value={data.length}
+                  value={pendingInvitations.length}
                   one={
                     <span>
                       You have <strong>1</strong> pending team invitation
@@ -63,7 +67,7 @@ export const TeamInvitations = () => {
 
                     <DialogDescription className="mt-4">
                       <Plural
-                        value={data.length}
+                        value={pendingInvitations.length}
                         one={
                           <span>
                             You have <strong>1</strong> pending team invitation
@@ -79,7 +83,7 @@ export const TeamInvitations = () => {
                   </DialogHeader>
 
                   <ul className="-mx-6 -mb-6 max-h-[80vh] divide-y overflow-auto px-6 pb-6 xl:max-h-[70vh]">
-                    {data.map((invitation) => (
+                    {pendingInvitations.map((invitation) => (
                       <li key={invitation.teamId}>
                         <AvatarWithText
                           avatarSrc={formatAvatarUrl(invitation.team.avatarImageId)}
@@ -114,6 +118,7 @@ export const TeamInvitations = () => {
 const AcceptTeamInvitationButton = ({ teamId }: { teamId: number }) => {
   const { _ } = useLingui();
   const { toast } = useToast();
+  const utils = trpc.useUtils();
 
   const {
     mutateAsync: acceptTeamInvitation,
@@ -126,6 +131,7 @@ const AcceptTeamInvitationButton = ({ teamId }: { teamId: number }) => {
         description: _(msg`Accepted team invitation`),
         duration: 5000,
       });
+      utils.team.getTeamInvitations.invalidate();
     },
     onError: () => {
       toast({

@@ -102,6 +102,9 @@ export const createTeam = async ({
 
   try {
     // Create the team directly if no payment is required.
+
+
+   
     if (!isPaymentRequired) {
       await prisma.$transaction(async (tx) => {
         const existingUserProfileWithUrl = await tx.user.findUnique({

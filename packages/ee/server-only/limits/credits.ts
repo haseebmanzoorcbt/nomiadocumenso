@@ -97,6 +97,20 @@ export async function deductCredits({ userId, teamId }: CreditManagementOptions)
  * Get current available credits for a user
  */
 export async function getAvailableCredits({ userId, teamId }: CreditManagementOptions) {
+
+
+  //check if user has a periodEnd date valid
+  const user = await prisma.subscription.findFirst({
+    where: { userId, periodEnd: { gt: new Date() } },
+    
+  });
+
+  if (!user) {
+    return 0;
+  }
+  
+
+
   const activeCredits = await prisma.userCredits.findFirst({
     where: {
       userId,
