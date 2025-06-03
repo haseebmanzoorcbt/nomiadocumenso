@@ -1,6 +1,7 @@
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { findDocuments } from '@documenso/lib/server-only/admin/get-all-documents';
 import { getEntireDocument } from '@documenso/lib/server-only/admin/get-entire-document';
+import { getDocumentData } from '@documenso/lib/server-only/admin/get-document-data';
 import { updateRecipient } from '@documenso/lib/server-only/admin/update-recipient';
 import { updateUser } from '@documenso/lib/server-only/admin/update-user';
 import { sealDocument } from '@documenso/lib/server-only/document/seal-document';
@@ -12,12 +13,13 @@ import { disableUser } from '@documenso/lib/server-only/user/disable-user';
 import { enableUser } from '@documenso/lib/server-only/user/enable-user';
 import { getUserById } from '@documenso/lib/server-only/user/get-user-by-id';
 import { isDocumentCompleted } from '@documenso/lib/utils/document';
-
+import { downloadPDF } from '@documenso/lib/client-only/download-pdf';
 import { adminProcedure, router } from '../trpc';
 import {
   ZAdminDeleteDocumentMutationSchema,
   ZAdminDeleteUserMutationSchema,
   ZAdminDisableUserMutationSchema,
+  ZAdminDownloadDocumentMutationSchema,
   ZAdminEnableUserMutationSchema,
   ZAdminFindDocumentsQuerySchema,
   ZAdminResealDocumentMutationSchema,
@@ -73,6 +75,23 @@ export const adminRouter = router({
 
       return await sealDocument({ documentId: id, isResealing });
     }),
+  downloadDocument: adminProcedure
+    .input(ZAdminDownloadDocumentMutationSchema)
+    .mutation(async ({ input }) => {
+      const { id } = input;
+      const document = await getEntireDocument({ id });
+
+      const documentData = await getDocumentData({ id: document.documentDataId });
+
+      if (!documentData) {
+        throw new AppError(AppErrorCode.NOT_FOUND, {
+          message: 'Document data not found',
+        });
+      }
+
+      return await downloadPDF({ documentData, fileName: document.title });
+    }),
+  
 
   enableUser: adminProcedure.input(ZAdminEnableUserMutationSchema).mutation(async ({ input }) => {
     const { id } = input;
@@ -119,6 +138,6 @@ export const adminRouter = router({
         requestMetadata: ctx.metadata.requestMetadata,
       });
     }),
-  
-  
 });
+
+

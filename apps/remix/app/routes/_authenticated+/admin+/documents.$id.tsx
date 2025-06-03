@@ -29,7 +29,7 @@ import { DocumentStatus } from '~/components/general/document/document-status';
 import { AdminDocumentRecipientItemTable } from '~/components/tables/admin-document-recipient-item-table';
 
 import type { Route } from './+types/documents.$id';
-import { prisma } from '@documenso/prisma';
+// import { prisma } from '@documenso/prisma';
 
 export async function loader({ params }: Route.LoaderArgs) {
   const id = Number(params.id);
@@ -66,33 +66,22 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
       },
     });
 
-  const onDownloadClick = async () => {
-    try {
-      if (!document.documentDataId) {
-        throw new Error('No document data available');
-      }
-
-      //get document data from database
-      const documentData = await prisma.documentData.findUnique({
-        where: {
-          id: document.documentDataId,
-
-        },
-      });
-
-      if (!documentData) {
-        throw new Error('No document data available');
-      }
-
-      await downloadPDF({ documentData: documentData, fileName: document.title });
-    } catch (err) {
-      toast({
-        title: _(msg`Error`),
-        description: _(msg`Failed to download document`),
-        variant: 'destructive',
-      });
-    }
-  };
+  const { mutate: downloadDocument, isPending: isDownloadDocumentLoading } =
+    trpc.admin.downloadDocument.useMutation({
+      onSuccess: () => {
+        toast({
+          title: _(msg`Success`),
+          description: _(msg`Document downloaded`),
+        });
+      },
+      onError: () => {
+        toast({
+          title: _(msg`Error`),
+          description: _(msg`Failed to download document`),
+          variant: 'destructive',
+        });
+      },
+    });
 
   return (
     <div>
@@ -135,7 +124,7 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
                 disabled={document.recipients.some(
                   (recipient) =>
                     recipient.signingStatus !== SigningStatus.SIGNED &&
-                    recipient.signingStatus !== SigningStatus.REJECTED,
+                    recipient.signingStatus !== SigningStatus.REJECTED 
                 )}
                 onClick={() => resealDocument({ id: document.id })}
               >
@@ -152,7 +141,7 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
           </Tooltip>
         </TooltipProvider>
 
-        <Button variant="outline" onClick={onDownloadClick}>
+        <Button variant="outline" onClick={() => downloadDocument({ id: document.id })}>
           <Trans>Download PDF</Trans>
         </Button>
 

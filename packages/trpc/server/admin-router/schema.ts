@@ -64,4 +64,12 @@ export const ZAdminDeleteDocumentMutationSchema = z.object({
   reason: z.string(),
 });
 
-export type TAdminDeleteDocomentMutationSchema = z.infer<typeof ZAdminDeleteDocumentMutationSchema>;
+export type TAdminDeleteDocumentMutationSchema = z.infer<typeof ZAdminDeleteDocumentMutationSchema>;
+
+export const ZAdminDownloadDocumentMutationSchema = z.object({
+  id: z.number().min(1),
+});
+
+export type TAdminDownloadDocumentMutationSchema = z.infer<typeof ZAdminDownloadDocumentMutationSchema>;
+
+
