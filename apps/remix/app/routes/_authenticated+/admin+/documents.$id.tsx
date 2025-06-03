@@ -68,7 +68,18 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
 
   const { mutate: downloadDocument, isPending: isDownloadDocumentLoading } =
     trpc.admin.downloadDocument.useMutation({
-      onSuccess: () => {
+      onSuccess: (data) => {
+        // Create a temporary link element and trigger download
+        const link = window.document.createElement('a') as HTMLAnchorElement;
+        link.href = data.url
+        // 3. Suggest the filename for download
+        link.download = data.filename
+
+        // 4. Append it, "click" it, then remove it once
+        window.document.body.appendChild(link)
+        link.click()
+        window.document.body.removeChild(link)
+
         toast({
           title: _(msg`Success`),
           description: _(msg`Document downloaded`),

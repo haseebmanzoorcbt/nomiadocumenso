@@ -89,7 +89,20 @@ export const adminRouter = router({
         });
       }
 
-      return await downloadPDF({ documentData, fileName: document.title });
+      const response = await fetch('https://e-sign.nomiadocs.com/api/files/presigned-get-url', {
+        method: 'POST',
+        body: JSON.stringify({
+          data: documentData.data,
+        }),
+      });
+
+      const data = await response.json();
+
+      // Return the URL and filename for client-side download
+      return {
+        url: data.url,
+        filename: `${document.title || 'document'}.pdf`
+      };
     }),
   
 
