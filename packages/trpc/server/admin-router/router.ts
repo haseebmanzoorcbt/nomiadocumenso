@@ -88,21 +88,33 @@ export const adminRouter = router({
           message: 'Document data not found',
         });
       }
-
-      const response = await fetch('https://e-sign.nomiadocs.com/api/files/presigned-get-url', {
-        method: 'POST',
-        body: JSON.stringify({
-          data: documentData.data,
-        }),
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      const raw = JSON.stringify({
+        "key": documentData.data
       });
 
-      const data = await response.json();
-
-      // Return the URL and filename for client-side download
-      return {
-        url: data.url,
-        filename: `${document.title || 'document'}.pdf`
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow" as const
       };
+      
+      const response = await fetch("https://e-sign.nomiadocs.com/api/files/presigned-get-url", requestOptions)
+        .then((response) => response.json())
+        .then((result) => ({
+          url: result.url,
+          filename: `${document.title || 'document'}`
+        }))
+        .catch((error) => {
+          console.error(error);
+          throw new AppError(AppErrorCode.NOT_FOUND, {
+            message: 'Failed to get document URL'
+          });
+        });
+
+        return response;
     }),
   
 
