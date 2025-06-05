@@ -136,9 +136,9 @@ export const DocumentUploadDropzone = ({ className }: DocumentUploadDropzoneProp
           Number.isFinite(remaining.documents) && (
             <p className="text-muted-foreground/60 text-xs">
              <Trans>
-                {team?.id  && user?<div className="roles"></div> (
+                {team?.id && user ? (
                   <>
-                    Team: {remaining.documents}  envelopes remaining.
+                    Team: {remaining.documents} envelopes remaining.
                   </>
                 ) : (
                   <>
