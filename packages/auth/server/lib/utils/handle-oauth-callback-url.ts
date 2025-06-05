@@ -165,6 +165,12 @@ export const handleOAuthCallbackUrl = async (options: HandleOAuthCallbackUrlOpti
         name: name,
         emailVerified: new Date(),
         url: nanoid(17),
+        userCredits: {
+          create: {
+            credits: 10,
+            isActive: true,
+          }
+        }
       },
     });
 
