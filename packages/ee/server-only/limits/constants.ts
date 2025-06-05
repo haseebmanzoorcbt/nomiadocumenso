@@ -60,12 +60,12 @@ export const PLAN_DOCUMENT_QUOTAS: Record<string, number> = {
   PLN_m0iv4x08zo10128: 50, //EsignMonthly50
   PLN_4yptquhayqxdx68: 20, //EsignMonthly20
 
-  PLN_aiohn8rtai2dtq1: 1000, //EsignMonthly1000
-  PLN_9n7qj5gj3462buu: 500, //EsignMonthly500
-  PLN_y1fcc9z6et50sx3: 200, //EsignMonthly200
-  PLN_arl2oksyipcd4aq: 100, //EsignMonthly100
-  PLN_jw0og1p6hc4oz9d: 50, //EsignMonthly50
-  PLN_qcz1c2zdiyk3lw3: 20, //EsignMonthly20
+  PLN_aiohn8rtai2dtq1: 1000, //EsignPayAsYouGo1000
+  PLN_9n7qj5gj3462buu: 500, //EsignPayAsYouGo500
+  PLN_y1fcc9z6et50sx3: 200, //EsignPayAsYouGo200
+  PLN_arl2oksyipcd4aq: 100, //EsignPayAsYouGo100
+  PLN_jw0og1p6hc4oz9d: 50, //EsignPayAsYouGo50
+  PLN_qcz1c2zdiyk3lw3: 20, //EsignPayAsYouGo20
 
 };
 
