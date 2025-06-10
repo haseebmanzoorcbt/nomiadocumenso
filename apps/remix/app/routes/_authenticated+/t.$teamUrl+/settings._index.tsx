@@ -46,7 +46,6 @@ export default function TeamsSettingsPage({ loaderData }: Route.ComponentProps) 
   return (
     <div>
       <SettingsHeader title="General settings" subtitle="Here you can edit your team's details." />
-
       <TeamTransferStatus
         className="mb-4"
         currentUserTeamRole={team.currentTeamMember.role}
@@ -55,7 +54,6 @@ export default function TeamsSettingsPage({ loaderData }: Route.ComponentProps) 
       />
 
       <AvatarImageForm className="mb-8" />
-
       <TeamUpdateForm teamId={team.id} teamName={team.name} teamUrl={team.url} />
 
       <section className="mt-6 space-y-6">
