@@ -251,7 +251,9 @@ function PlanCard({
           className="w-full"
           onClick={() => {
             if (selectedPlan.label === 'Pay as you go') {
-              window.location.href = `${selectedPlan.redirect_url}?email=${user?.email}&first_name=${user?.name}&last_name=%20`;
+              window.location.assign(
+                `${selectedPlan.redirect_url}?email=${user?.email}&first_name=${user?.name}&last_name=%20`,
+              );
             } else {
               onClick(user?.email, 100, selectedPlan.planCode);
             }
