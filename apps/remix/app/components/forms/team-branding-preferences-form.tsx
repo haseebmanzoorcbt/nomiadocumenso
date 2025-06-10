@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { getFile } from '@documenso/lib/universal/upload/get-file';
-import { putFile } from '@documenso/lib/universal/upload/put-file';
+import { putBrandingLogo } from '@documenso/lib/universal/upload/put-file';
 import { trpc } from '@documenso/trpc/react';
 import { cn } from '@documenso/ui/lib/utils';
 import { Button } from '@documenso/ui/primitives/button';
@@ -80,7 +80,7 @@ export function TeamBrandingPreferencesForm({ team, settings }: TeamBrandingPref
       let uploadedBrandingLogo = settings?.brandingLogo;
 
       if (brandingLogo) {
-        uploadedBrandingLogo = JSON.stringify(await putFile(brandingLogo));
+        uploadedBrandingLogo = JSON.stringify(await putBrandingLogo(brandingLogo));
       }
 
       if (brandingLogo === null) {

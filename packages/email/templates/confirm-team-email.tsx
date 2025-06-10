@@ -39,9 +39,7 @@ export const ConfirmTeamEmailTemplate = ({
 }: ConfirmTeamEmailProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
 
   const previewText = msg`Accept team email request for ${teamName} on Nomia Signatures`;
 

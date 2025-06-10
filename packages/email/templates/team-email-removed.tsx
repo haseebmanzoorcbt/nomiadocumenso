@@ -27,8 +27,7 @@ export const TeamEmailRemovedTemplate = ({
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`Team email removed for ${teamName} on Nomia Signatures`;
 
   return (

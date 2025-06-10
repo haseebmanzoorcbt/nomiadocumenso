@@ -15,9 +15,7 @@ export const DocumentPendingEmailTemplate = ({
 }: DocumentPendingEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
 
   const previewText = msg`Pending Document`;
 
@@ -42,7 +40,7 @@ export const DocumentPendingEmailTemplate = ({
                 />
               ) : (
                 <Img
-                  src={getAssetUrl('/static/logo.png')}
+                  src='https://e-sign.nomiadocs.com/images/nomiasignatures.png'
                 alt="Nomia Logo"
                   className="mb-4 h-6"
                 />

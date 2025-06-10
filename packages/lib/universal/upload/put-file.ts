@@ -112,4 +112,18 @@ const putFileInS3 = async (file: File) => {
   };
 };
 
+/**
+ * Uploads a branding logo to the database.
+ */
+export const putBrandingLogo = async (file: File) => {
+  const contents = await file.arrayBuffer();
+  const binaryData = new Uint8Array(contents);
+  const asciiData = base64.encode(binaryData);
+
+  return {
+    type: DocumentDataType.BYTES_64,
+    data: asciiData,
+  };
+};
+
 

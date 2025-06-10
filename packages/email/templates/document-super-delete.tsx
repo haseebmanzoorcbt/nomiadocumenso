@@ -18,9 +18,7 @@ export const DocumentSuperDeleteEmailTemplate = ({
 }: DocumentDeleteEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
   const previewText = msg`An admin has deleted your document "${documentName}".`;
 
   const getAssetUrl = (path: string) => {

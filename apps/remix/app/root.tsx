@@ -199,7 +199,6 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="google" content="notranslate" />
-        <script src="https://js.paystack.co/v1/inline.js" />
         <Meta />
         <Links />
         <meta name="google" content="notranslate" />

@@ -7,6 +7,8 @@ import type { TemplateDocumentCompletedProps } from '../template-components/temp
 import { TemplateDocumentCompleted } from '../template-components/template-document-completed';
 import { TemplateFooter } from '../template-components/template-footer';
 import { nomiaBrand } from '../nomiabrand';
+import { TemplateImage } from '../template-components/template-image';
+
 export type DocumentCompletedEmailTemplateProps = Partial<TemplateDocumentCompletedProps> & {
   customBody?: string;
 };
@@ -19,9 +21,7 @@ export const DocumentCompletedEmailTemplate = ({
 }: DocumentCompletedEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
   const previewText = msg`Completed Document`;
   branding.brandingAltText = 'Nomia Logo';
   const getAssetUrl = (path: string) => {
@@ -41,13 +41,13 @@ export const DocumentCompletedEmailTemplate = ({
                 <Img
                   src={branding.brandingLogo}
                   alt={branding.brandingAltText}
-                  className="mb-4 h-6"
+                  className="mb-4 h-6 p-2"
                 />
               ) : (
-                <Img
-                  src={getAssetUrl('/static/logo.png')}
-               alt="Nomia Logo"
-                  className="mb-4 h-6"
+                <TemplateImage
+                  assetBaseUrl={assetBaseUrl}
+                  className="mb-4 h-6 p-2"
+                  staticAsset="logo.png"
                 />
               )}
 

@@ -10,6 +10,8 @@ import { useBranding } from '../providers/branding';
 import TemplateDocumentImage from '../template-components/template-document-image';
 import { TemplateFooter } from '../template-components/template-footer';
 import { nomiaBrand } from '../nomiabrand';
+import TemplateImage from '../template-components/template-image';
+
 export type DocumentCompletedEmailTemplateProps = {
   recipientName?: string;
   recipientRole?: RecipientRole;
@@ -27,9 +29,7 @@ export const DocumentCreatedFromDirectTemplateEmailTemplate = ({
 }: DocumentCompletedEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
   const action = _(RECIPIENT_ROLES_DESCRIPTION[recipientRole].actioned).toLowerCase();
 
   const previewText = msg`Document created from direct template`;
@@ -55,7 +55,7 @@ export const DocumentCreatedFromDirectTemplateEmailTemplate = ({
                 />
               ) : (
                 <Img
-                  src={getAssetUrl('/static/logo.png')}
+                  src='https://e-sign.nomiadocs.com/images/nomiasignatures.png'
   alt="Nomia Logo"
                   className="mb-4 h-6"
                 />

@@ -18,9 +18,7 @@ export const DocumentCancelTemplate = ({
 }: DocumentCancelEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
 
   const previewText = msg`${inviterName} has cancelled the document ${documentName}, you don't need to sign it anymore.`;
 
@@ -45,7 +43,7 @@ export const DocumentCancelTemplate = ({
                 />
               ) : (
                 <Img
-                  src={getAssetUrl('/static/logo.png')}
+                  src='https://e-sign.nomiadocs.com/images/nomiasignatures.png'
                   alt="Nomia Logo"
                   className="mb-4 h-6"
                 />

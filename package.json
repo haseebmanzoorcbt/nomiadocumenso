@@ -69,6 +69,7 @@
     "@google-cloud/storage": "^7.16.0",
     "@lingui/conf": "^5.2.0",
     "@lingui/core": "^5.2.0",
+    "@paystack/inline-js": "^2.22.6",
     "cors": "^2.8.5",
     "inngest-cli": "^0.29.1",
     "luxon": "^3.5.0",

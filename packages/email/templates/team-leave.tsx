@@ -29,8 +29,7 @@ export const TeamLeaveEmailTemplate = ({
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`A team member has left a team on Nomia Signatures`;
 
   return (

@@ -15,9 +15,7 @@ export const DocumentSelfSignedEmailTemplate = ({
 }: DocumentSelfSignedTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+
   const previewText = msg`Completed Document`;
 
   const getAssetUrl = (path: string) => {
@@ -41,7 +39,7 @@ export const DocumentSelfSignedEmailTemplate = ({
                 />
               ) : (
                 <Img
-                  src={getAssetUrl('/static/logo.png')}
+                  src='https://e-sign.nomiadocs.com/images/nomiasignatures.png'
                   alt="Nomia Logo"
                   className="mb-4 h-6"
                 />

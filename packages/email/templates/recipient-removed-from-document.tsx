@@ -17,9 +17,8 @@ export const RecipientRemovedFromDocumentTemplate = ({
 }: DocumentCancelEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = false;
-  branding.brandingLogo = 'https://e-sign.nomiadocs.com/images/nomiasignatures.png';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingEnabled = true;
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`${inviterName} has removed you from the document ${documentName}.`;
 
   const getAssetUrl = (path: string) => {
