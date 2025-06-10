@@ -42,6 +42,45 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return superLoaderJson({ subscriptions, user });
 };
 
+// app/types/paystack.d.ts
+interface PaystackConfig {
+  key: string;
+  email: string;
+  amount: number;
+  currency?: string;
+  ref?: string;
+  callback: (response: PaystackResponse) => void;
+  onClose: () => void;
+  label?: string;
+  metadata?: Record<string, any>;
+  channels?: string[];
+  plan?: string;
+  quantity?: number;
+  subaccount?: string;
+  transaction_charge?: number;
+  bearer?: 'account' | 'subaccount';
+}
+
+interface PaystackResponse {
+  reference: string;
+  message: string;
+  status: string;
+  trans: string;
+  transaction: string;
+  trxref: string;
+  redirecturl: string;
+}
+
+interface PaystackHandler {
+  openIframe: () => void;
+}
+
+interface Window {
+  PaystackPop: {
+    setup: (config: PaystackConfig) => PaystackHandler;
+  };
+}
+
 const payAsYouGoRedirects = {
   '20': 'https://paystack.shop/pay/testqoiw2m',
   '50': 'https://paystack.shop/pay/guc0g9s57q',
@@ -207,6 +246,25 @@ function PlanCard({
 }) {
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
 
+  const [isPaystackLoaded, setIsPaystackLoaded] = useState(false);
+
+  useEffect(() => {
+    // Load Paystack script dynamically
+    const loadPaystackScript = () => {
+      if (typeof window !== 'undefined' && !('PaystackPop' in window)) {
+        const script = document.createElement('script');
+        script.src = 'https://js.paystack.co/v1/inline.js';
+        script.onload = () => setIsPaystackLoaded(true);
+        script.onerror = () => console.error('Failed to load Paystack script');
+        document.head.appendChild(script);
+      } else if (typeof window !== 'undefined' && 'PaystackPop' in window) {
+        setIsPaystackLoaded(true);
+      }
+    };
+
+    loadPaystackScript();
+  }, []);
+
   return (
     <div className="flex w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
       <div className="h-44">
@@ -251,9 +309,20 @@ function PlanCard({
           className="w-full"
           onClick={() => {
             if (selectedPlan.label === 'Pay as you go') {
-              window.location.assign(
-                `${selectedPlan.redirect_url}?email=${user?.email}&first_name=${user?.name}&last_name=%20`,
-              );
+              const handler = (window as any).PaystackPop.setup({
+                key: 'pk_test_2da9421e99c379d3486ac4cecd937be18a252d7e',
+                email: user?.email,
+                amount: selectedPlan.amount * 100,
+                currency: 'ZAR',
+                callback: function (response: any) {
+                  console.log('Payment successful:', response);
+                  // Handle success
+                },
+                onClose: function () {
+                  console.log('Payment popup closed');
+                },
+              });
+              handler.openIframe();
             } else {
               onClick(user?.email, 100, selectedPlan.planCode);
             }
