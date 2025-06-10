@@ -151,7 +151,7 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       });
     }
 
-    const { name, email, password, signature, url , fromNomia } = c.req.valid('json');
+    const { name, email, password, signature, url, fromNomia } = c.req.valid('json');
 
     if (IS_BILLING_ENABLED() && url && url.length < 6) {
       throw new AppError('PREMIUM_PROFILE_URL', {
@@ -159,21 +159,16 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       });
     }
 
-    let  userId = 0;
-
+    let userId = 0;
 
     if (fromNomia) {
-
-      console.log("User Signup from Nomia");
+      console.log('User Signup from Nomia');
       //simply create verifies user there
       const user = await createUser({ name, email, password, signature, url, fromNomia });
       userId = user.id;
-
-    }
-    else
-    {
-      console.log("user Signup from Outside");
-      const user = await createUser({ name, email, password, signature, url});
+    } else {
+      console.log('user Signup from Outside');
+      const user = await createUser({ name, email, password, signature, url });
 
       await jobsClient.triggerJob({
         name: 'send.signup.confirmation.email',
@@ -183,9 +178,6 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       });
     }
 
-
-
-
     //return id of user and 201 response
     return c.json(
       {
@@ -193,7 +185,6 @@ export const emailPasswordRoute = new Hono<HonoAuthContext>()
       },
       201,
     );
-    
   })
   /**
    * Update password endpoint.

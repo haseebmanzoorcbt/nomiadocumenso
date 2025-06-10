@@ -42,6 +42,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return superLoaderJson({ subscriptions, user });
 };
 
+const payAsYouGoRedirects = {
+  '20': 'https://paystack.shop/pay/testqoiw2m',
+  '50': 'https://paystack.shop/pay/guc0g9s57q',
+  '100': 'https://paystack.shop/pay/dfpu1arzjn',
+  '200': 'https://paystack.shop/pay/c4jdb6jsv7',
+  '500': 'https://paystack.shop/pay/bpbblrunck',
+  '1000': 'https://paystack.shop/pay/q2shmym9rjg',
+};
+
 const plansData = {
   'Pay-as-you-go': [
     {
@@ -50,6 +59,7 @@ const plansData = {
       amount: 'ZAR 190',
       planCode: 'PLN_qcz1c2zdiyk3lw3',
       label: 'Pay as you go',
+      redirect_url: payAsYouGoRedirects[20],
     },
     {
       name: '50 envelopes',
@@ -57,6 +67,7 @@ const plansData = {
       amount: 'ZAR 450',
       planCode: 'PLN_jw0og1p6hc4oz9d',
       label: 'Pay as you go',
+      redirect_url: payAsYouGoRedirects[50],
     },
     {
       name: '100 envelopes',
@@ -64,6 +75,7 @@ const plansData = {
       amount: 'ZAR 850',
       planCode: 'PLN_arl2oksyipcd4aq',
       label: 'Pay as you go',
+      redirect_url: payAsYouGoRedirects[100],
     },
     {
       name: '200 envelopes',
@@ -71,6 +83,7 @@ const plansData = {
       amount: 'ZAR 1,600',
       planCode: 'PLN_y1fcc9z6et50sx3',
       label: 'Pay as you go',
+      redirect_url: payAsYouGoRedirects[200],
     },
     {
       name: '500 envelopes',
@@ -78,6 +91,7 @@ const plansData = {
       amount: 'ZAR 3,750',
       planCode: 'PLN_9n7qj5gj3462buu',
       label: 'Pay as you go',
+      redirect_url: payAsYouGoRedirects[500],
     },
     {
       name: '1000 envelopes',
@@ -85,6 +99,7 @@ const plansData = {
       amount: 'ZAR 7,000',
       planCode: 'PLN_aiohn8rtai2dtq1',
       label: 'Pay as you go',
+      redirect_url: payAsYouGoRedirects[1000],
     },
   ],
   Monthly: [
@@ -235,7 +250,11 @@ function PlanCard({
         <Button
           className="w-full"
           onClick={() => {
-            onClick(user?.email, 100, selectedPlan.planCode);
+            if (selectedPlan.label === 'Pay as you go') {
+              window.location.href = `${selectedPlan.redirect_url}?email=${user?.email}&first_name=${user?.name}&last_name=%20`;
+            } else {
+              onClick(user?.email, 100, selectedPlan.planCode);
+            }
           }}
         >
           <Trans>Proceed with this subscription</Trans>
