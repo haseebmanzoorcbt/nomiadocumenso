@@ -120,6 +120,43 @@ export async function action({ request }: { request: Request }){
         });
       }
     }
+    else if (event.event === 'charge.success') {
+      const { customer, metadata } = event.data;
+      const customerEmail = customer.email;
+      
+      // Extract referral code from referrer URL
+      const referrerUrl = metadata?.referrer;
+      const referralCode = referrerUrl ? referrerUrl.split('/pay/')[1]?.split('?')[0] : null;
+
+      console.log('Charge success details:', {
+        customerEmail,
+        referralCode,
+        referrerUrl
+      });
+
+      const user = await prisma.user.findUnique({
+        where: { email: customerEmail },
+        include: {
+          userCredits: {
+            where: { isActive: true },
+            orderBy: { lastUpdatedAt: 'desc' },
+            take: 1
+          }
+        }
+      });
+
+      if (user) {
+        const existingCredits = user.userCredits[0]?.credits ?? 0;
+        const newPlanCredits = PLAN_DOCUMENT_QUOTAS[referralCode] ?? 0;
+
+        await prisma.userCredits.update({
+          where: { id: user.userCredits[0]?.id },
+          data: {
+            credits: existingCredits + newPlanCredits,
+          },
+        });
+      }
+    }
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
     console.error('Paystack webhook error:', error);

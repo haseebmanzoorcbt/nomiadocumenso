@@ -39,7 +39,9 @@ export const PLAN_DOCUMENT_QUOTAS: Record<string, number> = {
   PLN_kxqcw02dow71g6c: 200, // EsignMonthly200
   PLN_ktbomtrjkiz73i1: 100, // EsignMonthly100 
   PLN_59961ig3ply5r3s: 50, // EsignMonthly50 
-  PLN_bit1oy0ayiqpkdu: 20, // EsignMonthly20  
+  PLN_bit1oy0ayiqpkdu: 20, // EsignMonthly20
+
+  
 
 
 
@@ -66,6 +68,34 @@ export const PLAN_DOCUMENT_QUOTAS: Record<string, number> = {
   PLN_arl2oksyipcd4aq: 100, //EsignPayAsYouGo100
   PLN_jw0og1p6hc4oz9d: 50, //EsignPayAsYouGo50
   PLN_qcz1c2zdiyk3lw3: 20, //EsignPayAsYouGo20
+
+
+
+//Live
+  u1d7onwlr : 1000, //EsignPayAsYouGo1000
+  jk53idasm2: 500, //EsignPayAsYouGo500
+  pkxnaia58b: 200, //EsignPayAsYouGo200
+  nom51ao6dn: 100, //EsignPayAsYouGo100
+  x0njhbshus: 50, //EsignPayAsYouGo50
+  t1tt334q2r: 20, //EsignPayAsYouGo20
+
+
+
+
+
+
+
+  //tEST
+  
+
+
+  q2shmym9rjg : 1000, //EsignPayAsYouGo1000
+  bpbblrunck: 500, //EsignPayAsYouGo500
+  c4jdb6jsv7: 200, //EsignPayAsYouGo200
+  dfpu1arzjn: 100, //EsignPayAsYouGo100
+  guc0g9s57q: 50, //EsignPayAsYouGo50
+  testqoiw2m: 20 //EsignPayAsYouGo20
+
 
 };
 
