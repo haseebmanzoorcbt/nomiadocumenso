@@ -42,47 +42,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return superLoaderJson({ subscriptions, user });
 };
 
-// Type declarations for Paystack
-declare global {
-  interface Window {
-    PaystackPop: {
-      setup: (config: PaystackConfig) => PaystackHandler;
-    };
-  }
-}
-
-interface PaystackConfig {
-  key: string;
-  email: string;
-  amount: number;
-  currency?: string;
-  ref?: string;
-  callback: (response: PaystackResponse) => void;
-  onClose: () => void;
-  label?: string;
-  metadata?: Record<string, any>;
-  channels?: string[];
-  plan?: string;
-  quantity?: number;
-  subaccount?: string;
-  transaction_charge?: number;
-  bearer?: 'account' | 'subaccount';
-}
-
-interface PaystackResponse {
-  reference: string;
-  message: string;
-  status: string;
-  trans: string;
-  transaction: string;
-  trxref: string;
-  redirecturl: string;
-}
-
-interface PaystackHandler {
-  openIframe: () => void;
-}
-
 const payAsYouGoRedirects = {
   '20': 'https://paystack.shop/pay/testqoiw2m',
   '50': 'https://paystack.shop/pay/guc0g9s57q',
@@ -249,34 +208,6 @@ function PlanCard({
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
   const [isPaystackLoaded, setIsPaystackLoaded] = useState(false);
 
-  useEffect(() => {
-    // Only load Paystack script on client side
-    if (typeof window !== 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://js.paystack.co/v2/inline.js';
-      script.async = true;
-      script.onload = () => setIsPaystackLoaded(true);
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  const handlePayment = () => {
-    if (typeof window !== 'undefined' && isPaystackLoaded) {
-      const handler = window.PaystackPop.setup({
-        key: 'pk_test_2da9421e99c379d3486ac4cecd937be18a252d7e',
-        email: user?.email,
-        amount: 100,
-        callback: (response) => {
-          console.log('Payment successful:', response);
-        },
-        onClose: () => {
-          console.log('Payment cancelled');
-        }
-      });
-      handler.openIframe();
-    }
-  };
-
   return (
     <div className="flex w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
       <div className="h-44">
@@ -320,11 +251,13 @@ function PlanCard({
         <Button
           className="w-full"
           onClick={() => {
-            if (selectedPlan.label === 'Pay as you go') {
-              handlePayment();
-            } else {
-              onClick(user?.email, 100, selectedPlan.planCode);
-            }
+            onClick(
+              selectedPlan.label === 'Pay as you go',
+              user?.email,
+              selectedPlan.amount,
+              selectedPlan.planCode,
+              selectedPlan.credits,
+            );
           }}
         >
           <Trans>Proceed with this subscription</Trans>
@@ -441,12 +374,19 @@ export default function PricePlansPage() {
   const activePlanDetails = getActiveSubscriptionDetails(planId);
 
   async function handleApiPaystack(
+    isOneTime: boolean,
     email: string,
     amount: number,
     planId: string,
     reference: null | string = '',
     callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
+    metadata?: any,
   ) {
+    if (isOneTime) {
+      handleApiPaystackOneTimeTransaction(email, amount, metadata, callback_url);
+      return;
+    }
+
     const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/initialize`, {
       method: 'POST',
       headers: {
@@ -476,6 +416,45 @@ export default function PricePlansPage() {
       });
     } else {
       window.location.href = data?.authorization_url;
+    }
+  }
+
+  async function handleApiPaystackOneTimeTransaction(
+    email: string,
+    amount: any,
+    metadata: number,
+    callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
+  ) {
+    const sanitizedAmount = amount.replace(/[^\d]/g, '');
+    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/create-transaction`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        amount: parseInt(sanitizedAmount) * 100,
+        metadata,
+        callback_url,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('API ERROR', errorData?.message);
+    }
+
+    const dataa = await response.json();
+    const data = dataa.data;
+
+    if (data?.error) {
+      toast({
+        title: 'Something went wrong',
+        description: data?.error,
+        variant: 'destructive',
+      });
+    } else {
+      window.open(data?.authorization_url, '_blank');
     }
   }
 
