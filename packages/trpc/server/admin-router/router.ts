@@ -1,6 +1,7 @@
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { findDocuments } from '@documenso/lib/server-only/admin/get-all-documents';
 import { getEntireDocument } from '@documenso/lib/server-only/admin/get-entire-document';
+import { getDocumentData } from '@documenso/lib/server-only/admin/get-document-data';
 import { updateRecipient } from '@documenso/lib/server-only/admin/update-recipient';
 import { updateUser } from '@documenso/lib/server-only/admin/update-user';
 import { sealDocument } from '@documenso/lib/server-only/document/seal-document';
@@ -12,12 +13,13 @@ import { disableUser } from '@documenso/lib/server-only/user/disable-user';
 import { enableUser } from '@documenso/lib/server-only/user/enable-user';
 import { getUserById } from '@documenso/lib/server-only/user/get-user-by-id';
 import { isDocumentCompleted } from '@documenso/lib/utils/document';
-
+import { downloadPDF } from '@documenso/lib/client-only/download-pdf';
 import { adminProcedure, router } from '../trpc';
 import {
   ZAdminDeleteDocumentMutationSchema,
   ZAdminDeleteUserMutationSchema,
   ZAdminDisableUserMutationSchema,
+  ZAdminDownloadDocumentMutationSchema,
   ZAdminEnableUserMutationSchema,
   ZAdminFindDocumentsQuerySchema,
   ZAdminResealDocumentMutationSchema,
@@ -73,6 +75,48 @@ export const adminRouter = router({
 
       return await sealDocument({ documentId: id, isResealing });
     }),
+  downloadDocument: adminProcedure
+    .input(ZAdminDownloadDocumentMutationSchema)
+    .mutation(async ({ input }) => {
+      const { id } = input;
+      const document = await getEntireDocument({ id });
+
+      const documentData = await getDocumentData({ id: document.documentDataId });
+
+      if (!documentData) {
+        throw new AppError(AppErrorCode.NOT_FOUND, {
+          message: 'Document data not found',
+        });
+      }
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      const raw = JSON.stringify({
+        "key": documentData.data
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow" as const
+      };
+      
+      const response = await fetch("https://e-sign.nomiadocs.com/api/files/presigned-get-url", requestOptions)
+        .then((response) => response.json())
+        .then((result) => ({
+          url: result.url,
+          filename: `${document.title || 'document'}`
+        }))
+        .catch((error) => {
+          console.error(error);
+          throw new AppError(AppErrorCode.NOT_FOUND, {
+            message: 'Failed to get document URL'
+          });
+        });
+
+        return response;
+    }),
+  
 
   enableUser: adminProcedure.input(ZAdminEnableUserMutationSchema).mutation(async ({ input }) => {
     const { id } = input;
@@ -120,3 +164,5 @@ export const adminRouter = router({
       });
     }),
 });
+
+
