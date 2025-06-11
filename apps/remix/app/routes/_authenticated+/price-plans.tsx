@@ -207,7 +207,7 @@ function PlanCard({
 }) {
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
   const [isPaystackLoaded, setIsPaystackLoaded] = useState(false);
-
+  console.log('Metadata', selectedPlan.credits);
   return (
     <div className="flex w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
       <div className="h-44">
@@ -378,12 +378,13 @@ export default function PricePlansPage() {
     email: string,
     amount: number,
     planId: string,
+    metadata?: any,
     reference: null | string = '',
     callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
-    metadata?: any,
   ) {
     if (isOneTime) {
-      handleApiPaystackOneTimeTransaction(email, amount, metadata, callback_url);
+      // console.log('Metadata', metadata);
+      handleApiPaystackOneTimeTransaction(email, amount, metadata);
       return;
     }
 
@@ -422,8 +423,7 @@ export default function PricePlansPage() {
   async function handleApiPaystackOneTimeTransaction(
     email: string,
     amount: any,
-    metadata: number,
-    callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
+    metadata: any,
   ) {
     const sanitizedAmount = amount.replace(/[^\d]/g, '');
     const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/create-transaction`, {
@@ -435,7 +435,6 @@ export default function PricePlansPage() {
         email,
         amount: parseInt(sanitizedAmount) * 100,
         metadata,
-        callback_url,
       }),
     });
 
