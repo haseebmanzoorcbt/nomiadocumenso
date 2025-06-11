@@ -101,7 +101,7 @@ export const adminRouter = router({
         redirect: "follow" as const
       };
       
-      const response = await fetch("https://e-sign.nomiadocs.com/api/files/presigned-get-url", requestOptions)
+      const response = await fetch("https://sign.nomiadocs.com/api/files/presigned-get-url", requestOptions)
         .then((response) => response.json())
         .then((result) => ({
           url: result.url,
