@@ -398,7 +398,6 @@ export default function PricePlansPage() {
         //With this amount, the user will be able to pay for the plan but original amount will be used as mentioned in the plan details in paystack
         amount: 100,
         plan: planId,
-        reference: reference,
         callback_url: callback_url,
       }),
     });

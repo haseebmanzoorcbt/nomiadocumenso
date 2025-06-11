@@ -54,6 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     if (!result.data) {
+      console.log('Failed to initialize transaction', result);
       return new Response(
         JSON.stringify({ success: false, error: 'Failed to initialize transaction' }),
         { status: 500 }
