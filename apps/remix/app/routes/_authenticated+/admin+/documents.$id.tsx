@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { Link, redirect } from 'react-router';
 
 import { getEntireDocument } from '@documenso/lib/server-only/admin/get-entire-document';
+import { downloadPDF } from '@documenso/lib/client-only/download-pdf';
 import { trpc } from '@documenso/trpc/react';
 import {
   Accordion,
@@ -28,6 +29,7 @@ import { DocumentStatus } from '~/components/general/document/document-status';
 import { AdminDocumentRecipientItemTable } from '~/components/tables/admin-document-recipient-item-table';
 
 import type { Route } from './+types/documents.$id';
+// import { prisma } from '@documenso/prisma';
 
 export async function loader({ params }: Route.LoaderArgs) {
   const id = Number(params.id);
@@ -59,6 +61,28 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
         toast({
           title: _(msg`Error`),
           description: _(msg`Failed to reseal document`),
+          variant: 'destructive',
+        });
+      },
+    });
+
+  const { mutate: downloadDocument, isPending: isDownloadDocumentLoading } =
+    trpc.admin.downloadDocument.useMutation({
+      onSuccess: (data) => {
+        // Open URL in new tab
+        console.log(data);
+        window.open(data.url, '_blank');
+
+
+        toast({
+          title: _(msg`Success`),
+          description: _(msg`Document opened in new tab`),
+        });
+      },
+      onError: () => {
+        toast({
+          title: _(msg`Error`),
+          description: _(msg`Failed to download document`),
           variant: 'destructive',
         });
       },
@@ -105,7 +129,7 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
                 disabled={document.recipients.some(
                   (recipient) =>
                     recipient.signingStatus !== SigningStatus.SIGNED &&
-                    recipient.signingStatus !== SigningStatus.REJECTED,
+                    recipient.signingStatus !== SigningStatus.REJECTED 
                 )}
                 onClick={() => resealDocument({ id: document.id })}
               >
@@ -121,6 +145,10 @@ export default function AdminDocumentDetailsPage({ loaderData }: Route.Component
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
+        <Button variant="outline" onClick={() => downloadDocument({ id: document.id })}>
+          <Trans>Download PDF</Trans>
+        </Button>
 
         <Button variant="outline" asChild>
           <Link to={`/admin/users/${document.userId}`}>
