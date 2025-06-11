@@ -60,7 +60,7 @@ export async function action({ request }: { request: Request }){
             const userCredits = await prisma.userCredits.update({
               where: { id: user.userCredits[0]?.id },
               data: {
-                credits: existingCredits + newPlanCredits,
+                credits: Number(existingCredits) + Number(newPlanCredits),
                 expiresAt: next_payment_date,
               },
             });
@@ -152,7 +152,7 @@ export async function action({ request }: { request: Request }){
         await prisma.userCredits.update({
           where: { id: user.userCredits[0]?.id },
           data: {
-            credits: existingCredits + newPlanCredits,
+            credits: Number(existingCredits) + Number(newPlanCredits),
           },
         });
       }
