@@ -125,13 +125,13 @@ export async function action({ request }: { request: Request }){
       const customerEmail = customer.email;
       
       // Extract referral code from referrer URL
-      const referrerUrl = metadata?.referrer;
-      const referralCode = referrerUrl ? referrerUrl.split('/pay/')[1]?.split('?')[0] : null;
+      const refferCredits = metadata;
+     
 
       console.log('Charge success details:', {
         customerEmail,
-        referralCode,
-        referrerUrl
+        refferCredits
+        
       });
 
       const user = await prisma.user.findUnique({
@@ -147,7 +147,7 @@ export async function action({ request }: { request: Request }){
 
       if (user) {
         const existingCredits = user.userCredits[0]?.credits ?? 0;
-        const newPlanCredits = PLAN_DOCUMENT_QUOTAS[referralCode] ?? 0;
+        const newPlanCredits = refferCredits ?? 0;
 
         await prisma.userCredits.update({
           where: { id: user.userCredits[0]?.id },

@@ -8,7 +8,7 @@ const createTransactionSchema = z.object({
   invoice_limit: z.number().optional(),
   callback_url: z.string().url().optional(),
   metadata: z.number().optional(),
-});``
+});
 
 interface CreateTransactionResponse {
   success: boolean;
