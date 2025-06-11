@@ -29,11 +29,28 @@ import {
   TableRow,
 } from '@documenso/ui/primitives/table';
 import { useToast } from '@documenso/ui/primitives/use-toast';
+
 import { E_SIGN_BASE_URL } from '~/utils/config';
 import { appMetaTags } from '~/utils/meta';
 import { superLoaderJson, useSuperLoaderData } from '~/utils/super-json-loader';
 
-// Add Paystack types
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // Get session user
+  const { user } = await getSession(request);
+  const subscriptions = await getSubscriptionsByUserId({ userId: user.id });
+
+  return superLoaderJson({ subscriptions, user });
+};
+
+// Type declarations for Paystack
+declare global {
+  interface Window {
+    PaystackPop: {
+      setup: (config: PaystackConfig) => PaystackHandler;
+    };
+  }
+}
+
 interface PaystackConfig {
   key: string;
   email: string;
@@ -66,29 +83,13 @@ interface PaystackHandler {
   openIframe: () => void;
 }
 
-declare global {
-  interface Window {
-    PaystackPop: {
-      setup: (config: PaystackConfig) => PaystackHandler;
-    };
-  }
-}
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // Get session user
-  const { user } = await getSession(request);
-  const subscriptions = await getSubscriptionsByUserId({ userId: user.id });
-
-  return superLoaderJson({ subscriptions, user });
-};
-
 const payAsYouGoRedirects = {
-  '20': { amount: 19000, code: 'testqoiw2m' },
-  '50': { amount: 45000, code: 'guc0g9s57q' },
-  '100': { amount: 85000, code: 'dfpu1arzjn' },
-  '200': { amount: 160000, code: 'c4jdb6jsv7' },
-  '500': { amount: 375000, code: 'bpbblrunck' },
-  '1000': { amount: 700000, code: 'q2shmym9rjg' },
+  '20': 'https://paystack.shop/pay/testqoiw2m',
+  '50': 'https://paystack.shop/pay/guc0g9s57q',
+  '100': 'https://paystack.shop/pay/dfpu1arzjn',
+  '200': 'https://paystack.shop/pay/c4jdb6jsv7',
+  '500': 'https://paystack.shop/pay/bpbblrunck',
+  '1000': 'https://paystack.shop/pay/q2shmym9rjg',
 };
 
 const plansData = {
@@ -97,49 +98,49 @@ const plansData = {
       name: '20 envelopes',
       credits: 20,
       amount: 'ZAR 190',
-      planCode: 'PLN_qcz1c2zdiyk3lw3',
+      planCode: 'PLN_bit1oy0ayiqpkdu',
       label: 'Pay as you go',
-      redirect_url: payAsYouGoRedirects[20].code,
+      redirect_url: payAsYouGoRedirects[20],
     },
     {
       name: '50 envelopes',
       credits: 50,
       amount: 'ZAR 450',
-      planCode: 'PLN_jw0og1p6hc4oz9d',
+      planCode: 'PLN_59961ig3ply5r3s',
       label: 'Pay as you go',
-      redirect_url: payAsYouGoRedirects[50].code,
+      redirect_url: payAsYouGoRedirects[50],
     },
     {
       name: '100 envelopes',
       credits: 100,
       amount: 'ZAR 850',
-      planCode: 'PLN_arl2oksyipcd4aq',
+      planCode: 'PLN_ktbomtrjkiz73i1',
       label: 'Pay as you go',
-      redirect_url: payAsYouGoRedirects[100].code,
+      redirect_url: payAsYouGoRedirects[100],
     },
     {
       name: '200 envelopes',
       credits: 200,
       amount: 'ZAR 1,600',
-      planCode: 'PLN_y1fcc9z6et50sx3',
+      planCode: 'PLN_kxqcw02dow71g6c',
       label: 'Pay as you go',
-      redirect_url: payAsYouGoRedirects[200].code,
+      redirect_url: payAsYouGoRedirects[200],
     },
     {
       name: '500 envelopes',
       credits: 500,
       amount: 'ZAR 3,750',
-      planCode: 'PLN_9n7qj5gj3462buu',
+      planCode: 'PLN_5nmok91ploz44u6',
       label: 'Pay as you go',
-      redirect_url: payAsYouGoRedirects[500].code,
+      redirect_url: payAsYouGoRedirects[500],
     },
     {
       name: '1000 envelopes',
       credits: 1000,
       amount: 'ZAR 7,000',
-      planCode: 'PLN_aiohn8rtai2dtq1',
+      planCode: 'PLN_f54sm9jv38v7r5m',
       label: 'Pay as you go',
-      redirect_url: payAsYouGoRedirects[1000].code,
+      redirect_url: payAsYouGoRedirects[1000],
     },
   ],
   Monthly: [
@@ -147,42 +148,42 @@ const plansData = {
       name: '20 envelopes',
       credits: 20,
       amount: 'ZAR 170',
-      planCode: 'PLN_4yptquhayqxdx68',
+      planCode: 'PLN_1croxh14pyq4cj7',
       label: 'Monthly',
     },
     {
       name: '50 envelopes',
       credits: 50,
       amount: 'ZAR 400',
-      planCode: 'PLN_m0iv4x08zo10128',
+      planCode: 'PLN_zel9llutx085dp9',
       label: 'Monthly',
     },
     {
       name: '100 envelopes',
       credits: 100,
       amount: 'ZAR 750',
-      planCode: 'PLN_hhfxiemem179vbl',
+      planCode: 'PLN_yvo5ujkxt1diiak',
       label: 'Monthly',
     },
     {
       name: '200 envelopes',
       credits: 200,
       amount: 'ZAR 1,400',
-      planCode: 'PLN_4lu7sf9rbtotr2n',
+      planCode: 'PLN_0oqk4fljy5uais0',
       label: 'Monthly',
     },
     {
       name: '500 envelopes',
       credits: 500,
       amount: 'ZAR 3,250',
-      planCode: 'PLN_b3xu6wzwym77ifa',
+      planCode: 'PLN_27yc6cxtga9huy7',
       label: 'Monthly',
     },
     {
       name: '1000 envelopes',
       credits: 1000,
       amount: 'ZAR 6,000',
-      planCode: 'PLN_sat4vs3qy4btmjj',
+      planCode: 'PLN_q4qbiwreibc8qr5',
       label: 'Monthly',
     },
   ],
@@ -191,42 +192,42 @@ const plansData = {
       name: '240 envelopes',
       credits: 240,
       amount: 'ZAR 1,800',
-      planCode: 'PLN_9xcixnz5a5kh14x',
+      planCode: 'PLN_coac3n7m4jo59ct',
       label: 'Annually',
     },
     {
       name: '600 envelopes',
       credits: 600,
       amount: 'ZAR 4,200',
-      planCode: 'PLN_aq2fdnx8jpzxnuf',
+      planCode: 'PLN_8kh731h1ojcx37d',
       label: 'Annually',
     },
     {
       name: '1200 envelopes',
       credits: 1200,
       amount: 'ZAR 7,800',
-      planCode: 'PLN_4od24fxbpa947cw',
+      planCode: 'PLN_tzngz1lbhvxnufb',
       label: 'Annually',
     },
     {
       name: '2400 envelopes',
       credits: 2400,
       amount: 'ZAR 14,400',
-      planCode: 'PLN_lybvu4aaf5ry1jf',
+      planCode: 'PLN_kn6j6ur12pedilo',
       label: 'Annually',
     },
     {
       name: '6000 envelopes',
       credits: 6000,
       amount: 'ZAR 33,000',
-      planCode: 'PLN_tdlrkbcuxy1w91v',
+      planCode: 'PLN_moko1x694rvm5l8',
       label: 'Annually',
     },
     {
       name: '12000 envelopes',
       credits: 12000,
       amount: 'ZAR 60,000',
-      planCode: 'PLN_60j0btaxtinfc7j',
+      planCode: 'PLN_scnf05tt3vrui2i',
       label: 'Annually',
     },
   ],
@@ -246,89 +247,35 @@ function PlanCard({
   activePlanId?: any;
 }) {
   const [selectedPlan, setSelectedPlan] = useState(plans[0]);
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handlePayment = async () => {
-    if (selectedPlan.label === 'Pay as you go') {
-      try {
-        setIsLoading(true);
-        const planAmount = payAsYouGoRedirects[selectedPlan.credits as keyof typeof payAsYouGoRedirects];
-        if (!planAmount) {
-          toast({
-            title: 'Error',
-            description: 'Invalid plan amount. Please try again.',
-            variant: 'destructive',
-          });
-          return;
-        }
-
-        // Ensure PaystackPop is available
-        if (!(window as any).PaystackPop) {
-          toast({
-            title: 'Error',
-            description: 'Payment system is still loading. Please try again in a moment.',
-            variant: 'destructive',
-          });
-          return;
-        }
-
-        const handler = (window as any).PaystackPop.setup({
-          key: 'pk_test_2da9421e99c379d3486ac4cecd937be18a252d7e', // Replace with your Paystack public key
-          email: user?.email,
-          amount: planAmount.amount, // Amount in kobo (ZAR cents)
-          currency: 'ZAR',
-          ref: `${planAmount.code}-${Date.now()}`,
-          callback: function (response: any) {
-            // Handle successful payment here
-            toast({
-              title: 'Payment Successful',
-              description: 'Your payment has been processed successfully.',
-              variant: 'default',
-            });
-            window.location.reload();
-          },
-          onClose: function () {
-            toast({
-              title: 'Payment Cancelled',
-              description: 'You closed the payment window. You can try again when ready.',
-              variant: 'default',
-            });
-          },
-        });
-
-        handler.openIframe();
-      } catch (error: any) {
-        console.error('Payment error:', error);
-        toast({
-          title: 'Payment Failed',
-          description: error.message || 'Failed to process payment. Please try again.',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      onClick(user?.email, 100, selectedPlan.planCode);
-    }
-  };
+  const [isPaystackLoaded, setIsPaystackLoaded] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (document.getElementById('paystack-js')) return;
-
-    const script = document.createElement('script');
-    script.id = 'paystack-js';
-    script.src = 'https://js.paystack.co/v1/inline.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
+    // Only load Paystack script on client side
+    if (typeof window !== 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://js.paystack.co/v2/inline.js';
+      script.async = true;
+      script.onload = () => setIsPaystackLoaded(true);
+      document.body.appendChild(script);
+    }
   }, []);
+
+  const handlePayment = () => {
+    if (typeof window !== 'undefined' && isPaystackLoaded) {
+      const handler = window.PaystackPop.setup({
+        key: 'pk_test_2da9421e99c379d3486ac4cecd937be18a252d7e',
+        email: user?.email,
+        amount: 100,
+        callback: (response) => {
+          console.log('Payment successful:', response);
+        },
+        onClose: () => {
+          console.log('Payment cancelled');
+        }
+      });
+      handler.openIframe();
+    }
+  };
 
   return (
     <div className="flex w-full flex-col justify-between rounded-xl border p-4 hover:bg-purple-50 md:w-1/3">
@@ -371,20 +318,16 @@ function PlanCard({
       </div>
       <div className="text-primary bottom-0 w-full text-sm underline duration-200 hover:opacity-70">
         <Button
-          key={`payment-button-${selectedPlan.credits}`}
           className="w-full"
-          onClick={handlePayment}
-          disabled={isLoading}
-          id={`payment-button-${selectedPlan.credits}`}
+          onClick={() => {
+            if (selectedPlan.label === 'Pay as you go') {
+              handlePayment();
+            } else {
+              onClick(user?.email, 100, selectedPlan.planCode);
+            }
+          }}
         >
-          {isLoading ? (
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              <span>Processing...</span>
-            </div>
-          ) : (
-            <Trans>Proceed with this subscription</Trans>
-          )}
+          <Trans>Proceed with this subscription</Trans>
         </Button>
       </div>
     </div>

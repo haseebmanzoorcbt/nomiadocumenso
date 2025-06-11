@@ -3,7 +3,8 @@ import { Paystack } from 'paystack-sdk';
 import { env } from '../../utils/env';
 import { any } from 'zod';
 
-const paystack = new Paystack(env('NEXT_PAYSTACK_LIVE_KEY') ?? env('NEXT_PAYSTACK_TEST_KEY') ?? '');
+// const paystack = new Paystack(env('NEXT_PAYSTACK_LIVE_KEY') ?? env('NEXT_PAYSTACK_TEST_KEY') ?? '');
+const paystack = new Paystack(env('NEXT_PAYSTACK_TEST_KEY') ?? '');
 
 export { paystack };
 
@@ -42,3 +43,21 @@ export async function disableSubscription(subscriptionCode: string) {
 export async function manageSubscription(subscriptionCode: string) {
   return paystack.subscription.generateSubscriptionLink(subscriptionCode);
 }
+
+export async function createTransaction(options: {
+  email: string;
+  amount: number;
+  plan?: string;
+  callback_url?: string;
+  metadata?: Record<string, unknown>;
+}) {
+  return paystack.transaction.initialize({
+    ...options,
+    amount: options.amount.toString()
+  });
+}
+
+
+
+
+
