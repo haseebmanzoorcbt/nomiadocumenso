@@ -125,7 +125,7 @@ export async function action({ request }: { request: Request }){
       const customerEmail = customer.email;
       
       // Extract referral code from referrer URL
-      const refferCredits = metadata;
+      const refferCredits = metadata.value as number;
      
 
       console.log('Charge success details:', {
