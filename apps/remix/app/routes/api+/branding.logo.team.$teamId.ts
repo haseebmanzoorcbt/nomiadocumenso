@@ -1,6 +1,5 @@
 import sharp from 'sharp';
 
-import { getFile } from '@documenso/lib/universal/upload/get-file';
 import { prisma } from '@documenso/prisma';
 
 import type { Route } from './+types/branding.logo.team.$teamId';
@@ -44,30 +43,37 @@ export async function loader({ params }: Route.LoaderArgs) {
     );
   }
 
-  const file = await getFile(JSON.parse(settings.brandingLogo)).catch(() => null);
+  try {
+    const logoData = JSON.parse(settings.brandingLogo);
+    
+    if (logoData.type !== 'BYTES_64' || !logoData.data) {
+      throw new Error('Invalid logo data format');
+    }
 
-  if (!file) {
+    const binaryData = Buffer.from(logoData.data, 'base64');
+    
+    const img = await sharp(binaryData)
+      .toFormat('png', {
+        quality: 80,
+      })
+      .toBuffer();
+
+    return new Response(img, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Content-Length': img.length.toString(),
+        // Stale while revalidate for 1 hours to 24 hours
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      },
+    });
+  } catch (error) {
+    console.error('Error processing branding logo:', error);
     return Response.json(
       {
         status: 'error',
-        message: 'Not found',
+        message: 'Error processing logo',
       },
-      { status: 404 },
+      { status: 500 },
     );
   }
-
-  const img = await sharp(file)
-    .toFormat('png', {
-      quality: 80,
-    })
-    .toBuffer();
-
-  return new Response(img, {
-    headers: {
-      'Content-Type': 'image/png',
-      'Content-Length': img.length.toString(),
-      // Stale while revalidate for 1 hours to 24 hours
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-    },
-  });
 }

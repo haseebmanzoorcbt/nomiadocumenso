@@ -75,6 +75,7 @@ model User {
   siteSettings       SiteSettings[]
   passkeys           Passkey[]
   avatarImage        AvatarImage?           @relation(fields: [avatarImageId], references: [id], onDelete: SetNull)
+  userCredits        UserCredits[]
 
   @@index([email])
 }
@@ -796,4 +797,17 @@ model AvatarImage {
 
   team Team[]
   user User[]
+}
+
+model UserCredits {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  credits       Int       @default(0)
+  lastUpdatedAt DateTime  @default(now()) @updatedAt
+  expiresAt     DateTime?
+  isActive      Boolean   @default(true)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isActive])
 }

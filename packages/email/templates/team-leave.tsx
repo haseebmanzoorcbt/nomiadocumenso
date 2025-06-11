@@ -8,7 +8,7 @@ import { Body, Container, Head, Hr, Html, Img, Preview, Section, Text } from '..
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import TemplateImage from '../template-components/template-image';
-
+import { nomiaBrand } from '../nomiabrand';
 export type TeamLeaveEmailProps = {
   assetBaseUrl: string;
   baseUrl: string;
@@ -20,18 +20,16 @@ export type TeamLeaveEmailProps = {
 
 export const TeamLeaveEmailTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
-  baseUrl = 'https://documenso.com',
-  memberName = 'John Doe',
-  memberEmail = 'johndoe@documenso.com',
+  baseUrl = 'https://e-sign.nomiadocs.com',
+  memberName = 'Abuzar',
+  memberEmail = 'abuzarmohammad945@gmail.com',
   teamName = 'Team Name',
   teamUrl = 'demo',
 }: TeamLeaveEmailProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`A team member has left a team on Nomia Signatures`;
 
   return (
@@ -67,7 +65,7 @@ export const TeamLeaveEmailTemplate = ({
             <Section className="p-2 text-slate-500">
               <Text className="text-center text-lg font-medium text-black">
                 <Trans>
-                  {memberName || memberEmail} left the team {teamName} on Documenso
+                  {memberName || memberEmail} left the team {teamName} on Nomia Signatures
                 </Trans>
               </Text>
 

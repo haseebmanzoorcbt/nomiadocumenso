@@ -7,20 +7,18 @@ import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import type { TemplateResetPasswordProps } from '../template-components/template-reset-password';
 import { TemplateResetPassword } from '../template-components/template-reset-password';
-
+import { nomiaBrand } from '../nomiabrand';
 export type ResetPasswordTemplateProps = Partial<TemplateResetPasswordProps>;
 
 export const ResetPasswordTemplate = ({
-  userName = 'Lucas Smith',
-  userEmail = 'lucas@documenso.com',
+  userName = 'Mohammad Abuzar',
+  userEmail = 'abuzarmohammad945@gmail.com',
   assetBaseUrl = 'http://localhost:3002',
 }: ResetPasswordTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`Password Reset Successful`;
 
   const getAssetUrl = (path: string) => {
@@ -79,7 +77,7 @@ export const ResetPasswordTemplate = ({
                 <Trans>
                   Didn't request a password change? We are here to help you secure your account,
                   just{' '}
-                  <Link className="text-documenso-700 font-normal" href="mailto:hi@documenso.com">
+                  <Link className="text-documenso-700 font-normal" href="mailto:help@nomiadocs.com">
                     contact us.
                   </Link>
                 </Trans>

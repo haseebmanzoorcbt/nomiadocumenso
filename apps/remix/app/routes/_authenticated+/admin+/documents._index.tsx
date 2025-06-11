@@ -51,6 +51,9 @@ export default function AdminDocumentsPage() {
     totalPages: 1,
   };
 
+  console.log("data", results.data);
+
+
   const columns = useMemo(() => {
     return [
       {

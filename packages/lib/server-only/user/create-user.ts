@@ -58,6 +58,12 @@ export const createUser = async ({ name, email, password, signature, url , fromN
         password: hashedPassword, // Todo: (RR7) Drop password.
         signature,
         url,
+        userCredits: {
+          create: {
+            credits: 10,
+            isActive: true,
+          }
+        }
       },
     });
 

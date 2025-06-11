@@ -19,7 +19,7 @@ import {
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import TemplateImage from '../template-components/template-image';
-
+import { nomiaBrand } from '../nomiabrand';
 export type TeamInviteEmailProps = {
   assetBaseUrl: string;
   baseUrl: string;
@@ -40,9 +40,7 @@ export const TeamInviteEmailTemplate = ({
   const { _ } = useLingui();
   const branding:any= useBranding();
   branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`Accept invitation to join a team on Nomia Signatures`;
 
   return (
@@ -77,7 +75,7 @@ export const TeamInviteEmailTemplate = ({
 
             <Section className="p-2 text-slate-500">
               <Text className="text-center text-lg font-medium text-black">
-                <Trans>Join {teamName} on Documenso</Trans>
+                <Trans>Join {teamName} on Nomia Signatures</Trans>
               </Text>
 
               <Text className="my-1 text-center text-base">

@@ -45,8 +45,9 @@ export const DocumentDropzone = ({
   const { _ } = useLingui();
 
   const { getRootProps, getInputProps } = useDropzone({
+    maxSize: 1024 * 1024,
     accept: {
-      'application/pdf': ['.pdf'],
+      '*/*': ['.*'],
     },
     multiple: false,
     disabled,
@@ -60,7 +61,6 @@ export const DocumentDropzone = ({
         void onDropRejected();
       }
     },
-    maxSize: megabytesToBytes(APP_DOCUMENT_UPLOAD_SIZE_LIMIT),
   });
 
   const heading = {

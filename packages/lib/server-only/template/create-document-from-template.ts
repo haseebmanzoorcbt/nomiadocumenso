@@ -104,9 +104,8 @@ const getUpdatedFieldMeta = (field: Field, prefillField?: TFieldMetaPrefillField
     });
   }
 
-  // We've already validated that the field types match at a higher level
   // Start with the existing field meta or an empty object
-  const existingMeta = field.fieldMeta || {};
+  const existingMeta: any = (field.fieldMeta as Record<string, unknown>) || {};
 
   // Apply type-specific updates based on the prefill field type using ts-pattern
   return match(prefillField)

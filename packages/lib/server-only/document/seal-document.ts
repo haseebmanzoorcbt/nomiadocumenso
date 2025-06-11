@@ -25,6 +25,7 @@ import { insertFieldInPDF } from '../pdf/insert-field-in-pdf';
 import { normalizeSignatureAppearances } from '../pdf/normalize-signature-appearances';
 import { triggerWebhook } from '../webhooks/trigger/trigger-webhook';
 import { sendCompletedEmail } from './send-completed-email';
+// import { handleDocumentCompletion } from '@documenso/ee/server-only/limits/hooks';
 
 export type SealDocumentOptions = {
   documentId: number;
@@ -230,6 +231,11 @@ export const sealDocument = async ({
       }),
     });
   });
+
+  // Deduct credits when document is completed (not rejected)
+  // if (!isRejected) {
+  //   await handleDocumentCompletion(document.id);
+  // }
 
   if (sendEmail && !isResealing) {
     await sendCompletedEmail({ documentId, requestMetadata });

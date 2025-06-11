@@ -7,7 +7,7 @@ import { useBranding } from '../providers/branding';
 import type { TemplateDocumentCancelProps } from '../template-components/template-document-cancel';
 import TemplateDocumentImage from '../template-components/template-document-image';
 import { TemplateFooter } from '../template-components/template-footer';
-
+import { nomiaBrand } from '../nomiabrand';
 export type DocumentCancelEmailTemplateProps = Partial<TemplateDocumentCancelProps>;
 
 export const RecipientRemovedFromDocumentTemplate = ({
@@ -17,10 +17,8 @@ export const RecipientRemovedFromDocumentTemplate = ({
 }: DocumentCancelEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = false;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
-  branding.brandingAltText = 'Nomia Logo';
+  branding.brandingEnabled = true;
+  branding.brandingAltText = 'Team Logo';
   const previewText = msg`${inviterName} has removed you from the document ${documentName}.`;
 
   const getAssetUrl = (path: string) => {

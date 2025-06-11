@@ -5,7 +5,7 @@ import { Body, Container, Head, Html, Img, Preview, Section } from '../component
 import { useBranding } from '../providers/branding';
 import { TemplateDocumentRecipientSigned } from '../template-components/template-document-recipient-signed';
 import { TemplateFooter } from '../template-components/template-footer';
-
+import { nomiaBrand } from '../nomiabrand';
 export interface DocumentRecipientSignedEmailTemplateProps {
   documentName?: string;
   recipientName?: string;
@@ -15,16 +15,13 @@ export interface DocumentRecipientSignedEmailTemplateProps {
 
 export const DocumentRecipientSignedEmailTemplate = ({
   documentName = 'Open Source Pledge.pdf',
-  recipientName = 'John Doe',
-  recipientEmail = 'lucas@documenso.com',
+  recipientName = 'Mohammad Abuzar',
+  recipientEmail = 'abuzarmohammad945@gmail.com',
   assetBaseUrl = 'http://localhost:3002',
 }: DocumentRecipientSignedEmailTemplateProps) => {
   const { _ } = useLingui();
   const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
-  branding.brandingAltText = 'Nomia Logo';
+
 
   const recipientReference = recipientName || recipientEmail;
 
@@ -51,7 +48,7 @@ export const DocumentRecipientSignedEmailTemplate = ({
                 />
               ) : (
                 <Img
-                  src={getAssetUrl('/static/logo.png')}
+                  src='https://e-sign.nomiadocs.com/images/nomiasignatures.png'
        alt="Nomia Logo"
                   className="mb-4 h-6"
                 />

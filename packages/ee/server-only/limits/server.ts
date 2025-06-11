@@ -9,6 +9,7 @@ import { PLAN_DOCUMENT_QUOTAS, DEFAULT_FREE_CREDITS, FREE_PLAN_LIMITS, SELFHOSTE
 import { ERROR_CODES } from './errors';
 import type { TLimitsResponseSchema } from './schema';
 import { ZLimitsSchema } from './schema';
+import { getAvailableCredits, addUserCredits } from './credits';
 
 const PAY_AS_YOU_GO_PLANS = [
   'PLN_f54sm9jv38v7r5m',
@@ -44,115 +45,28 @@ const handleUserLimits = async ({ email }: HandleUserLimitsOptions) => {
     where: { email },
     include: { subscriptions: true },
   });
+  console.log("user subscription found", user?.subscriptions);
 
   if (!user) {
     throw new Error(ERROR_CODES.USER_FETCH_FAILED);
   }
 
-  // Default to free credits
-  let documentQuota = DEFAULT_FREE_CREDITS;
+  // Get available credits from the new credit system
+  const availableCredits = await getAvailableCredits({ userId: user.id });
 
-  const now = new Date();
-
-  // Sort subscriptions by periodEnd date to find the most recent
-  const sortedSubscriptions = [...user.subscriptions].sort((a, b) => {
-    if (!a.periodEnd) return 1;
-    if (!b.periodEnd) return -1;
-    return new Date(b.periodEnd).getTime() - new Date(a.periodEnd).getTime();
-  });
-
-  const mostRecentSubscription = sortedSubscriptions[0];
-  const isMostRecentValid = mostRecentSubscription && (
-    PAY_AS_YOU_GO_PLANS.includes(mostRecentSubscription.planId) || 
-    (mostRecentSubscription.periodEnd && new Date(mostRecentSubscription.periodEnd) > now)
-  );
-
-  // console.log('most recent subscription:', mostRecentSubscription);
-  // console.log('is most recent valid:', isMostRecentValid);
-
-  if (isMostRecentValid) {
-    // If most recent subscription is valid, consider all subscriptions with future periodEnd
-    const validSubscriptions = user.subscriptions.filter(
-      (sub) => 
-        PLAN_DOCUMENT_QUOTAS[sub.planId] && 
-        (PAY_AS_YOU_GO_PLANS.includes(sub.planId) || 
-         (sub.periodEnd && new Date(sub.periodEnd) > now))
-    );
-
-    // console.log('valid subscriptions:', validSubscriptions);
-    // console.log('PLAN_DOCUMENT_QUOTAS:', PLAN_DOCUMENT_QUOTAS);
-
-    if (validSubscriptions.length > 0) {
-      // Group subscriptions by planId to handle multiple subscriptions of the same plan
-      const planGroups = validSubscriptions.reduce((groups, sub) => {
-        if (!groups[sub.planId]) {
-          groups[sub.planId] = [];
-        }
-        groups[sub.planId].push(sub);
-        return groups;
-      }, {} as Record<string, typeof validSubscriptions>);
-
-      // console.log('plan groups:', planGroups);
-
-      // Calculate total quota from all valid subscriptions
-      documentQuota = Object.entries(planGroups).reduce((total, [planId, subscriptions]) => {
-        const planQuota = PLAN_DOCUMENT_QUOTAS[planId] ?? 0;
-        const groupTotal = planQuota * subscriptions.length;
-        // console.log(`Plan ${planId} has ${subscriptions.length} subscriptions, total quota:`, groupTotal);
-        return total + groupTotal;
-      }, 0);
-
-      // console.log('total document quota from all valid subscriptions:', documentQuota);
-    }
-  } else {
-    // If most recent subscription is expired, mark all as cancelled and reset to free credits
-    const expiredSubscriptions = user.subscriptions.filter(
-      (sub) => sub.periodEnd && new Date(sub.periodEnd) <= now
-    );
-
-    if (expiredSubscriptions.length > 0) {
-      // Update all expired subscriptions in the database
-      await Promise.all(
-        expiredSubscriptions.map((sub) =>
-          prisma.subscription.update({
-            where: { id: sub.id },
-            data: { 
-              status: SubscriptionStatus.INACTIVE,
-              cancelAtPeriodEnd: true 
-            },
-          })
-        )
-      );
-      // console.log('marked all expired subscriptions as inactive and cancelled:', expiredSubscriptions);
-    }
-
-    // Reset to free credits since most recent subscription is expired
-    documentQuota = DEFAULT_FREE_CREDITS;
-
-
-    // console.log('most recent subscription expired, using default free credits:', documentQuota);
-  }
-
+  console.log("available credits", availableCredits);
   // Count all current documents (not just this month)
-  const documentsUsed = await prisma.document.count({
-    where: {
-      userId: user.id,
-      teamId: null,
-      status: 'COMPLETED',
-      source: {
-        not: DocumentSource.TEMPLATE_DIRECT_LINK,
-      },
-    },
-  });
 
-  // console.log('documents used:', documentsUsed);
-
-  // For simplicity, keep recipients/directTemplates logic as before
-  const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+  const quota = { 
+    documents: availableCredits, 
+    recipients: Infinity, 
+    directTemplates: Infinity 
+  };
+  
   const remaining = {
-    documents: Math.max(documentQuota - documentsUsed, 0),
-    recipients: 10, // You can adjust this if you want per-plan recipient quotas
-    directTemplates: 3, // You can adjust this if you want per-plan template quotas
+    documents: availableCredits,
+    recipients: Infinity,
+    directTemplates: Infinity,
   };
 
   return { quota, remaining };
@@ -173,32 +87,39 @@ const handleTeamLimits = async ({ email, teamId }: HandleTeamLimitsOptions) => {
         },
       },
     },
-    include: { subscription: true },
+    include: { 
+      subscription: true,
+      owner: {
+        include: {
+          subscriptions: true
+        }
+      }
+    },
   });
 
   if (!team) throw new Error('Team not found');
 
-  const { subscription } = team;
+  // Get available credits for the team owner
+  const availableCredits = await getAvailableCredits({ userId: team.ownerUserId });
 
-  let documentQuota = DEFAULT_FREE_CREDITS;
-  if (subscription && subscription.status === SubscriptionStatus.ACTIVE && PLAN_DOCUMENT_QUOTAS[subscription.planId]) {
-    documentQuota = PLAN_DOCUMENT_QUOTAS[subscription.planId];
-  }
 
-  // Count documents for the team this month
-  const documentsUsed = await prisma.document.count({
-    where: {
-      teamId: team.id,
-      source: { not: DocumentSource.TEMPLATE_DIRECT_LINK },
-    },
-  });
 
-  const quota = { documents: documentQuota, recipients: 10, directTemplates: 3 };
+
+
+  const quota = { 
+    documents: availableCredits || DEFAULT_FREE_CREDITS, 
+    recipients: Infinity, 
+    directTemplates: Infinity 
+  };
+  
   const remaining = {
-    documents: Math.max(documentQuota - documentsUsed, 0),
-    recipients: 10,
-    directTemplates: 3,
+    documents: availableCredits,
+    recipients: Infinity,
+    directTemplates: Infinity,
   };
 
   return { quota, remaining };
 };
+
+
+

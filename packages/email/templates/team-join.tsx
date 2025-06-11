@@ -8,7 +8,7 @@ import { Body, Container, Head, Hr, Html, Img, Preview, Section, Text } from '..
 import { useBranding } from '../providers/branding';
 import { TemplateFooter } from '../template-components/template-footer';
 import TemplateImage from '../template-components/template-image';
-
+import { nomiaBrand } from '../nomiabrand';
 export type TeamJoinEmailProps = {
   assetBaseUrl: string;
   baseUrl: string;
@@ -21,18 +21,15 @@ export type TeamJoinEmailProps = {
 export const TeamJoinEmailTemplate = ({
   assetBaseUrl = 'http://localhost:3002',
   baseUrl = 'https://documenso.com',
-  memberName = 'John Doe',
-  memberEmail = 'johndoe@documenso.com',
+  memberName = 'Mohammad Abuzar',
+  memberEmail = 'abuzarmohammad945@gmail.com',
   teamName = 'Team Name',
   teamUrl = 'demo',
 }: TeamJoinEmailProps) => {
   const { _ } = useLingui();
-  const branding:any= useBranding();
-  branding.brandingEnabled = true;
-  branding.brandingLogo =
-    'https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py';
-  branding.brandingAltText = 'Nomia Logo';
-  const previewText = msg`A team member has joined a team on Documenso`;
+  const branding: any = useBranding();
+
+  const previewText = msg`A team member has joined a team on Nomia Signatures`;
 
   return (
     <Html>
@@ -67,7 +64,7 @@ export const TeamJoinEmailTemplate = ({
             <Section className="p-2 text-slate-500">
               <Text className="text-center text-lg font-medium text-black">
                 <Trans>
-                  {memberName || memberEmail} joined the team {teamName} on Documenso
+                  {memberName || memberEmail} joined the team {teamName} on Nomia Signatures
                 </Trans>
               </Text>
 
