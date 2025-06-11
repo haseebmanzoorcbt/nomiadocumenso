@@ -251,11 +251,13 @@ function PlanCard({
         <Button
           className="w-full"
           onClick={() => {
-            if (selectedPlan.label === 'Pay as you go') {
-              console.log('We can apply our logic here now as well');
-            } else {
-              onClick(user?.email, 100, selectedPlan.planCode);
-            }
+            onClick(
+              selectedPlan.label === 'Pay as you go',
+              user?.email,
+              selectedPlan.amount,
+              selectedPlan.planCode,
+              selectedPlan.credits,
+            );
           }}
         >
           <Trans>Proceed with this subscription</Trans>
@@ -372,12 +374,19 @@ export default function PricePlansPage() {
   const activePlanDetails = getActiveSubscriptionDetails(planId);
 
   async function handleApiPaystack(
+    isOneTime: boolean,
     email: string,
     amount: number,
     planId: string,
     reference: null | string = '',
     callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
+    metadata?: any,
   ) {
+    if (isOneTime) {
+      handleApiPaystackOneTimeTransaction(email, amount, metadata, callback_url);
+      return;
+    }
+
     const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/initialize`, {
       method: 'POST',
       headers: {
@@ -412,20 +421,21 @@ export default function PricePlansPage() {
 
   async function handleApiPaystackOneTimeTransaction(
     email: string,
-    amount: number,
+    amount: any,
     metadata: number,
     callback_url: null | string = E_SIGN_BASE_URL + '/price-plans',
   ) {
-    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/initialize`, {
+    const sanitizedAmount = amount.replace(/[^\d]/g, '');
+    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/create-transaction`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         email,
-        amount,
+        amount: parseInt(sanitizedAmount) * 100,
         metadata,
-        callback_url: callback_url,
+        callback_url,
       }),
     });
 
@@ -434,7 +444,8 @@ export default function PricePlansPage() {
       console.log('API ERROR', errorData?.message);
     }
 
-    const data = await response.json();
+    const dataa = await response.json();
+    const data = dataa.data;
 
     if (data?.error) {
       toast({
@@ -443,7 +454,7 @@ export default function PricePlansPage() {
         variant: 'destructive',
       });
     } else {
-      window.location.href = data?.authorization_url;
+      window.open(data?.authorization_url, '_blank');
     }
   }
 

@@ -25,7 +25,6 @@ export const getLimits = async ({ headers, teamId }: GetLimitsOptions = {}) => {
   })
     .then(async (res) => res.json())
     .then((res) => {
-      console.log('Limits API response:', res);
       return ZLimitsResponseSchema.parse(res);
     })
     .catch((_err) => {

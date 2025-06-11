@@ -1,10 +1,12 @@
 import { Paystack } from 'paystack-sdk';
-
-import { env } from '../../utils/env';
 import { any } from 'zod';
 
+import { env } from '../../utils/env';
+
 // const paystack = new Paystack(env('NEXT_PAYSTACK_LIVE_KEY') ?? env('NEXT_PAYSTACK_TEST_KEY') ?? '');
-const paystack = new Paystack(env('NEXT_PAYSTACK_TEST_KEY') ?? '');
+const paystack = new Paystack(
+  env('NEXT_PAYSTACK_TEST_KEY') ?? 'sk_test_be0b3cb028d5ea5cdf6aa15c2a60a9c9b453dba0',
+);
 
 export { paystack };
 
@@ -26,7 +28,7 @@ export async function initializeTransaction(options: {
 }): Promise<PaystackResponse> {
   return paystack.transaction.initialize({
     ...options,
-    amount: options.amount.toString()
+    amount: options.amount.toString(),
   });
 }
 
@@ -36,7 +38,7 @@ export async function verifyTransaction(reference: string) {
 export async function disableSubscription(subscriptionCode: string) {
   return paystack.subscription.disable({
     code: subscriptionCode,
-    token: ''
+    token: '',
   });
 }
 
@@ -53,11 +55,6 @@ export async function createTransaction(options: {
 }) {
   return paystack.transaction.initialize({
     ...options,
-    amount: options.amount.toString()
+    amount: options.amount.toString(),
   });
 }
-
-
-
-
-
