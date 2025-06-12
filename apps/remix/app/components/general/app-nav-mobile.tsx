@@ -54,7 +54,7 @@ export const AppNavMobile = ({ isMenuOpen, onMenuOpenChange }: AppNavMobileProps
       <SheetContent className="flex w-full max-w-[350px] flex-col">
         <Link to="/" onClick={handleMenuItemClick}>
           <img
-            src="https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"
+            src="https://e-sign.nomiadocs.com/images/nomiasignatures.png"
             alt="Nomia"
             className="dark:invert"
             width={170}
