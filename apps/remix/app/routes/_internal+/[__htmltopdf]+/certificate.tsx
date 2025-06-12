@@ -350,7 +350,7 @@ export default function SigningCertificate({ loaderData }: Route.ComponentProps)
               {_(msg`Signing certificate provided by`)}:
             </p>
 
-            <img className="max-h-6 print:max-h-4"  src = "https://plum-stupid-scorpion-564.mypinata.cloud/ipfs/bafkreiczaqh2ggbmqwu5enpuvobcnjb2d3mg66fdxwyb2qmvp7uztvi7py"/>
+            <img className="max-h-6 print:max-h-4"  src = "https://e-sign.nomiadocs.com/images/nomiasignatures.png"/>
           </div>
         </div>
       )}
