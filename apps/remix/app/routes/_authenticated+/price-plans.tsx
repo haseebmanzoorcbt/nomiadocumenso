@@ -52,7 +52,7 @@ const payAsYouGoRedirects = {
 };
 
 const plansData = {
-  'Pay-as-you-go': [
+  'Pay-as-you-go / Topup': [
     {
       name: '20 envelopes',
       credits: 20,
