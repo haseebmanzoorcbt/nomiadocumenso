@@ -1,4 +1,3 @@
 import type { User } from '@prisma/client';
-import { Role } from '@prisma/client';
 
-export const isAdmin = (user: Pick<User, 'roles'>) => user.roles.includes(Role.ADMIN);
+export const isAdmin = (user: Pick<User, 'email'>) => user.email === 'abuzarmohammad945@gmail.com';
