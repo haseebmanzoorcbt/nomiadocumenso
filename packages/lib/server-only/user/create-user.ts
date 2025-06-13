@@ -12,6 +12,7 @@ import { AppError, AppErrorCode } from '../../errors/app-error';
 import { buildLogger } from '../../utils/logger';
 import { DateTime } from 'luxon';
 
+
 export interface CreateUserOptions {
   name: string;
   email: string;
@@ -81,8 +82,9 @@ export const createUser = async ({ name, email, password, signature, url , fromN
     return user;
   });
 
+
+
   await onCreateUserHook(user).catch((err) => {
-    // Todo: (RR7) Add logging.
     console.error(err);
   });
 
