@@ -45,7 +45,7 @@ export const DocumentDropzone = ({
   const { _ } = useLingui();
 
   const { getRootProps, getInputProps } = useDropzone({
-    maxSize: APP_DOCUMENT_UPLOAD_SIZE_LIMIT * 1024 * 1024,
+    maxSize: megabytesToBytes(APP_DOCUMENT_UPLOAD_SIZE_LIMIT),
     accept: {
       '*/*': ['.*'],
     },
