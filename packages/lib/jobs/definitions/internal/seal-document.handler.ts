@@ -195,7 +195,7 @@ export const run = async ({
     flattenForm(pdfDoc);
 
     const pdfBytes = await pdfDoc.save();
-    const pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes) });
+    const pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes) , userId: document.userId });
 
     const { name } = path.parse(document.title);
 
