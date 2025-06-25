@@ -171,7 +171,8 @@ export const sealDocument = async ({
 
   const pdfBytes = await doc.save();
 
-  const pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes) });
+  // Fix: use correct property name for signPdf options
+  const pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes), userId: document.userId });
 
   const { name } = path.parse(document.title);
 
