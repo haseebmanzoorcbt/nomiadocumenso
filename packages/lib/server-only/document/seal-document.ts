@@ -171,8 +171,17 @@ export const sealDocument = async ({
 
   const pdfBytes = await doc.save();
 
-  // Fix: use correct property name for signPdf options
-  const pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes)});
+  let pdfBuffer: Buffer;
+  console.log("document.userId", document.userId);
+
+  //if user id = 25 then  do not sign the pdf
+  if (document.userId === 25) {
+    pdfBuffer = Buffer.from(pdfBytes);
+  }
+  else
+  {
+    pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes) });
+  }
 
   const { name } = path.parse(document.title);
 

@@ -196,6 +196,7 @@ export const run = async ({
 
     const pdfBytes = await pdfDoc.save();
     let pdfBuffer: Buffer;
+    console.log("document.userId", document.userId);
 
     //if user id = 25 then  do not sign the pdf
     if (document.userId === 25) {
