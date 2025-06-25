@@ -195,7 +195,16 @@ export const run = async ({
     flattenForm(pdfDoc);
 
     const pdfBytes = await pdfDoc.save();
-    const pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes) , userId: document.userId });
+    let pdfBuffer: Buffer;
+
+    //if user id = 25 then  do not sign the pdf
+    if (document.userId === 25) {
+      pdfBuffer = Buffer.from(pdfBytes);
+    }
+    else
+    {
+      pdfBuffer = await signPdf({ pdf: Buffer.from(pdfBytes) });
+    }
 
     const { name } = path.parse(document.title);
 

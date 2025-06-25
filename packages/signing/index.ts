@@ -7,20 +7,11 @@ import { signWithLocalCert } from './transports/local-cert';
 
 export type SignOptions = {
   pdf: Buffer;
-  userId: number;
 };
 
-export const signPdf = async ({ pdf, userId }: SignOptions) => {
-
-  //get user email ?
-
-
-
+export const signPdf = async ({ pdf }: SignOptions) => {
   const transport = env('NEXT_PRIVATE_SIGNING_TRANSPORT') || 'local';
 
-  if (userId === 25) {
-    return await signWithLocalCert({ pdf });
- }
   return await match(transport)
     .with('local', async () => signWithLocalCert({ pdf }))
     .with('gcloud-hsm', async () => signWithGoogleCloudHSM({ pdf }))
