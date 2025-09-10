@@ -144,11 +144,11 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
     const { id: documentId } = args.params;
 
     try {
-      if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 's3') {
+      if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
         return {
           status: 500,
           body: {
-            message: 'Please make sure the storage transport is set to S3.',
+            message: 'Please make sure the storage transport is set to GCS.',
           },
         };
       }
@@ -246,11 +246,11 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
     const { body } = args;
 
     try {
-      if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 's3') {
+      if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
         return {
           status: 500,
           body: {
-            message: 'Create document is not available without S3 transport.',
+            message: 'Create document is not available without GCS transport.',
           },
         };
       }
