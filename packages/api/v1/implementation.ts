@@ -142,7 +142,8 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
 
   downloadSignedDocument: authenticatedMiddleware(async (args, user, team) => {
     const { id: documentId } = args.params;
-
+    console.log("Authenticate middleware");
+    console.log("env transport", process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT);
     try {
       if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
         return {
@@ -244,16 +245,17 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
 
   createDocument: authenticatedMiddleware(async (args, user, team, { metadata }) => {
     const { body } = args;
-
+    console.log("Authenticate middleware");
+    console.log("env transport", process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT);
     try {
-      if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
-        return {
-          status: 500,
-          body: {
-            message: 'Create document is not available without GCS transport.',
-          },
-        };
-      }
+      // if (process.env.NEXT_PUBLIC_UPLOAD_TRANSPORT !== 'gcs') {
+      //   return {
+      //     status: 500,
+      //     body: {
+      //       message: 'Create document is not available without GCS transport.',
+      //     },
+      //   };
+      // }
 
       const { remaining } = await getServerLimits({ email: user.email, teamId: team?.id });
 
