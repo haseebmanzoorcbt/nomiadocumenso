@@ -43,7 +43,7 @@ import { DocumentRecipientLinkCopyDialog } from '~/components/general/document/d
 import { useOptionalCurrentTeam } from '~/providers/team';
 
 export type DocumentsTableActionDropdownProps = {
-  row: Omit<Document, 'fromNomia'> & {
+  row: Document & {
     user: Pick<User, 'id' | 'name' | 'email'>;
     recipients: Recipient[];
     team: Pick<Team, 'id' | 'url'> | null;
