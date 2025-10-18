@@ -360,7 +360,7 @@ export const run = async ({
         teamId: updatedDocument.teamId ?? undefined,
       };
 
-      await fetch('http://localhost:8000/esignature/documentSendv1', {
+      await fetch('https://tapi.nomiadocs.com/esignature/documentSendv1', {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
