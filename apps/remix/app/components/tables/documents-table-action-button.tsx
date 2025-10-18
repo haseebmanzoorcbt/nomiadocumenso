@@ -18,7 +18,7 @@ import { useToast } from '@documenso/ui/primitives/use-toast';
 import { useOptionalCurrentTeam } from '~/providers/team';
 
 export type DocumentsTableActionButtonProps = {
-  row: Document & {
+  row: Omit<Document, 'fromNomia'> & {
     user: Pick<User, 'id' | 'name' | 'email'>;
     recipients: Recipient[];
     team: Pick<Team, 'id' | 'url'> | null;
