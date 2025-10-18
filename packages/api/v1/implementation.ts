@@ -305,14 +305,25 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
         type: DocumentDataType.S3_PATH,
       });
 
+      let fromNomia = false;
+
+      if (body.externalId?.startsWith('nomiasigns-') || body.externalId?.startsWith('NomiaSigns-')) {
+        fromNomia = true;
+      }
+      let trimExternalId = body.externalId;
+      if (fromNomia) {
+        trimExternalId = trimExternalId?.replace('nomiasigns-', '').replace('NomiaSigns-', '');
+      }
+
       const document = await createDocument({
         title: body.title,
-        externalId: body.externalId || null,
+        externalId: trimExternalId || null,
         userId: user.id,
         teamId: team?.id,
         formValues: body.formValues,
         documentDataId: documentData.id,
         requestMetadata: metadata,
+        fromNomia: fromNomia,
       });
 
       await upsertDocumentMeta({

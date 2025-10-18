@@ -152,6 +152,8 @@ export const DocumentSigningAutoSign = ({ recipient, fields }: DocumentSigningAu
         duration: 5000,
         variant: 'destructive',
       });
+    } else {
+      setOpen(false);
     }
 
     await revalidate();

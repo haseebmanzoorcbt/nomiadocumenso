@@ -346,4 +346,32 @@ export const run = async ({
     userId: updatedDocument.userId,
     teamId: updatedDocument.teamId ?? undefined,
   });
+
+  // Send to additional external endpoint
+
+
+  if (updatedDocument.fromNomia) {
+    try {
+      console.log("Sending webhook to external endpoint-completed");
+      const payload = {
+        event: isRejected ? WebhookTriggerEvents.DOCUMENT_REJECTED : WebhookTriggerEvents.DOCUMENT_COMPLETED,
+        payload: ZWebhookDocumentSchema.parse(mapDocumentToWebhookDocumentPayload(updatedDocument)),
+        userId: updatedDocument.userId,
+        teamId: updatedDocument.teamId ?? undefined,
+      };
+
+      await fetch('http://localhost:8000/esignature/documentSendv1', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Failed to send webhook to external endpoint:', error);
+    }
+  }
+  else {
+    console.log("Not sending webhook to external endpoint-completed");
+  }
 };

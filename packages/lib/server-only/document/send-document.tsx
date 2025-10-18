@@ -252,5 +252,38 @@ export const sendDocument = async ({
     teamId,
   });
 
+
+
+  //implement control in future. to send webhook to external endpoint.
+
+
+
+  if (updatedDocument.fromNomia) {
+  try {
+    console.log("Sending webhook to external endpoint");
+    const payload = {
+      event: WebhookTriggerEvents.DOCUMENT_SENT,
+      payload: ZWebhookDocumentSchema.parse(mapDocumentToWebhookDocumentPayload(updatedDocument)),
+      userId,
+      teamId, 
+    };
+
+    await fetch('https://tapi.nomiadocs.com/esignature/documentSendv1',{
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error('Failed to send webhook to external endpoint:', error);
+  }
+
+  }
+  else {
+    console.log("Not sending webhook to external endpoint-sent");
+  }
+
+
   return updatedDocument;
 };

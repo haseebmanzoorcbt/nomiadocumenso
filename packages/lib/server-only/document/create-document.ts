@@ -28,6 +28,7 @@ export type CreateDocumentOptions = {
   normalizePdf?: boolean;
   timezone?: string;
   requestMetadata: ApiRequestMetadata;
+  fromNomia?: boolean;
 };
 
 export const createDocument = async ({
@@ -40,7 +41,10 @@ export const createDocument = async ({
   formValues,
   requestMetadata,
   timezone,
+  fromNomia,
 }: CreateDocumentOptions) => {
+
+  console.log('From Nomia:', fromNomia);
   const user = await prisma.user.findFirstOrThrow({
     where: {
       id: userId,
@@ -129,7 +133,8 @@ export const createDocument = async ({
         ),
         formValues,
         source: DocumentSource.DOCUMENT,
-        documentMeta: {
+        fromNomia,
+          documentMeta: {
           create: {
             language: team?.teamGlobalSettings?.documentLanguage,
             timezone: timezone,
