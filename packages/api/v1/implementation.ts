@@ -256,17 +256,27 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
       //     },
       //   };
       // }
+      let fromNomia = false;
+
+      if (body.externalId?.startsWith('nomiasigns-') || body.externalId?.startsWith('NomiaSigns-')) {
+        fromNomia = true;
+      }
+
 
       const { remaining } = await getServerLimits({ email: user.email, teamId: team?.id });
-
-      if (remaining.documents <= 0) {
-        return {
-          status: 400,
-          body: {
-            message: 'You have reached the maximum number of documents allowed for this month',
-          },
-        };
+      
+      if (!fromNomia) {
+        if (remaining.documents <= 0) {
+          return {
+            status: 400,
+            body: {
+              message: 'You have reached the maximum number of documents allowed for this month',
+            },
+          };
+        }
       }
+
+
 
       const dateFormat = body.meta.dateFormat
         ? DATE_FORMATS.find((format) => format.value === body.meta.dateFormat)
@@ -305,11 +315,7 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
         type: DocumentDataType.S3_PATH,
       });
 
-      let fromNomia = false;
 
-      if (body.externalId?.startsWith('nomiasigns-') || body.externalId?.startsWith('NomiaSigns-')) {
-        fromNomia = true;
-      }
       let trimExternalId = body.externalId;
       if (fromNomia) {
         trimExternalId = trimExternalId?.replace('nomiasigns-', '').replace('NomiaSigns-', '');
