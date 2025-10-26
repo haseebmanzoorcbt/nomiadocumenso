@@ -122,7 +122,7 @@ export const documentRouter = router({
         orderBy: orderByColumn ? { column: orderByColumn, direction: orderByDirection } : undefined,
       });
 
-      return documents;
+      return documents as any;
     }),
 
   /**
