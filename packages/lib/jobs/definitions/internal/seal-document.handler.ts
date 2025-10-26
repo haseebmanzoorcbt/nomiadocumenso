@@ -257,11 +257,16 @@ export const run = async ({
           });
           if (teamOwnerCredits) {
 
-            
-            await tx.userCredits.update({
-              where: { id: teamOwnerCredits.id },
-              data: { credits: { decrement: 1 } },
-            });
+            if (document.fromNomia){
+            console.log("Deducting credits from Nomia");
+             
+            } else {
+              await tx.userCredits.update({
+                where: { id: teamOwnerCredits.id },
+                data: { credits: { decrement: 1 } },
+              });
+               
+            }
           }
         } else {
           const userCredits = await tx.userCredits.findFirst({
@@ -273,12 +278,12 @@ export const run = async ({
           });
           if (userCredits) {
             if (document.fromNomia){
+              console.log("Deducting credits from Nomia");
+            } else {
               await tx.userCredits.update({
                 where: { id: userCredits.id },
                 data: { credits: { decrement: 1 } },
               });
-            } else {
-              
             }
           }
         }
