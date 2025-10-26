@@ -256,6 +256,8 @@ export const run = async ({
             }
           });
           if (teamOwnerCredits) {
+
+            
             await tx.userCredits.update({
               where: { id: teamOwnerCredits.id },
               data: { credits: { decrement: 1 } },
@@ -270,10 +272,14 @@ export const run = async ({
             }
           });
           if (userCredits) {
-            await tx.userCredits.update({
-              where: { id: userCredits.id },
-              data: { credits: { decrement: 1 } },
-            });
+            if (document.fromNomia){
+              await tx.userCredits.update({
+                where: { id: userCredits.id },
+                data: { credits: { decrement: 1 } },
+              });
+            } else {
+              
+            }
           }
         }
       }
