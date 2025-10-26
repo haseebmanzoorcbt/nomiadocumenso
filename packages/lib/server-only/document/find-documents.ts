@@ -270,7 +270,7 @@ export const findDocuments = async ({
     currentPage: Math.max(page, 1),
     perPage,
     totalPages: Math.ceil(count / perPage),
-  } satisfies FindResultResponse<typeof data>;
+  };
 };
 
 const findDocumentsFilter = (status: ExtendedDocumentStatus, user: User) => {
