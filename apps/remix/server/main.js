@@ -30,5 +30,4 @@ server.use(
 
 const handler = handle(build, server);
 
-const port = Number(process.env.NEXT_PORT) || 3000;
-serve({ fetch: handler.fetch, port });
+serve({ fetch: handler.fetch, port: 3000 });
