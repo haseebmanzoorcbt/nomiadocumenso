@@ -96,7 +96,7 @@ export const BillingPlans = ({ prices }: BillingPlansProps) => {
                 <CardTitle>{price.product.name}</CardTitle>
 
                 <div className="text-muted-foreground mt-2 text-lg font-medium">
-                  ${toHumanPrice(price.unit_amount ?? 0)} {price.currency.toUpperCase()}{' '}
+                  $<span>{toHumanPrice(price.unit_amount ?? 0)}</span> {price.currency.toUpperCase()}{' '}
                   <span className="text-xs">per {interval}</span>
                 </div>
 
