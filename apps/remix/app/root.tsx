@@ -237,10 +237,25 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
       victims.forEach((n) => n.parentNode && n.parentNode.removeChild(n));
     };
 
-    // Initial cleanup
-    removeDollarTextsIn(document.body);
+    const run = () => removeDollarTextsIn(document.body || document);
 
-    // Watch for future insertions (e.g., CDN beacons injected post-stream)
+    // If parsing isn't finished, schedule cleanup when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run, { once: true });
+    } else {
+      // Run as soon as possible, then in the next tick to catch parser-inserted nodes
+      run();
+      setTimeout(run, 0);
+    }
+
+    // Also run after window load (some CDNs inject at onload)
+    window.addEventListener('load', () => {
+      run();
+      setTimeout(run, 0);
+      setTimeout(run, 200);
+    }, { once: true });
+
+    // Watch for post-load insertions (e.g., beacons injected after streaming completes)
     const obs = new MutationObserver((muts) => {
       for (const m of muts) {
         if (isDollarText(m.target)) {
@@ -257,9 +272,10 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
       }
     });
     obs.observe(document.documentElement, { childList: true, subtree: true });
-  } catch (err) {
-    // no-op
-  }
+
+    // Optional: stop observing after a few seconds to avoid long-lived observers
+    setTimeout(() => { try { obs.disconnect(); } catch (_) {} }, 5000);
+  } catch (_) {}
 })();`,
           }}
         />
