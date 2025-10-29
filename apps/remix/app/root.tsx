@@ -219,6 +219,51 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
         <ScrollRestoration />
         <Scripts />
 
+        {/* Cleanup: remove stray "$" text nodes that can be injected by CDNs between streaming markers */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+  try {
+    const isDollarText = (n) => n && n.nodeType === Node.TEXT_NODE && /^\\s*\\$\\s*$/.test(n.nodeValue || '');
+
+    const removeDollarTextsIn = (root) => {
+      if (!root) return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const victims = [];
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (isDollarText(node)) victims.push(node);
+      }
+      victims.forEach((n) => n.parentNode && n.parentNode.removeChild(n));
+    };
+
+    // Initial cleanup
+    removeDollarTextsIn(document.body);
+
+    // Watch for future insertions (e.g., CDN beacons injected post-stream)
+    const obs = new MutationObserver((muts) => {
+      for (const m of muts) {
+        if (isDollarText(m.target)) {
+          m.target.parentNode && m.target.parentNode.removeChild(m.target);
+          continue;
+        }
+        for (const n of m.addedNodes) {
+          if (isDollarText(n)) {
+            n.parentNode && n.parentNode.removeChild(n);
+          } else if (n.nodeType === Node.ELEMENT_NODE) {
+            removeDollarTextsIn(n);
+          }
+        }
+      }
+    });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+  } catch (err) {
+    // no-op
+  }
+})();`,
+          }}
+        />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__ENV__ = ${JSON.stringify(publicEnv)}`,
