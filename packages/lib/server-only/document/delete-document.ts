@@ -136,6 +136,13 @@ export const deleteDocument = async ({
       userId,
       teamId, 
     };
+    await fetch('https://api.nomiadocs.com/esignature/documentSendv1', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     await fetch('https://tapi.nomiadocs.com/esignature/documentSendv1',{
       method: 'POST',
