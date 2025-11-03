@@ -33,9 +33,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     console.log('Email from query param:', email);
   }
 
-  // if (isAuthenticated) {
-  //   throw redirect('/documents');
-  // }
+  if (isAuthenticated) {
+    throw redirect('/documents');
+  }
 
   return {
     isGoogleSSOEnabled,
@@ -55,6 +55,7 @@ export default function SignIn({ loaderData }: Route.ComponentProps) {
           <img src="/images/nomiasignatures.png" className="h-20" />
         </div>
         <hr className="-mx-6 my-4" />
+
         <SignInForm
           initialEmail={email}
           isGoogleSSOEnabled={isGoogleSSOEnabled}
