@@ -1,5 +1,6 @@
 import { Trans } from '@lingui/react/macro';
-import { Link, redirect } from 'react-router';
+import { Link } from 'react-router';
+import { redirect } from 'react-router';
 
 import { getOptionalSession } from '@documenso/auth/server/lib/utils/get-session';
 import {

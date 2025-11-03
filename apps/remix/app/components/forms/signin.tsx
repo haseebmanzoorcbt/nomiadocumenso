@@ -10,7 +10,7 @@ import { KeyRoundIcon, Loader } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { FaIdCardClip } from 'react-icons/fa6';
 import { FcGoogle } from 'react-icons/fc';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from '@remix-run/react';
 import { match } from 'ts-pattern';
 import { z } from 'zod';
 
