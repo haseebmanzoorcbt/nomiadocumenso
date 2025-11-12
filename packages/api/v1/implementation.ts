@@ -38,8 +38,12 @@ import { getTemplateById } from '@documenso/lib/server-only/template/get-templat
 import { extractDerivedDocumentEmailSettings } from '@documenso/lib/types/document-email';
 import {
   ZCheckboxFieldMeta,
+  ZDateFieldMeta,
   ZDropdownFieldMeta,
+  ZEmailFieldMeta,
   ZFieldMetaSchema,
+  ZInitialsFieldMeta,
+  ZNameFieldMeta,
   ZNumberFieldMeta,
   ZRadioFieldMeta,
   ZTextFieldMeta,
@@ -1069,7 +1073,35 @@ export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
               .with('DROPDOWN', () => ZDropdownFieldMeta.safeParse(fieldMeta))
               .with('NUMBER', () => ZNumberFieldMeta.safeParse(fieldMeta))
               .with('TEXT', () => ZTextFieldMeta.safeParse(fieldMeta))
-              .with('SIGNATURE', 'INITIALS', 'DATE', 'EMAIL', 'NAME', () => ({
+              .with('INITIALS', () => {
+                if (!fieldMeta) {
+                  return { success: true, data: undefined };
+                }
+
+                return ZInitialsFieldMeta.safeParse(fieldMeta);
+              })
+              .with('DATE', () => {
+                if (!fieldMeta) {
+                  return { success: true, data: undefined };
+                }
+
+                return ZDateFieldMeta.safeParse(fieldMeta);
+              })
+              .with('EMAIL', () => {
+                if (!fieldMeta) {
+                  return { success: true, data: undefined };
+                }
+
+                return ZEmailFieldMeta.safeParse(fieldMeta);
+              })
+              .with('NAME', () => {
+                if (!fieldMeta) {
+                  return { success: true, data: undefined };
+                }
+
+                return ZNameFieldMeta.safeParse(fieldMeta);
+              })
+              .with('SIGNATURE', () => ({
                 success: true,
                 data: undefined,
               }))
