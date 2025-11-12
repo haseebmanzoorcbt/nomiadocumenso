@@ -34,6 +34,8 @@ import { E_SIGN_BASE_URL } from '~/utils/config';
 import { appMetaTags } from '~/utils/meta';
 import { superLoaderJson, useSuperLoaderData } from '~/utils/super-json-loader';
 
+
+import { env } from '@documenso/lib/utils/env';
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Get session user
   const { user } = await getSession(request);
@@ -426,7 +428,7 @@ export default function PricePlansPage() {
     metadata: any,
   ) {
     const sanitizedAmount = amount.replace(/[^\d]/g, '');
-    const response = await fetch(`${E_SIGN_BASE_URL}/api/paystack/create-transaction`, {
+    const response = await fetch(`${env('NEXT_PUBLIC_WEBAPP_URL')}/api/paystack/create-transaction`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
