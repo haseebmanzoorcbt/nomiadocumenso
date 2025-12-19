@@ -7,6 +7,7 @@ import { TeamSchema } from '@documenso/prisma/generated/zod/modelSchema/TeamSche
 import { UserSchema } from '@documenso/prisma/generated/zod/modelSchema/UserSchema';
 
 import { ZFieldSchema } from './field';
+import { ZDocumentFormValuesSchema } from './document-form-values';
 import { ZRecipientLiteSchema } from './recipient';
 
 /**
@@ -97,7 +98,6 @@ export const ZDocumentManySchema = DocumentSchema.pick({
   externalId: true,
   userId: true,
   authOptions: true,
-  formValues: true,
   title: true,
   documentDataId: true,
   createdAt: true,
@@ -108,6 +108,7 @@ export const ZDocumentManySchema = DocumentSchema.pick({
   templateId: true,
   fromNomia: true,
 }).extend({
+  formValues: ZDocumentFormValuesSchema.nullable(),
   user: UserSchema.pick({
     id: true,
     name: true,
