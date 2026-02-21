@@ -27,7 +27,17 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
     // if (browserlessUrl) {
     //   browser = await chromium.connectOverCDP(browserlessUrl);
     // } else {
-    browser = await chromium.launch();
+      browser = await chromium.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--no-zygote',
+          '--single-process',
+        ],
+      });
     // }
 
     if (!browser) {
