@@ -245,7 +245,7 @@ export class LocalJobProvider extends BaseJobProvider {
     console.log(`[JOB:${jobId}] Submitting to endpoint: ${endpoint}`);
   
     const controller = new AbortController();
-    const timeout = 1000;
+    const timeout = 60_000;
     const timeoutId = setTimeout(() => {
       controller.abort();
       console.warn(`[JOB:${jobId}] Fetch aborted after ${timeout}ms`);

@@ -20,61 +20,57 @@ export const getCertificatePdf = async ({ documentId, language }: GetCertificate
     expiresAt: DateTime.now().plus({ minutes: 5 }).toJSDate().valueOf(),
   });
 
-  let browser: Browser;
+  let browser: Browser | null = null;
 
-  // const browserlessUrl = env('NEXT_PRIVATE_BROWSERLESS_URL');
+  try {
+    // const browserlessUrl = env('NEXT_PRIVATE_BROWSERLESS_URL');
+    // if (browserlessUrl) {
+    //   browser = await chromium.connectOverCDP(browserlessUrl);
+    // } else {
+    browser = await chromium.launch();
+    // }
 
-  // console.log("Browserless URL:", browserlessUrl);
+    if (!browser) {
+      throw new Error(
+        'Failed to establish a browser, please ensure you have either a Browserless.io url or chromium browser installed',
+      );
+    }
 
-  // if (browserlessUrl) {
-  //   // !: Use CDP rather than the default `connect` method to avoid coupling to the playwright version.
-  //   // !: Previously we would have to keep the playwright version in sync with the browserless version to avoid errors.
-  //   browser = await chromium.connectOverCDP(browserlessUrl);
-  // } else {
-  browser = await chromium.launch();
-  // }
+    const browserContext = await browser.newContext();
+    console.log('Browser context created successfully');
 
-  if (!browser) {
-    throw new Error(
-      'Failed to establish a browser, please ensure you have either a Browserless.io url or chromium browser installed',
-    );
+    const page = await browserContext.newPage();
+
+    const lang = isValidLanguageCode(language) ? language : 'en';
+    console.log('Language set to:', lang);
+
+    await page.context().addCookies([
+      {
+        name: 'language',
+        value: lang,
+        url: NEXT_PUBLIC_WEBAPP_URL(),
+      },
+    ]);
+
+    await page.goto(`${NEXT_PUBLIC_WEBAPP_URL()}/__htmltopdf/certificate?d=${encryptedId}`, {
+      waitUntil: 'networkidle',
+      timeout: 10_000,
+    });
+
+    console.log('Page loaded successfully');
+
+    // Allow layout/fonts to settle before printing (reduces "Printing failed" in headless)
+    await new Promise((r) => setTimeout(r, 500));
+
+    const result = await page.pdf({
+      format: 'A4',
+    });
+
+    console.log('PDF generated successfully');
+    return result;
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
   }
-
-  const browserContext = await browser.newContext();
-  console.log('Browser context created successfully');
-
-  const page = await browserContext.newPage();
-
-  const lang = isValidLanguageCode(language) ? language : 'en';
-  console.log('Language set to:', lang);
-
-  await page.context().addCookies([
-    {
-      name: 'language',
-      value: lang,
-      url: NEXT_PUBLIC_WEBAPP_URL(),
-    },
-  ]);
-
-  await page.goto(`${NEXT_PUBLIC_WEBAPP_URL()}/__htmltopdf/certificate?d=${encryptedId}`, {
-    waitUntil: 'networkidle',
-    timeout: 10_000,
-  });
-
-  console.log('Page loaded successfully');
-
-  const result = await page.pdf({
-    format: 'A4',
-  });
-
-
-  console.log('PDF generated successfully');
-
-  await browserContext.close();
-
-  void browser.close();
-
-  return result;
-
-
 };
